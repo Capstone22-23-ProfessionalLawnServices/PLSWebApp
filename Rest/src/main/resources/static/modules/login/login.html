@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="icon" type="image/x-icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="login.css">
+    <script src="login.js"></script>
+</head>
+<body>
+<div class="overlay">
+
+    <div class="main-container">
+        <div class="login-container">
+            <div class="login-container-header">
+                <h1>Professional Lawn Services Login</h1>
+            </div>
+
+            <div class="login-container-body">
+                <div id="invalid-login-prompt" class="alert alert-danger" role="alert">
+                    The username or password you entered is incorrect.
+                </div>
+                <form name="login-form" class="login-form" action="login.js" onsubmit="return validateForm(event)" method="get">
+                    <h2 id="username_field_heading">Username</h2>
+                    <input id="username-field" type="email" class="form-control center-block"
+                           placeholder="Enter username" required maxlength="50">
+                    <h2 id="password-field-heading">Password</h2>
+                    <input id="password-field" type="password" class="form-control center-block" id="exampleInputPassword1"
+                           placeholder="Password" required maxlength="30">
+                    <button id="sign-in-button" class="btn btn-primary" type="submit">Sign-in</button>
+                </form>
+            </div>
+
+            <div class="login-container-footer">
+                <p id="footer-text">This website is designed for use strictly by the website owner and their designees.</p>
+            </div>
+        </div>
+
+
+        <div class="logo-container">
+            <img src="../../images/Professional%20Lawn%20Services%20Logo.JPG">
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>
