@@ -16,9 +16,16 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        String[] staticResources = {
+                "/css/**",
+                "/images/**",
+        };
+
         http
                 .authorizeHttpRequests((requests) -> requests
                         .antMatchers("/", "/home").permitAll()
+                        .antMatchers(staticResources).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
