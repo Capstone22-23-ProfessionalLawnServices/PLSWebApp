@@ -20,6 +20,7 @@ public class WebSecurityConfig {
         String[] staticResources = {
                 "/css/**",
                 "/images/**",
+                "/assets/**"
         };
 
         http
