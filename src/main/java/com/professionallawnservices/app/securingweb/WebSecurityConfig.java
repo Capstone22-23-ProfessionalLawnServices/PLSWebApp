@@ -32,12 +32,12 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .antMatchers("/", "/home").permitAll()
                         .antMatchers(staticResources).permitAll()
+                        .antMatchers("/manager**").hasRole("MANAGER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
+                        .loginPage("/login").permitAll()
                         .defaultSuccessUrl("/greeting", true)
-                        .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());
 
