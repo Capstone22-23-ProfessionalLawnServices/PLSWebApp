@@ -1,13 +1,259 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Spring Security Example</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" media="all" href="../static/css/home.css" th:href="@{/css/home.css}" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+  <link rel="icon" type="image/x-icon" href="../../../images/favicon.ico">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="../common.css">
+  <link rel="stylesheet" href="home.css">
+  <script src="../common.js"></script>
+  <script src="home.js"></script>
 </head>
-<body>
-<h1>Welcome!</h1>
+<body onload="timeClock(); setDates();">
+<div class="overlay">
 
-<p>Click <a th:href="@{/hello}">here</a> to see a greeting.</p>
+  <header class="navbar">
+    <a href="#" id="navbar-title">
+      Professional Lawn Services
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="../contacts/contacts.html">Contacts</a></li>
+        <li><a href="../appointments/appointments.html">Appointments</a></li>
+        <li><a href="../account/account.html">Account</a></li>
+        <li><a href="../statistics/statistics.html">Statistics</a></li>
+      </ul>
+    </nav>
+    <div id="navbar-dropdown">
+      <button id="nav-links-dropdown-button" onclick="navbarDropdown(event)">
+        <img id="navbar-dropdown-svg" src="../../../images/caret-right-square.svg" height="25" width="25">
+      </button>
+      <div id="navbar-dropdown-content">
+        <a href="#">Home</a>
+        <a href="../contacts/contacts.html">Contacts</a>
+        <a href="../appointments/appointments.html">Appointments</a>
+        <a href="../account/account.html">Account</a>
+        <a href="../statistics/statistics.html">Statistics</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container main-container center-block">
+
+    <div class="row center-block">
+
+      <div class="column col-md-3 text-center">
+        <div class="inner-clock">
+          <div class="primary-column-header">Clock</div>
+          <time id="clock-numbers"> Time</time>
+          <div class="inner-clock-client">
+            <label id="client-list-label" for="client-list">Choose a client:</label>
+            <select name="people" id="client-list">
+              <!-- Tom is a hardcoded example -->
+              <option value="volvo">Tom</option>
+            </select>
+            <label id="active-client-label" for="active-client">Active client:</label>
+            <span id="active-client">Tom</span>
+          </div>
+        </div>
+        <div class="inner-clock-buttons">
+          <button id="start-session-button" class="btn btn-primary" onclick="startSession()" type="submit">Start Session</button>
+          <button id="end-session-button" class="btn btn-primary" onclick="endSession()" type="submit">End Current Session</button>
+        </div>
+      </div>
+
+      <div id="current-day-column" class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-0" class="date-header"> Date 0 </div>
+          <div id="day-0-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <button id="weather-module-day-0" class="content-module" onclick="moduleInfo(event)">Weather 0</button>
+            <div id="weather-module-day-0-info" class="module-info">
+              <ul>
+                <li><span>Humidity: </span></li>
+                <li><span>Description: </span></li>
+              </ul>
+            </div>
+            <!-- Tom is a hardcoded example -->
+              <button id="861561-11" class="content-module" draggable="true" ondragstart="drag(event)">
+                <div>
+                  <span>Tom</span>
+                </div>
+              </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-1" class="date-header"> Date 1 </div>
+          <div id="day-1-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <button id="weather-module-day-1" class="content-module" onclick="moduleInfo(event)">Weather 1</button>
+            <div id="weather-module-day-1-info" class="module-info">
+              <ul>
+                <li><span>Humidity: </span></li>
+                <li><span>Description: </span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-2" class="date-header"> Date 2 </div>
+          <div id="day-2-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <button id="weather-module-day-2" class="content-module" onclick="moduleInfo(event)">Weather 2</button>
+            <div id="weather-module-day-2-info" class="module-info">
+              <ul>
+                <li><span>Humidity: </span></li>
+                <li><span>Description: </span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-3" class="date-header"> Date 3 </div>
+          <div id="day-3-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <button id="weather-module-day-3" class="content-module" onclick="moduleInfo(event)">Weather 3</button>
+            <div id="weather-module-day-3-info" class="module-info">
+              <ul>
+                <li><span>Humidity: </span></li>
+                <li><span>Description: </span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row center-block">
+
+      <div class="column col-md-3 text-center">
+        <div class="inner-add">
+          <div id="add-header" class="primary-column-header">Quick Add</div>
+          <input type="text" class="inner-add-elements" placeholder="Search Contacts">
+          <div class="clear inner-add-elements"></div>
+          <input type="date" id="add-schedule-date">
+          <div class="clear inner-add-elements"></div>
+          <button  class="btn btn-primary inner-add-elements" onclick="" type="submit">Schedule</button>
+        </div>
+      </div>
+
+      <div class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-4" class="date-header"> Date 4 </div>
+          <div id="day-4-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <button id="weather-module-day-4" class="content-module" onclick="moduleInfo(event)">Weather 4</button>
+            <div id="weather-module-day-4-info" class="module-info">
+              <ul>
+                <li><span>Humidity: </span></li>
+                <li><span>Description: </span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-5" class="date-header"> Date 5 </div>
+          <div id="day-5-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <button id="weather-module-day-5" class="content-module" onclick="moduleInfo(event)">Weather 5</button>
+            <div id="weather-module-day-5-info" class="module-info">
+              <ul>
+                <li><span>Humidity: </span></li>
+                <li><span>Description: </span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-6" class="date-header"> Date 6 </div>
+          <div id="day-6-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+          </div>
+        </div>
+      </div>
+
+      <div class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-7" class="date-header"> Date 7 </div>
+          <div id="day-7-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row center-block">
+
+      <div class="column col-md-3 text-center">
+        <div class="inner-add">
+          <div id="missed-header" class="primary-column-header">Missed Appointments</div>
+          <div id="missed-content">
+            <!-- Tom is a hardcoded example -->
+            <button id="86151-11" class="content-module" draggable="true" ondragstart="drag(event)">
+              <div>
+                <span>Tom</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-8" class="date-header"> Date 8 </div>
+          <div id="day-8-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+          </div>
+        </div>
+      </div>
+
+      <div class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-9" class="date-header"> Date 9 </div>
+          <div id="day-9-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+          </div>
+        </div>
+      </div>
+
+      <div class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-10" class="date-header"> Date 10 </div>
+          <div id="day-10-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+          </div>
+        </div>
+      </div>
+
+      <div class="column col-md-2 text-center">
+        <div class="inner-date-column">
+          <div id="day-11" class="date-header"> Date 11 </div>
+          <div id="day-11-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 </body>
 </html>

@@ -32,7 +32,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .antMatchers("/", "/home").permitAll()
                         .antMatchers(staticResources).permitAll()
-                        .antMatchers("/manager**").hasRole("MANAGER")
+                        .antMatchers("/managerfolder/**").hasRole("MANAGER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
