@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home Page</title>
-  <link rel="icon" type="image/x-icon" href="../../../images/favicon.ico">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="../common.css">
-  <link rel="stylesheet" href="home.css">
-  <script src="../common.js"></script>
-  <script src="home.js"></script>
+  <link rel="icon" type="image/x-icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}">
+  <link rel="stylesheet" type="text/css" media="all" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+  <script th:src="@{/js/jquery.min.js}"></script>
+  <script th:src="@{/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" type="text/css" media="all" href="../static/css/common.css" th:href="@{/css/common.css}" />
+  <link rel="stylesheet" type="text/css" media="all" href="../static/css/home.css" th:href="@{/css/home.css}" />
+  <script th:src="@{/js/common.js}"></script>
+  <script th:src="@{/js/home.js}"></script>
 </head>
 <body onload="timeClock(); setDates();">
 <div class="overlay">
@@ -22,11 +22,11 @@
     </a>
     <nav>
       <ul class="nav-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="../contacts/contacts.html">Contacts</a></li>
-        <li><a href="../appointments/appointments.html">Appointments</a></li>
-        <li><a href="../account/account.html">Account</a></li>
-        <li><a href="../statistics/statistics.html">Statistics</a></li>
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/contacts}">Contacts</a></li>
+        <li><a th:href="@{/appointments}">Appointments</a></li>
+        <li><a th:href="@{/account}">Account</a></li>
+        <li><a th:href="@{/statistics}">Statistics</a></li>
       </ul>
     </nav>
     <div id="navbar-dropdown">

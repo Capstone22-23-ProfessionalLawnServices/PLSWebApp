@@ -25,19 +25,29 @@ public class WebSecurityConfig {
         String[] staticResources = {
                 "/css/**",
                 "/images/**",
+                "/js/**",
                 "/assets/**"
+        };
+
+        String[] managerPages = {
+                "/add-appointment**",
+                "/add-contact**",
+                "/appointments**",
+                "/contacts**",
+                "/statistics**",
+                "/manager**"
         };
 
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/", "/home").permitAll()
+                        //.antMatchers("/", "/home").permitAll()
                         .antMatchers(staticResources).permitAll()
-                        .antMatchers("/managerfolder/**").hasRole("MANAGER")
+                        .antMatchers(managerPages).hasRole("MANAGER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login").permitAll()
-                        .defaultSuccessUrl("/greeting", true)
+                        .defaultSuccessUrl("/", true)
                 )
                 .logout((logout) -> logout.permitAll());
 
