@@ -8,7 +8,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     justify-items: center;
     align-items: center;
-    background-image: url("/images/shattered.webp");
+    background-image: url("../images/shattered.webp");
 }
 
 .overlay {
@@ -124,10 +124,11 @@ body {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 100px;
+    min-width: 90%;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
-    margin: 14px 0 0 -50px;
+    margin: 17px 0 0 -50px;
+    height: 1000px;
 }
 
 #nav-links-dropdown-button {
@@ -148,6 +149,8 @@ body {
     text-align: left;
 }
 
+/*IPad or less view*/
+
 @media (max-width: 991px) {
 
     .container {
@@ -160,6 +163,7 @@ body {
 
     #navbar-dropdown-content {
         display: none;
+        margin: 17px 0 0 -140px;
     }
 
     #nav-links-dropdown-button {

@@ -17,28 +17,28 @@
 <div class="overlay">
 
   <header class="navbar">
-    <a href="../home/home.html" id="navbar-title">
+    <a href="home.html" id="navbar-title">
       Professional Lawn Services
     </a>
     <nav>
       <ul class="nav-links">
-        <li><a href="../home/home.html">Home</a></li>
+        <li><a href="home.html">Home</a></li>
         <li><a href="#">Contacts</a></li>
-        <li><a href="../appointments/appointments.html">Appointments</a></li>
-        <li><a href="../account/account.html">Account</a></li>
-        <li><a href="../statistics/statistics.html">Statistics</a></li>
+        <li><a href="appointments.html">Appointments</a></li>
+        <li><a href="account.html">Account</a></li>
+        <li><a href="statistics.html">Statistics</a></li>
       </ul>
     </nav>
     <div id="navbar-dropdown">
       <button id="nav-links-dropdown-button" onclick="navbarDropdown(event)">
-        <img id="navbar-dropdown-svg" src="../../../images/caret-right-square.svg" height="25" width="25">
+        <img id="navbar-dropdown-svg" src="../static/images/caret-right-square.svg" height="25" width="25">
       </button>
       <div id="navbar-dropdown-content">
-        <a href="../home/home.html">Home</a>
+        <a href="home.html">Home</a>
         <a href="#">Contacts</a>
-        <a href="../appointments/appointments.html">Appointments</a>
-        <a href="../account/account.html">Account</a>
-        <a href="../statistics/statistics.html">Statistics</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="account.html">Account</a>
+        <a href="statistics.html">Statistics</a>
       </div>
     </div>
   </header>
@@ -51,17 +51,16 @@
         <h1>Contacts</h1>
       </div>
 
-      <div class="column col-sm-5 text-center" style="margin-top: 15px">
+      <div class="column col-sm-8 text-center" style="margin-top: 15px">
         <input type="text" class="inner-add-elements" placeholder="Search Contacts">
         <button id="search-contact-button" class="btn btn-primary">
-          Search <img src="../../../images/search.svg" height="20" width="20">
+          <span id="search-contact-button-text"> Search </span>
+          <img src="../static/images/search.svg" height="20" width="20">
         </button>
-      </div>
-
-      <div class="column col-sm-3 text-center" style="margin-top: 15px">
         <a href="add-contact.html">
           <button id="add-contact-button" class="btn btn-primary">
-            Add <img src="../../../images/person-add.svg" height="25" width="25">
+            <span id="add-contact-button-text"> Add </span>
+            <img src="../static/images/person-add.svg" height="25" width="25">
           </button>
         </a>
       </div>
@@ -113,9 +112,9 @@
         <span style="margin: 0 5px 0 35px">Page: </span>
         <input type="text" id="current-page" size="1" maxlength="2">
         <span id="total-pages">/ </span>
-        
-        <button id="next-page"> <img src="../../../images/arrow-left-square-fill.svg"></button>
-        <button id="prev-page"> <img src="../../../images/arrow-right-square-fill.svg"></button>
+
+        <button id="next-page"> <img src="../static/images/arrow-left-square-fill.svg"></button>
+        <button id="prev-page"> <img src="../static/images/arrow-right-square-fill.svg"></button>
 
       </div>
 
