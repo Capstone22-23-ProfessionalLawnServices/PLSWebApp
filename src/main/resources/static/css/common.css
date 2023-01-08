@@ -110,6 +110,10 @@ body {
     opacity: 50%;
 }
 
+#navbar-dropdown-content li {
+    list-style: none;
+}
+
 #navbar-title {
     font-size: 25px;
     color: white;
