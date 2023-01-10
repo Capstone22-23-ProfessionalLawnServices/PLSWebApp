@@ -9,7 +9,7 @@
   <script th:src="@{/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
   <script th:src="@{/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" media="all" href="../static/css/common.css" th:href="@{/css/common.css}" />
-  <link rel="stylesheet" type="text/css" media="all" href="../static/css/account.css" th:href="@{/css/contacts.css}" />
+  <link rel="stylesheet" type="text/css" media="all" href="../static/css/contacts.css" th:href="@{/css/contacts.css}" />
   <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
   <script th:src="@{/js/contacts.js}" src="../static/js/contacts.js"></script>
 </head>
@@ -17,28 +17,28 @@
 <div class="overlay">
 
   <header class="navbar">
-    <a href="home.html" id="navbar-title">
+    <a th:href="@{/}" href="home.html" id="navbar-title">
       Professional Lawn Services
     </a>
     <nav>
       <ul class="nav-links">
-        <li><a th:href="@{/}">Home</a></li>
-        <li><a th:href="@{/contacts}">Contacts</a></li>
-        <li><a th:href="@{/appointments}">Appointments</a></li>
-        <li><a th:href="@{/account}">Account</a></li>
-        <li><a th:href="@{/statistics}">Statistics</a></li>
+        <li><a th:href="@{/}" href="home.html">Home</a></li>
+        <li><a th:href="@{/contacts}" href="contacts.html">Contacts</a></li>
+        <li><a th:href="@{/appointments}" href="appointments.html">Appointments</a></li>
+        <li><a th:href="@{/account}" href="account.html">Account</a></li>
+        <li><a th:href="@{/statistics}" href="statistics.html">Statistics</a></li>
       </ul>
     </nav>
     <div id="navbar-dropdown">
       <button id="nav-links-dropdown-button" onclick="navbarDropdown(event)">
-        <img id="navbar-dropdown-svg" th:src="@{/images/caret-right-square.svg}" height="25" width="25">
+        <img id="navbar-dropdown-svg" th:src="@{/images/caret-right-square.svg}" src="../static/images/caret-right-square.svg" height="25" width="25">
       </button>
       <div id="navbar-dropdown-content">
-        <li><a th:href="@{/}">Home</a></li>
-        <li><a th:href="@{/contacts}">Contacts</a></li>
-        <li><a th:href="@{/appointments}">Appointments</a></li>
-        <li><a th:href="@{/account}">Account</a></li>
-        <li><a th:href="@{/statistics}">Statistics</a></li>
+        <li><a th:href="@{/}" href="home.html">Home</a></li>
+        <li><a th:href="@{/contacts}" href="contacts.html">Contacts</a></li>
+        <li><a th:href="@{/appointments}" href="appointments.html">Appointments</a></li>
+        <li><a th:href="@{/account}" href="account.html">Account</a></li>
+        <li><a th:href="@{/statistics}" href="statistics.html">Statistics</a></li>
       </div>
     </div>
   </header>
@@ -55,12 +55,12 @@
         <input type="text" class="inner-add-elements" placeholder="Search Contacts">
         <button id="search-contact-button" class="btn btn-primary">
           <span id="search-contact-button-text"> Search </span>
-          <img src="../static/images/search.svg" height="20" width="20">
+          <img th:src="@{/images/search.svg}" src="../static/images/search.svg" height="20" width="20">
         </button>
         <a href="add-contact.html">
           <button id="add-contact-button" class="btn btn-primary">
             <span id="add-contact-button-text"> Add </span>
-            <img src="../static/images/person-add.svg" height="25" width="25">
+            <img th:src="@{/images/person-add.svg}" src="../static/images/person-add.svg" height="25" width="25">
           </button>
         </a>
       </div>
@@ -113,8 +113,8 @@
         <input type="text" id="current-page" size="1" maxlength="2">
         <span id="total-pages">/ </span>
 
-        <button id="next-page"> <img src="../static/images/arrow-left-square-fill.svg"></button>
-        <button id="prev-page"> <img src="../static/images/arrow-right-square-fill.svg"></button>
+        <button id="next-page"> <img th:src="@{/images/arrow-left-square-fill.svg}" src="../static/images/arrow-left-square-fill.svg"></button>
+        <button id="prev-page"> <img th:src="@{/images/arrow-right-square-fill.svg}" src="../static/images/arrow-right-square-fill.svg"></button>
 
       </div>
 

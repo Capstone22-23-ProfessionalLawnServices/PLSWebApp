@@ -9,7 +9,7 @@
   <script th:src="@{/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
   <script th:src="@{/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" media="all" href="../static/css/common.css" th:href="@{/css/common.css}" />
-  <link rel="stylesheet" type="text/css" media="all" href="../static/css/account.css" th:href="@{/css/appointments.css}" />
+  <link rel="stylesheet" type="text/css" media="all" href="../static/css/appointments.css" th:href="@{/css/appointments.css}" />
   <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
   <script th:src="@{/js/appointments.js}" src="../static/js/appointments.js"></script>
 </head>
@@ -17,28 +17,28 @@
 <div class="overlay">
 
   <header class="navbar">
-    <a href="../home/home.html" id="navbar-title">
+    <a th:href="@{/}" href="home.html" id="navbar-title">
       Professional Lawn Services
     </a>
     <nav>
       <ul class="nav-links">
-        <li><a th:href="@{/}">Home</a></li>
-        <li><a th:href="@{/contacts}">Contacts</a></li>
-        <li><a th:href="@{/appointments}">Appointments</a></li>
-        <li><a th:href="@{/account}">Account</a></li>
-        <li><a th:href="@{/statistics}">Statistics</a></li>
+        <li><a th:href="@{/}" href="home.html">Home</a></li>
+        <li><a th:href="@{/contacts}" href="contacts.html">Contacts</a></li>
+        <li><a th:href="@{/appointments}" href="appointments.html">Appointments</a></li>
+        <li><a th:href="@{/account}" href="account.html">Account</a></li>
+        <li><a th:href="@{/statistics}" href="statistics.html">Statistics</a></li>
       </ul>
     </nav>
     <div id="navbar-dropdown">
       <button id="nav-links-dropdown-button" onclick="navbarDropdown(event)">
-        <img id="navbar-dropdown-svg" th:src="@{/images/caret-right-square.svg}" height="25" width="25">
+        <img id="navbar-dropdown-svg" th:src="@{/images/caret-right-square.svg}" src="../static/images/caret-right-square.svg" height="25" width="25">
       </button>
       <div id="navbar-dropdown-content">
-        <li><a th:href="@{/}">Home</a></li>
-        <li><a th:href="@{/contacts}">Contacts</a></li>
-        <li><a th:href="@{/appointments}">Appointments</a></li>
-        <li><a th:href="@{/account}">Account</a></li>
-        <li><a th:href="@{/statistics}">Statistics</a></li>
+        <li><a th:href="@{/}" href="home.html">Home</a></li>
+        <li><a th:href="@{/contacts}" href="contacts.html">Contacts</a></li>
+        <li><a th:href="@{/appointments}" href="appointments.html">Appointments</a></li>
+        <li><a th:href="@{/account}" href="account.html">Account</a></li>
+        <li><a th:href="@{/statistics}" href="statistics.html">Statistics</a></li>
       </div>
     </div>
   </header>
@@ -55,7 +55,7 @@
         <input type="text" class="inner-add-elements" placeholder="Search Appointments">
         <button id="search-appointment-button" class="btn btn-primary">
           <span id="search-appointment-button-text"> Search </span>
-          <img src="../static/images/search.svg" height="20" width="20">
+          <img th:src="@{/images/search.svg}" src="../static/images/search.svg" height="20" width="20">
         </button>
       </div>
 
@@ -78,7 +78,7 @@
         <div id="filter-button-container" class="column-containers">
           <button id="filter-button" class="btn btn-primary">
             <span id="filter-button-text"> Filter </span>
-            <img src="../static/images/filter.svg" height="20" width="20">
+            <img th:src="@{/images/filter.svg}" src="../static/images/filter.svg" height="20" width="20">
           </button>
         </div>
 
@@ -91,7 +91,7 @@
         <a href="add-appointment.html">
           <button id="add-appointment-button" class="btn btn-primary">
             <span id="add-appointment-button-text"> Add </span>
-            <img src="../static/images/calendar-plus.svg" style="margin-left: 3px">
+            <img th:src="@{/images/calendar-plus.svg}" src="../static/images/calendar-plus.svg" style="margin-left: 3px">
           </button>
         </a>
       </div>
@@ -144,8 +144,8 @@
         <input type="text" id="current-page" size="1" maxlength="2">
         <span id="total-pages">/ </span>
 
-        <button id="next-page"> <img src="../static/images/arrow-left-square-fill.svg"></button>
-        <button id="prev-page"> <img src="../static/images/arrow-right-square-fill.svg"></button>
+        <button id="next-page"> <img th:src="@{/images/arrow-left-square-fill.svg}" src="../static/images/arrow-left-square-fill.svg"></button>
+        <button id="prev-page"> <img th:src="@{/images/arrow-right-square-fill.svg}" src="../static/images/arrow-right-square-fill.svg"></button>
 
       </div>
 
