@@ -22,12 +22,20 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        /*
+        Contains the directories that can be accessed prior to logging in.
+         */
+
         String[] staticResources = {
                 "/css/**",
                 "/images/**",
                 "/js/**",
                 "/assets/**"
         };
+
+        /*
+        Contains the pages that only users with the manager role can access.
+         */
 
         String[] managerPages = {
                 "/add-appointment**",
