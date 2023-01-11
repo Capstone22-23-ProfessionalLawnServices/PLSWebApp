@@ -74,7 +74,7 @@ public class WebSecurityConfig {
         List<UserDetails> userDetailsList = new ArrayList<>();
         userDetailsList.add(User.withUsername("employee").password(passwordEncoder().encode("password"))
                 .roles("EMPLOYEE", "USER").build());
-        userDetailsList.add(User.withUsername("manager").password(passwordEncoder().encode("password"))
+        userDetailsList.add(User.withUsername("1").password(passwordEncoder().encode("1"))
                 .roles("MANAGER", "USER").build());
 
         return new InMemoryUserDetailsManager(userDetailsList);
