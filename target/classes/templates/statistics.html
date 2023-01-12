@@ -16,32 +16,8 @@
 <body>
 <div class="overlay">
 
-  <header class="navbar">
-    <a href="../home/home.html" id="navbar-title">
-      Professional Lawn Services
-    </a>
-    <nav>
-      <ul class="nav-links">
-        <li><a th:href="@{/}">Home</a></li>
-        <li><a th:href="@{/contacts}">Contacts</a></li>
-        <li><a th:href="@{/appointments}">Appointments</a></li>
-        <li><a th:href="@{/account}">Account</a></li>
-        <li><a th:href="@{/statistics}">Statistics</a></li>
-      </ul>
-    </nav>
-    <div id="navbar-dropdown">
-      <button id="nav-links-dropdown-button" onclick="navbarDropdown(event)">
-        <img id="navbar-dropdown-svg" th:src="@{/images/caret-right-square.svg}" height="25" width="25">
-      </button>
-      <div id="navbar-dropdown-content">
-        <li><a th:href="@{/}">Home</a></li>
-        <li><a th:href="@{/contacts}">Contacts</a></li>
-        <li><a th:href="@{/appointments}">Appointments</a></li>
-        <li><a th:href="@{/account}">Account</a></li>
-        <li><a th:href="@{/statistics}">Statistics</a></li>
-      </div>
-    </div>
-  </header>
+  <div th:insert="navbar.html::#navbar-container">
+  </div>
 
 
 </div>
