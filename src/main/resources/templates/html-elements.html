@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<header id="navbar-container" class="navbar">
+  <a th:href="@{/}" href="home.html" id="navbar-title">
+    Professional Lawn Services
+  </a>
+  <nav>
+    <ul class="nav-links">
+      <li><a th:href="@{/}" href="home.html">Home</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/contacts}" href="contacts.html">Contacts</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/appointments}" href="appointments.html">Appointments</a></li>
+      <li><a th:href="@{/account}" href="account.html">Account</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/statistics}" href="statistics.html">Statistics</a></li>
+    </ul>
+  </nav>
+  <div id="navbar-dropdown">
+    <button id="nav-links-dropdown-button" onclick="navbarDropdown(event)">
+      <img id="navbar-dropdown-svg" th:src="@{/images/caret-right-square.svg}" src="../static/images/caret-right-square.svg" height="25" width="25">
+    </button>
+    <div id="navbar-dropdown-content">
+      <!--<img src="../../../images/plstraced.svg" height="60">-->
+      <li><a th:href="@{/}" href="home.html">Home</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/contacts}" href="contacts.html">Contacts</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/appointments}" href="appointments.html">Appointments</a></li>
+      <li><a th:href="@{/account}" href="account.html">Account</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/statistics}" href="statistics.html">Statistics</a></li>
+    </div>
+  </div>
+</header>
+
+</body>
+</html>
