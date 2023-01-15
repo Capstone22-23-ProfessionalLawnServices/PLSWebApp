@@ -2,6 +2,7 @@ package com.professionallawnservices.app.securingweb;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class WebSecurityConfig {
 
     @Bean
@@ -75,7 +77,7 @@ public class WebSecurityConfig {
         userDetailsList.add(User.withUsername("employee").password(passwordEncoder().encode("password"))
                 .roles("EMPLOYEE", "USER").build());
         userDetailsList.add(User.withUsername("1").password(passwordEncoder().encode("1"))
-                .roles("MANAGER", "USER").build());
+                .roles("MANAGER", "USER", "OWNER").build());
 
         return new InMemoryUserDetailsManager(userDetailsList);
     }
