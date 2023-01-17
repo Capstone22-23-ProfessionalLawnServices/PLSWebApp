@@ -20,9 +20,9 @@ public class HomeController {
     @GetMapping(value = {"/home", "/"})
     //@PreAuthorize("hasRole('MANAGER')")
     public String viewHome(Model model) {
-        RolesEnum userRole = SecurityHelpers.getPrimaryUserRole();
+        RolesEnum user = SecurityHelpers.getPrimaryUserRole();
 
-        model.addAttribute("userAccessLevel", userRole.accessLevel);
+        model.addAttribute("userAccessLevel", user.accessLevel);
         model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
 
         return "home";
