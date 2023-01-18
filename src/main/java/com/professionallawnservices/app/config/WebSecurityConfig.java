@@ -84,15 +84,16 @@ public class WebSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
-        List<UserDetails> userDetailsList = new ArrayList<>();
-        userDetailsList.add(User.withUsername("employee").password(passwordEncoder().encode("password"))
-                .roles("EMPLOYEE", "USER").build());
-        userDetailsList.add(User.withUsername("1").password(passwordEncoder().encode("1"))
-                .roles("MANAGER", "USER", "OWNER").build());
+        var userDetails = new JdbcUserDetailsManager(dataSource);
+/*
+        userDetails.createUser(User.withUsername("1").password(passwordEncoder().encode("1"))
+               .authorities("ROLE_MANAGER", "ROLE_USER").build());
+        userDetails.createUser(User.withUsername("2").password(passwordEncoder().encode("2"))
+               .authorities("ROLE_EMPLOYEE", "ROLE_USER").build());
 
-        var user = new JdbcUserDetailsManager(dataSource).loadUserByUsername("jhinson");
 
-        return new JdbcUserDetailsManager(dataSource);
-        //return new InMemoryUserDetailsManager(userDetailsList);
+ */
+
+        return userDetails;
     }
 }
