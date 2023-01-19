@@ -1,7 +1,8 @@
-package com.professionallawnservices.app.controller;
+package com.professionallawnservices.app.controllers;
 
 import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.enums.RolesEnum;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ import static com.professionallawnservices.app.enums.RolesEnum.*;
 public class HomeController {
 
     @GetMapping(value = {"/home", "/"})
-    //@PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public String viewHome(Model model) {
         RolesEnum user = SecurityHelpers.getPrimaryUserRole();
 

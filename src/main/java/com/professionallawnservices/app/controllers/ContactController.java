@@ -1,4 +1,4 @@
-package com.professionallawnservices.app.controller;
+package com.professionallawnservices.app.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
