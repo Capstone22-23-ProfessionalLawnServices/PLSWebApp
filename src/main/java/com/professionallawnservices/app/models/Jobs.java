@@ -37,15 +37,12 @@ public class Jobs {
     @NonNull
     private Date scheduledDate;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "customnerId")
     private Customer customer;
 
-    /*
-    @OneToMany(mappedBy = "help")
+    @OneToMany(mappedBy = "job")
     private Set<Help> help = new HashSet<>();
-
-     */
 
     public long getJobId() {
         return jobId;

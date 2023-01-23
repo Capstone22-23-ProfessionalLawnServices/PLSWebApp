@@ -27,11 +27,8 @@ public class Contacts {
     @NonNull
     private String contactEmail;
 
-    /*
     @OneToMany(mappedBy = "contacts")
     private Set<Help> help = new HashSet<>();
-
-     */
 
     public long getContactId() {
         return contactId;

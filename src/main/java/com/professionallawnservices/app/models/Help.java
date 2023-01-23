@@ -11,16 +11,14 @@ public class Help {
     @Column(name = "helpId")
     private long helpId;
 
-    /*
     @ManyToOne
     @JoinColumn(name = "contactId")
-    private Contacts contact;
+    private Contacts contacts;
 
     @ManyToOne
     @JoinColumn(name = "jobId")
     private Jobs job;
 
-     */
 
     public long getId() {
         return helpId;
