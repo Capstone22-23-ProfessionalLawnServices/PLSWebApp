@@ -14,7 +14,6 @@ import static com.professionallawnservices.app.enums.RolesEnum.*;
 public class HomeController {
 
     @GetMapping(value = {"/home", "/"})
-    @PreAuthorize("hasRole('MANAGER')")
     public String viewHome(Model model) {
         RolesEnum user = SecurityHelpers.getPrimaryUserRole();
 
