@@ -1,67 +1,74 @@
 package com.professionallawnservices.app.models;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(name = "customer")
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column(name = "customerId")
+    private long customerId;
 
-    @Column
-    private String name;
+    @Column(name = "customerName")
+    private String customerName;
 
-    @Column
-    private String location;
+    @Column(name = "customerLocation")
+    private String customerLocation;
 
-    @Column
-    private String phone;
+    @Column(name = "customerPhone")
+    private String customerPhone;
 
-    @Column
-    private String email;
+    @Column(name = "customerEmail")
+    private String customerEmail;
 
-    @Column
+    @Column(name = "frequency")
     private int frequency;
 
-    public long getId() {
-        return id;
+    @OneToMany(mappedBy = "customer")
+    private Set<Jobs> jobs = new HashSet<>();
+
+    public long getCustomerId() {
+        return customerId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 
-    public String getName() {
-        return name;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    public String getLocation() {
-        return location;
+    public String getCustomerLocation() {
+        return customerLocation;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setCustomerLocation(String customerLocation) {
+        this.customerLocation = customerLocation;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getCustomerPhone() {
+        return customerPhone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
     }
 
-    public String getEmail() {
-        return email;
+    public String getCustomerEmail() {
+        return customerEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
     public int getFrequency() {
