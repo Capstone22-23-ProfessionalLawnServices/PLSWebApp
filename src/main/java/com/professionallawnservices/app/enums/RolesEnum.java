@@ -6,6 +6,7 @@ authority has the value of the enum's authorityName.
  */
 
 public enum RolesEnum {
+    ADMIN("ADMIN", "ROLE_ADMIN", 4),
     OWNER("OWNER", "ROLE_OWNER", 3),
     MANAGER("MANAGER","ROLE_MANAGER", 2),
     EMPLOYEE("EMPLOYEE","ROLE_EMPLOYEE", 1),
