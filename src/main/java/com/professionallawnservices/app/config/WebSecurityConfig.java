@@ -53,9 +53,18 @@ public class WebSecurityConfig {
                 "/manager**"
         };
 
+        /*
+        Contains the pages that are accessible without logging in. Utilized only for testing. Should be removed from
+        the http protocol before deploying.
+         */
+
+        String[] testingPages = {
+                "/**"
+        };
+
         http
                 .authorizeHttpRequests((requests) -> requests
-                        //.antMatchers("/", "/home").permitAll()
+                        //.antMatchers(testingPages).permitAll()
                         .antMatchers(staticResources).permitAll()
                         .antMatchers(managerPages).hasRole("MANAGER")
                         .anyRequest().authenticated()
@@ -74,13 +83,6 @@ public class WebSecurityConfig {
     {
         return new BCryptPasswordEncoder();
     }
-
-    @Bean
-    @ConfigurationProperties("app.datasource")
-    public DataSource dataSource() {
-        return DataSourceBuilder.create().build();
-    }
-
 
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
