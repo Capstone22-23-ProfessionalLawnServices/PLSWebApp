@@ -13,11 +13,11 @@
   <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
   <script th:src="@{/js/home.js}" src="../static/js/home.js"></script>
 </head>
-<body onload="timeClock(); setDates();">
+<body onload="timeClock(); setDates(); loadNavbar()">
 <div class="overlay">
 
-<div th:insert="html-elements.html::#navbar-container">
-</div>
+  <div id="navbar-insert" th:insert="html-elements.html::#navbar-container">
+  </div>
 
   <div class="container main-container center-block">
 
