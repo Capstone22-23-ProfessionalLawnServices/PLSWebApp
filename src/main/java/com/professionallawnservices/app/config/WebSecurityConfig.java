@@ -62,7 +62,9 @@ public class WebSecurityConfig {
                 "/**"
         };
 
-        http
+        //Added .cors().and().csrf().disable() to allow for post requests from postman
+
+        http.cors().and().csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
                         //.antMatchers(testingPages).permitAll()
                         .antMatchers(staticResources).permitAll()
