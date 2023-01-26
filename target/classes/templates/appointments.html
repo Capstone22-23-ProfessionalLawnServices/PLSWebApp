@@ -13,10 +13,10 @@
   <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
   <script th:src="@{/js/appointments.js}" src="../static/js/appointments.js"></script>
 </head>
-<body>
+<body onload="loadNavbar()">
 <div class="overlay">
 
-  <div th:insert="html-elements.html::#navbar-container">
+  <div id="navbar-insert" th:insert="html-elements.html::#navbar-container">
   </div>
 
   <div class="container main-container center-block">

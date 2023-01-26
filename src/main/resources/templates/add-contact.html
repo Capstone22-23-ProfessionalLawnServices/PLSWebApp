@@ -19,6 +19,22 @@
     <div id="navbar-insert" th:insert="html-elements.html::#navbar-container">
     </div>
 
+    <div class="container main-container add-content-div">
+        <h1>Add Contact Form</h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <form>
+                    <label for="name" class="form-label">Name:</label>
+                    <input type="text" id="name" class="form-control form-input" placeholder="John Smith">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" id="email" class="form-control form-input" placeholder="john.smith@gmail.com">
+                    <label for="phone" class="form-label">Phone Number:</label>
+                    <input type="email" id="phone" class="form-control form-input" placeholder="8439999999">
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>
