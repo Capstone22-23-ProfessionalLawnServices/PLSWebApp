@@ -17,7 +17,10 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping />
+        <datasource-mapping>
+          <factory-entry name="PLSWebApp" />
+          <factory-entry name="entityManagerFactory" value="04610f20-11c9-4d7f-beb5-0d34421f72b7" />
+        </datasource-mapping>
         <naming-strategy-map />
       </configuration>
     </facet>

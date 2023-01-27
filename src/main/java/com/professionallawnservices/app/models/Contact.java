@@ -1,6 +1,7 @@
 package com.professionallawnservices.app.models;
 
 import org.springframework.lang.NonNull;
+import org.springframework.lang.NonNullFields;
 
 import javax.persistence.*;
 import java.util.HashSet;

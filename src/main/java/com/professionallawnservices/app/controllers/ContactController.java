@@ -2,13 +2,18 @@ package com.professionallawnservices.app.controllers;
 
 import com.professionallawnservices.app.models.Contact;
 import com.professionallawnservices.app.repos.ContactRepo;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 
@@ -21,18 +26,45 @@ public class ContactController {
     private static final String managerRole = MANAGER.roleName;
 
     @GetMapping("/contacts")
-    public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-        model.addAttribute("name", name);
+    public String contactsView(Model model) {
+        model.addAttribute("contacts", contactRepo.findAll());
         return "contacts";
     }
 
-    @GetMapping("/contactstest")
-    public ResponseEntity<List<Contact>> test() {
-        Contact contactRequest = new Contact();
-        contactRequest.setContactId(1);
-        return ResponseEntity.ok(contactRepo.findAll());
+    @GetMapping("/add-contact")
+    public String addContactView(Model model) {
+        model.addAttribute("contact", new Contact());
+        return "add-contact";
     }
 
+    @GetMapping("/update-contact/{id}")
+    public String updateContactView(@PathVariable("id") long id, Model model) {
+        Contact contact = contactRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id:" + id));
+        model.addAttribute("contact", contact);
+        return "update-contact";
+    }
+
+    @PostMapping("/create-contact")
+    public RedirectView createContact(@ModelAttribute Contact contact) {
+        contactRepo.save(contact);
+        return new RedirectView("/add-contact");
+    }
+
+    @PostMapping("/update-contact/{id}")
+    public RedirectView updateContact(@PathVariable("id") long id, @ModelAttribute Contact contact,Model model) {
+        contact.setContactId(id);
+        contactRepo.save(contact);
+        return new RedirectView("/update-contact/" + id);
+    }
+
+    @GetMapping("/delete-contact/{id}")
+    public ResponseEntity<Contact> deleteContact(@PathVariable("id") long id) {
+        Contact contact = contactRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id:" + id));
+        contactRepo.delete(contact);
+        return ResponseEntity.ok(contact);
+    }
 
     @GetMapping("/search-contacts")
     public ResponseEntity<List<Contact>> getEmployeeByName(@RequestParam(name = "search") String search) {
@@ -45,26 +77,6 @@ public class ContactController {
         String contactName = contact.getContactName();
         List<Contact> contacts = contactRepo.findByContactName(contactName);
         return ResponseEntity.ok(contacts);
-    }
-
-    @GetMapping(value = "/getContacts")
-    //@PreAuthorize("hasRole('MANAGER')")
-    public String getContacts(Model model) {
-        var x = contactRepo.findAll().toString();
-        model.addAttribute("contactsList", x);
-        return "contactstest";
-    }
-
-    //Test insert for contact
-    @GetMapping (value = "/insertContact")
-    //@PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<String> insertContact() {
-        Contact contact = new Contact();
-        contact.setContactEmail("test@test.com");
-        contact.setContactName("Test TEst");
-        contact.setContactPhone("9999999");
-        contactRepo.save(contact);
-        return ResponseEntity.ok("Contact inserted successfully");
     }
 
 }

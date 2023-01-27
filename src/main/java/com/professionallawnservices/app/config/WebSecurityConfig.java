@@ -53,20 +53,11 @@ public class WebSecurityConfig {
                 "/manager**"
         };
 
-        /*
-        Contains the pages that are accessible without logging in. Utilized only for testing. Should be removed from
-        the http protocol before deploying.
-         */
-
-        String[] testingPages = {
-                "/**"
-        };
-
         //Added .cors().and().csrf().disable() to allow for post requests from postman
 
         http.cors().and().csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        //.antMatchers(testingPages).permitAll()
+                        .antMatchers("/**").permitAll() //Allows access to pages without logging in
                         .antMatchers(staticResources).permitAll()
                         .antMatchers(managerPages).hasRole("MANAGER")
                         .anyRequest().authenticated()

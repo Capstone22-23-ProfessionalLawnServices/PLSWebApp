@@ -16,3 +16,11 @@ function navbarDropdown(e) {
 function loadNavbar() {
     $('#navbar-insert').load("html-elements.html");
 }
+
+function formClear() {
+    $(':input','#add-form')
+        .not(':button, :submit, :reset, :hidden')
+        .val('')
+        .prop('checked', false)
+        .prop('selected', false);
+}
