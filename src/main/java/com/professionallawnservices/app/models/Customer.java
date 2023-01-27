@@ -10,26 +10,26 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customerId")
+    @Column(name = "customer_id")
     private long customerId;
 
-    @Column(name = "customerName")
+    @Column(name = "customer_name")
     private String customerName;
 
-    @Column(name = "customerLocation")
+    @Column(name = "customer_location")
     private String customerLocation;
 
-    @Column(name = "customerPhone")
+    @Column(name = "customer_phone")
     private String customerPhone;
 
-    @Column(name = "customerEmail")
+    @Column(name = "customer_email")
     private String customerEmail;
 
     @Column(name = "frequency")
     private int frequency;
 
     @OneToMany(mappedBy = "customer")
-    private Set<Jobs> jobs = new HashSet<>();
+    private Set<Job> jobs = new HashSet<>();
 
     public long getCustomerId() {
         return customerId;

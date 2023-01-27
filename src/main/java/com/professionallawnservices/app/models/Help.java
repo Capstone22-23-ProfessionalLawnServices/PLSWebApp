@@ -8,16 +8,16 @@ public class Help {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "helpId")
+    @Column(name = "help_id")
     private long helpId;
 
     @ManyToOne
-    @JoinColumn(name = "contactId")
-    private Contacts contacts;
+    @JoinColumn(name = "contact_id")
+    private Contact contact;
 
     @ManyToOne
-    @JoinColumn(name = "jobId")
-    private Jobs job;
+    @JoinColumn(name = "job_id")
+    private Job job;
 
 
     public long getId() {
@@ -28,23 +28,20 @@ public class Help {
         this.helpId = helpId;
     }
 
-    /*
-    public Contacts getContact() {
+    public Contact getContact() {
         return contact;
     }
 
-    public void setContact(Contacts contact) {
+    public void setContact(Contact contact) {
         this.contact = contact;
     }
 
-    public Jobs getJob() {
+    public Job getJob() {
         return job;
     }
 
-    public void setJob(Jobs job) {
+    public void setJob(Job job) {
         this.job = job;
     }
-
-     */
 
 }

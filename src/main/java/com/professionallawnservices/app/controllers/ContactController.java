@@ -1,6 +1,6 @@
 package com.professionallawnservices.app.controllers;
 
-import com.professionallawnservices.app.models.Contacts;
+import com.professionallawnservices.app.models.Contact;
 import com.professionallawnservices.app.repos.ContactsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -29,23 +29,23 @@ public class ContactController {
     }
 
     @GetMapping("/contactstest")
-    public ResponseEntity<List<Contacts>> test() {
-        Contacts contactRequest = new Contacts();
+    public ResponseEntity<List<Contact>> test() {
+        Contact contactRequest = new Contact();
         contactRequest.setContactId(1);
         return ResponseEntity.ok(contactsRepo.findAll());
     }
 
 
     @GetMapping("/search-contacts")
-    public ResponseEntity<List<Contacts>> getEmployeeByName(@RequestParam(name = "search") String search) {
-        List<Contacts> contacts = contactsRepo.findByContactName(search);
+    public ResponseEntity<List<Contact>> getEmployeeByName(@RequestParam(name = "search") String search) {
+        List<Contact> contacts = contactsRepo.findByContactName(search);
         return ResponseEntity.ok(contacts);
     }
 
     @PostMapping("/search-contacts-post")
-    public ResponseEntity<List<Contacts>> getEmployeeByNamePost(@RequestBody Contacts contact) {
+    public ResponseEntity<List<Contact>> getEmployeeByNamePost(@RequestBody Contact contact) {
         String contactName = contact.getContactName();
-        List<Contacts> contacts = contactsRepo.findByContactName(contactName);
+        List<Contact> contacts = contactsRepo.findByContactName(contactName);
         return ResponseEntity.ok(contacts);
     }
 
@@ -61,7 +61,7 @@ public class ContactController {
     @GetMapping (value = "/insertContact")
     //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<String> insertContact() {
-        Contacts contact = new Contacts();
+        Contact contact = new Contact();
         contact.setContactEmail("test@test.com");
         contact.setContactName("Test TEst");
         contact.setContactPhone("9999999");

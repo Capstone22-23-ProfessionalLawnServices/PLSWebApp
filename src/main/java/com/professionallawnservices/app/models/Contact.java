@@ -7,27 +7,27 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "contacts")
-public class Contacts {
+@Table(name = "contact")
+public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "contactId")
+    @Column(name = "contact_id")
     private long contactId;
 
-    @Column(name = "contactName")
+    @Column(name = "contact_name")
     @NonNull
     private String contactName;
 
-    @Column(name = "contactPhone")
+    @Column(name = "contact_phone")
     @NonNull
     private String contactPhone;
 
-    @Column(name = "contactEmail")
+    @Column(name = "contact_email")
     @NonNull
     private String contactEmail;
 
-    @OneToMany(mappedBy = "contacts")
+    @OneToMany(mappedBy = "contact")
     private Set<Help> help = new HashSet<>();
 
     public long getContactId() {

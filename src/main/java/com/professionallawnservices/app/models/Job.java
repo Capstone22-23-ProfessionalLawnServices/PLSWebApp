@@ -9,36 +9,36 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "jobs")
-public class Jobs {
+@Table(name = "job")
+public class Job {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "jobId")
+    @Column(name = "job_id")
     private long jobId;
 
-    @Column(name = "startTime")
+    @Column(name = "start_time")
     private Time startTime;
 
-    @Column(name = "endTime")
+    @Column(name = "end_time")
     private Time endTime;
 
-    @Column(name = "totalTime")
+    @Column(name = "total_time")
     private Double totalTime;
 
     @Column(name = "cost")
     private Double cost;
 
-    @Column(name = "jobLocation")
+    @Column(name = "job_location")
     @NonNull
     private String jobLocation;
 
-    @Column(name = "scheduledDate")
+    @Column(name = "scheduled_date")
     @NonNull
     private Date scheduledDate;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "customnerId")
+    @JoinColumn(name = "customner_id")
     private Customer customer;
 
     @OneToMany(mappedBy = "job")
