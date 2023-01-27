@@ -1,11 +1,9 @@
 package com.professionallawnservices.app.controllers;
 
 import com.professionallawnservices.app.models.Contact;
-import com.professionallawnservices.app.repos.ContactsRepo;
+import com.professionallawnservices.app.repos.ContactRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +16,7 @@ import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 public class ContactController {
 
     @Autowired
-    ContactsRepo contactsRepo;
+    ContactRepo contactRepo;
 
     private static final String managerRole = MANAGER.roleName;
 
@@ -32,27 +30,27 @@ public class ContactController {
     public ResponseEntity<List<Contact>> test() {
         Contact contactRequest = new Contact();
         contactRequest.setContactId(1);
-        return ResponseEntity.ok(contactsRepo.findAll());
+        return ResponseEntity.ok(contactRepo.findAll());
     }
 
 
     @GetMapping("/search-contacts")
     public ResponseEntity<List<Contact>> getEmployeeByName(@RequestParam(name = "search") String search) {
-        List<Contact> contacts = contactsRepo.findByContactName(search);
+        List<Contact> contacts = contactRepo.findByContactName(search);
         return ResponseEntity.ok(contacts);
     }
 
     @PostMapping("/search-contacts-post")
     public ResponseEntity<List<Contact>> getEmployeeByNamePost(@RequestBody Contact contact) {
         String contactName = contact.getContactName();
-        List<Contact> contacts = contactsRepo.findByContactName(contactName);
+        List<Contact> contacts = contactRepo.findByContactName(contactName);
         return ResponseEntity.ok(contacts);
     }
 
     @GetMapping(value = "/getContacts")
     //@PreAuthorize("hasRole('MANAGER')")
     public String getContacts(Model model) {
-        var x = contactsRepo.findAll().toString();
+        var x = contactRepo.findAll().toString();
         model.addAttribute("contactsList", x);
         return "contactstest";
     }
@@ -65,7 +63,7 @@ public class ContactController {
         contact.setContactEmail("test@test.com");
         contact.setContactName("Test TEst");
         contact.setContactPhone("9999999");
-        contactsRepo.save(contact);
+        contactRepo.save(contact);
         return ResponseEntity.ok("Contact inserted successfully");
     }
 

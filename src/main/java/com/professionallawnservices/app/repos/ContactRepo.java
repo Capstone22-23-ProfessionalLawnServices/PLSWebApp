@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ContactsRepo extends JpaRepository<Contact, Long> {
+public interface ContactRepo extends JpaRepository<Contact, Long> {
 
     @Query("select e from Contact e where lower(e.contactName) like lower(concat('%', :search, '%')) ")
     List<Contact> findByContactName(@Param("search") String search);
