@@ -49,7 +49,7 @@ public class SecurityHelpers {
             for (RolesEnum role:
                  allRoles) {
 
-                if ((userRole.equals(role.roleName)) && (primaryRole.accessLevel <= role.accessLevel)) {
+                if ((userRole.equals(role.authorityName)) && (primaryRole.accessLevel <= role.accessLevel)) {
                     primaryRole = role;
                 }
             }

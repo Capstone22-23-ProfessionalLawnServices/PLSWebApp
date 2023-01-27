@@ -13,10 +13,26 @@
     <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
     <script th:src="@{/js/add-contact.js}" src="../static/js/add-contact.js"></script>
 </head>
-<body>
+<body onload="loadNavbar()">
 <div class="overlay">
 
-    <div th:insert="html-elements.html::#navbar-container">
+    <div id="navbar-insert" th:insert="html-elements.html::#navbar-container">
+    </div>
+
+    <div class="container main-container add-content-div">
+        <h1>Add Contact Form</h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <form>
+                    <label for="name" class="form-label">Name:</label>
+                    <input type="text" id="name" class="form-control" placeholder="John Smith" style="max-width: 500px">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" id="email" class="form-control" placeholder="john.smith@gmail.com" style="width: 500px">
+                    <label for="phone" class="form-label">Phone Number:</label>
+                    <input type="email" id="phone" class="form-control" placeholder="8439999999" style="width: 500px">
+                </form>
+            </div>
+        </div>
     </div>
 
 </div>
