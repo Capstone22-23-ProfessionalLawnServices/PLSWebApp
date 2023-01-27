@@ -225,7 +225,7 @@ function moduleInfo(e) {
         let set_color = $(button_id).parent().parent().parent().css("background-color");
 
         if(set_color === "rgb(42, 151, 147)") {
-            background_color = "#72C5C2";
+            background_color = "#B1E1DF";
         }
         else {
             background_color = "#FFE5B8";
@@ -266,7 +266,7 @@ function drop(e) {
         }
         else if($("#" + target.id).parent().parent().css("background-color") === "rgb(42, 151, 147)") {
             $("#" + document.getElementById(data).id).css("background-color",
-                "#72C5C2");
+                "#B1E1DF");
         }
         else {
             $("#" + document.getElementById(data).id).css("background-color",
