@@ -38,7 +38,7 @@ public class Job {
     private Date scheduledDate;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "customner_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToMany(mappedBy = "job")
@@ -76,7 +76,7 @@ public class Job {
         this.totalTime = totalTime;
     }
 
-    public double getCost() {
+    public Double getCost() {
         return cost;
     }
 
@@ -98,6 +98,14 @@ public class Job {
 
     public void setScheduledDate(Date scheduledDate) {
         this.scheduledDate = scheduledDate;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
 }
