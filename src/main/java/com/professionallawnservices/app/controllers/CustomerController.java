@@ -1,18 +1,14 @@
 package com.professionallawnservices.app.controllers;
 
 import com.professionallawnservices.app.helpers.SecurityHelpers;
-import com.professionallawnservices.app.models.Contact;
 import com.professionallawnservices.app.models.Customer;
 import com.professionallawnservices.app.repos.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import com.professionallawnservices.app.enums.RolesEnum;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
@@ -39,10 +35,25 @@ public class CustomerController {
         return "add-customer";
     }
 
+    @GetMapping("/update-customer/{id}")
+    public String updateCustomerView(@PathVariable("id") long id, Model model) {
+        Customer customer = customerRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + id));
+        model.addAttribute("customer", customer);
+        return "update-customer";
+    }
+
     @PostMapping("/create-customer")
-    public RedirectView createContact(@ModelAttribute Customer customer) {
+    public RedirectView createCustomer(@ModelAttribute Customer customer) {
         customerRepo.save(customer);
         return new RedirectView("/add-customer");
+    }
+
+    @PostMapping("/update-customer/{id}")
+    public RedirectView updateCustomer(@PathVariable("id") long id, @ModelAttribute Customer customer,Model model) {
+        customer.setCustomerId(id);
+        customerRepo.save(customer);
+        return new RedirectView("/update-customer/" + id);
     }
 
     /*

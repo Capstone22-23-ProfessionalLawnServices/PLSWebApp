@@ -57,7 +57,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="customers : ${customers}">
+        <tr th:each="customers : ${customers}" onclick="rowClick(event)"
+            th:value="${customers.customerId}">
           <th th:text="${customers.customerId}" scope="row"></th>
           <td th:text="${customers.customerName}"></td>
           <td class="location-column" th:text="${customers.customerLocation}"></td>
