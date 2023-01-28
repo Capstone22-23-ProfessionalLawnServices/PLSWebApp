@@ -13,14 +13,37 @@
   <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
   <script th:src="@{/js/add-appointment.js}" src="../static/js/add-appointment.js"></script>
 </head>
-<body onload="loadNavbar()">
+<body onload="loadNavbar(); formClear()">
 <div class="overlay">
 
   <div id="navbar-insert" th:insert="html-elements.html::#navbar-container">
   </div>
 
-  <div class="container main-container center-block add-content-div">
+  <div class="container main-container add-content-div">
+    <h1>Add Appointment Form</h1>
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <form id="add-form" action="#" th:action="@{/test}" th:object="${job}" method="post">
+          <label for="cost" class="form-label">Cost:</label>
+          <input type="text" id="cost" th:field="*{cost}" class="form-control form-input"
+                 placeholder="30.00" pattern="^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$">
+          <label for="location" class="form-label">Location:</label>
+          <input type="text" id="location" th:field="*{jobLocation}" class="form-control form-input"
+                 placeholder="120 Smith St" minlength="5">
+          <label for="date" class="form-label">Scheduled Date:</label>
+          <input type="date" id="date" th:field="*{scheduledDate}" class="form-control form-input"
+                 required="required">
+          <label for="start-time" class="form-label">Start Time:</label>
+          <input type="datetime-local" id="start-time" th:field="*{startTime}" class="form-control form-input">
+          <label for="end-time" class="form-label">End Time:</label>
+          <input type="datetime-local" id="end-time" th:field="*{endTime}" class="form-control form-input">
+          <label for="customer" class="form-label">Client: </label>
+          <input type="number" id="customer" th:field="*{customer.customerId}" required="required">
+          <input type="submit" value="Submit" />
 
+        </form>
+      </div>
+    </div>
   </div>
 
 </div>
