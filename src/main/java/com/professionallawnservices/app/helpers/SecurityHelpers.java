@@ -58,4 +58,13 @@ public class SecurityHelpers {
         return primaryRole;
     }
 
+    public static String encode(String rawString) {
+        return Base64.getEncoder().encodeToString(rawString.getBytes());
+    }
+
+    public static String decode(String encodedString) {
+        byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+        return new String(decodedBytes);
+    }
+
 }
