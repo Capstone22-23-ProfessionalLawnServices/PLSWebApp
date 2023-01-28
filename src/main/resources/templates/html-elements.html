@@ -14,6 +14,7 @@
     <ul class="nav-links">
       <li><a th:href="@{/}" href="home.html">Home</a></li>
       <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/contacts}" href="contacts.html">Contacts</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/customers}" href="customers.html">Customer</a></li>
       <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/appointments}" href="appointments.html">Appointments</a></li>
       <li><a th:href="@{/account}" href="account.html">Account</a></li>
       <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/statistics}" href="statistics.html">Statistics</a></li>
@@ -27,6 +28,7 @@
       <!--<img src="../../../images/plstraced.svg" height="60">-->
       <li><a th:href="@{/}" href="home.html">Home</a></li>
       <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/contacts}" href="contacts.html">Contacts</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/customers}" href="customers.html">Customer</a></li>
       <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/appointments}" href="appointments.html">Appointments</a></li>
       <li><a th:href="@{/account}" href="account.html">Account</a></li>
       <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/statistics}" href="statistics.html">Statistics</a></li>
