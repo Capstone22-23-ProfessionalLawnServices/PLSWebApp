@@ -18,9 +18,11 @@ function loadNavbar() {
 }
 
 function formClear() {
-    $(':input','#add-form')
-        .not(':button, :submit, :reset, :hidden')
-        .val('')
-        .prop('checked', false)
-        .prop('selected', false);
+    $(':input','#add-form').not(':button, :submit, :reset, :hidden').val('');
+}
+
+function rowClick(e) {
+    let rowId = e.target.parentNode.getAttribute("value");
+
+    window.location.href = ("/update-contact/" + rowId);
 }
