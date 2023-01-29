@@ -1,11 +1,13 @@
 package com.professionallawnservices.app.config;
 
 import com.professionallawnservices.app.helpers.SecurityHelpers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,11 +16,15 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfig {
+
+    @Autowired
+    DataSource dataSource;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -66,16 +72,28 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        var userDetails = new JdbcUserDetailsManager(dataSource);
+    public JdbcUserDetailsManager jdbcUserDetailsManager()
+    {
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
+        jdbcUserDetailsManager.setDataSource(dataSource);
 
-        /*
-        userDetails.createUser(User.withUsername("1").password(SecurityHelpers.passwordEncoder().encode("1"))
-               .authorities("ROLE_MANAGER", "ROLE_USER").build());
+                /*
+        jdbcUserDetailsManager.createUser(User.withUsername("3").password(passwordEncoder().encode("3"))
+               .authorities("ROLE_OWNER").build());
         userDetails.createUser(User.withUsername("2").password(SecurityHelpers.passwordEncoder().encode("2"))
                .authorities("ROLE_EMPLOYEE", "ROLE_USER").build());
+
          */
 
-        return userDetails;
+
+
+        return jdbcUserDetailsManager;
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder()
+    {
+        return new BCryptPasswordEncoder();
+    }
+
 }

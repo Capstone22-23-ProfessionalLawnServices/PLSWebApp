@@ -70,10 +70,4 @@ public class SecurityHelpers {
         return new String(decodedBytes);
     }
 
-    @Bean
-    public static PasswordEncoder passwordEncoder()
-    {
-        return new BCryptPasswordEncoder();
-    }
-
 }

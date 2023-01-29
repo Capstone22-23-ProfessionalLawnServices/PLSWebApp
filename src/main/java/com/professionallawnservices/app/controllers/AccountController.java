@@ -5,6 +5,7 @@ import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.models.Contact;
 import com.professionallawnservices.app.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -24,7 +25,10 @@ import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 public class AccountController {
 
     @Autowired
-    DataSource dataSource;
+    JdbcUserDetailsManager jdbcUserDetailsManager;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @GetMapping("/account")
     public String accountView(Model model) {
@@ -42,14 +46,13 @@ public class AccountController {
         return "add-account";
     }
 
-
     @PostMapping("/create-account")
     public RedirectView createAccount(@ModelAttribute User user) {
-        userDetailsManager.createUser(org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
-                .password(SecurityHelpers.passwordEncoder().encode(user.getPassword()))
-                .authorities((GrantedAuthority) user.getRolls()).build());
+        jdbcUserDetailsManager.createUser(org.springframework.security.core.userdetails.User
+                .withUsername(user.getUsername())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .authorities(user.getRoll()).build());
         return new RedirectView("/add-contact");
     }
-
 
 }

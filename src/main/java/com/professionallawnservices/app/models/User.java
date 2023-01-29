@@ -8,7 +8,7 @@ public class User {
 
     private String password;
 
-    private ArrayList<String> rolls;
+    private String roll;
 
     public String getUsername() {
         return username;
@@ -26,12 +26,12 @@ public class User {
         this.password = password;
     }
 
-    public ArrayList<String> getRolls() {
-        return rolls;
+    public String getRoll() {
+        return roll;
     }
 
-    public void setRolls(ArrayList<String> rolls) {
-        this.rolls = rolls;
+    public void setRoll(String roll) {
+        this.roll = roll;
     }
 
 }
