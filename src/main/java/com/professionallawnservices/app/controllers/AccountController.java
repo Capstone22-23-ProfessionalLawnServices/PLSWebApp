@@ -5,6 +5,8 @@ import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.models.Contact;
 import com.professionallawnservices.app.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,10 +38,11 @@ public class AccountController {
         return "account";
     }
 
-    @PostMapping("/create-contact")
-    public RedirectView createContact(@ModelAttribute User user) {
-        userDetailsManager.createUser(User.withUsername("1").password(passwordEncoder().encode("1"))
-                .authorities("ROLE_MANAGER", "ROLE_USER").build());
+    @PostMapping("/create-account")
+    public RedirectView createAccount(@ModelAttribute User user) {
+        userDetailsManager.createUser(org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
+                .password(SecurityHelpers.passwordEncoder().encode(user.getPassword()))
+                .authorities((GrantedAuthority) user.getRolls()).build());
         return new RedirectView("/add-contact");
     }
 

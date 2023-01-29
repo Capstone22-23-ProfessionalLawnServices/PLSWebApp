@@ -1,11 +1,14 @@
 package com.professionallawnservices.app.helpers;
 
 import com.professionallawnservices.app.enums.RolesEnum;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.professionallawnservices.app.enums.RolesEnum;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.*;
 
@@ -65,6 +68,12 @@ public class SecurityHelpers {
     public static String decode(String encodedString) {
         byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
         return new String(decodedBytes);
+    }
+
+    @Bean
+    public static PasswordEncoder passwordEncoder()
+    {
+        return new BCryptPasswordEncoder();
     }
 
 }
