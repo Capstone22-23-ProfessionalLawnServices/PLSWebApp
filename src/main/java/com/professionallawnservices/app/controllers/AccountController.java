@@ -11,10 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.sql.DataSource;
@@ -32,10 +29,15 @@ public class AccountController {
 
     @GetMapping("/account")
     public String accountView(Model model) {
-        RolesEnum user = SecurityHelpers.getPrimaryUserRole();
+        RolesEnum userRole = SecurityHelpers.getPrimaryUserRole();
+        var systemUser = SecurityHelpers.getUser();
+        User user = new User();
+        user.setUsername(systemUser.getName());
+        user.setRoll(systemUser.getAuthorities().toString());
 
-        model.addAttribute("userAccessLevel", user.accessLevel);
+        model.addAttribute("userAccessLevel", userRole.accessLevel);
         model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
+        model.addAttribute("user", user);
 
         return "account";
     }
@@ -54,5 +56,14 @@ public class AccountController {
                 .authorities(user.getRoll()).build());
         return new RedirectView("/add-contact");
     }
+
+
+    @PostMapping("/update-account")
+    public String updateAccount(@ModelAttribute User user, Model model) {
+        jdbcUserDetailsManager.changePassword(user.getPassword(), passwordEncoder.encode(user.getNewPassword()));
+        return "account";
+    }
+
+
 
 }

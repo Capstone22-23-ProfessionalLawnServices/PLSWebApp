@@ -39,6 +39,10 @@ public class SecurityHelpers {
         return userRoleList;
     }
 
+    /*
+    Return the current user's greatest ranking level of authority
+     */
+
     public static RolesEnum getPrimaryUserRole(){
 
         ArrayList<String> userRoles = getUserRolesList();
