@@ -26,8 +26,6 @@ public class AccountController {
     @Autowired
     DataSource dataSource;
 
-    private JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-
     @GetMapping("/account")
     public String accountView(Model model) {
         RolesEnum user = SecurityHelpers.getPrimaryUserRole();
@@ -37,6 +35,13 @@ public class AccountController {
 
         return "account";
     }
+
+    @GetMapping("/add-account")
+    public String addAccountView(Model model) {
+        model.addAttribute("user", new User());
+        return "add-account";
+    }
+
 
     @PostMapping("/create-account")
     public RedirectView createAccount(@ModelAttribute User user) {
