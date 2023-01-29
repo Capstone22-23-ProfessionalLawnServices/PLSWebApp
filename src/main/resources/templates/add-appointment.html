@@ -38,8 +38,10 @@
           <label for="end-time" class="form-label">End Time:</label>
           <input type="datetime-local" id="end-time" th:field="*{endTime}" class="form-control form-input">
           <label for="customer" class="form-label">Client: </label>
+          <div class="clear inner-add-elements"></div>
           <input type="number" id="customer" th:field="*{customer.customerId}" required="required">
-          <input type="submit" value="Submit" />
+          <div class="clear inner-add-elements"></div>
+          <input type="submit" class="btn btn-primary form-submit-btn" value="Submit" />
 
         </form>
       </div>

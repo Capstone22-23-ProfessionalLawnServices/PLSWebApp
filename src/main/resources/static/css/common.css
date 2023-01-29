@@ -98,6 +98,10 @@ body {
     transition-duration: 0s;
 }
 
+.form-submit-btn {
+    margin-top: 10px;
+}
+
 #row1 {
     border-radius: 10px 10px 0 0;
 }
