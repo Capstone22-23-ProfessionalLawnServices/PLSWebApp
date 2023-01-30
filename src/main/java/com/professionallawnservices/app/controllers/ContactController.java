@@ -1,8 +1,7 @@
 package com.professionallawnservices.app.controllers;
 
-import com.professionallawnservices.app.models.Contact;
+import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.repos.ContactRepo;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,10 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 

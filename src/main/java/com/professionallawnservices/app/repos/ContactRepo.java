@@ -1,6 +1,6 @@
 package com.professionallawnservices.app.repos;
 
-import com.professionallawnservices.app.models.Contact;
+import com.professionallawnservices.app.models.data.Contact;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

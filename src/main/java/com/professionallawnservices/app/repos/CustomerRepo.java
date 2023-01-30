@@ -1,6 +1,6 @@
 package com.professionallawnservices.app.repos;
 
-import com.professionallawnservices.app.models.Customer;
+import com.professionallawnservices.app.models.data.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.professionallawnservices.app.controllers;
 
-import com.professionallawnservices.app.models.Customer;
-import com.professionallawnservices.app.models.Job;
+import com.professionallawnservices.app.models.data.Customer;
+import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.repos.CustomerRepo;
 import com.professionallawnservices.app.repos.JobRepo;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,17 +1,12 @@
 package com.professionallawnservices.app.controllers;
 
-import com.professionallawnservices.app.helpers.SecurityHelpers;
-import com.professionallawnservices.app.models.Customer;
+import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.repos.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import com.professionallawnservices.app.enums.RolesEnum;
 import org.springframework.web.servlet.view.RedirectView;
-
-import java.util.List;
 
 import static com.professionallawnservices.app.enums.RolesEnum.*;
 
