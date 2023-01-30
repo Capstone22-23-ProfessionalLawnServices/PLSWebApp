@@ -102,6 +102,10 @@ body {
     margin-top: 10px;
 }
 
+.form-header {
+    text-align: center;
+}
+
 #row1 {
     border-radius: 10px 10px 0 0;
 }
