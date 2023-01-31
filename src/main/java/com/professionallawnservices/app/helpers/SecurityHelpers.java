@@ -1,11 +1,14 @@
 package com.professionallawnservices.app.helpers;
 
 import com.professionallawnservices.app.enums.RolesEnum;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.professionallawnservices.app.enums.RolesEnum;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.*;
 
@@ -36,6 +39,10 @@ public class SecurityHelpers {
         return userRoleList;
     }
 
+    /*
+    Return the current user's greatest ranking level of authority
+     */
+
     public static RolesEnum getPrimaryUserRole(){
 
         ArrayList<String> userRoles = getUserRolesList();
@@ -49,13 +56,22 @@ public class SecurityHelpers {
             for (RolesEnum role:
                  allRoles) {
 
-                if ((userRole.equals(role.roleName)) && (primaryRole.accessLevel <= role.accessLevel)) {
+                if ((userRole.equals(role.authorityName)) && (primaryRole.accessLevel <= role.accessLevel)) {
                     primaryRole = role;
                 }
             }
         }
 
         return primaryRole;
+    }
+
+    public static String encode(String rawString) {
+        return Base64.getEncoder().encodeToString(rawString.getBytes());
+    }
+
+    public static String decode(String encodedString) {
+        byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+        return new String(decodedBytes);
     }
 
 }

@@ -12,3 +12,12 @@ function navbarDropdown(e) {
         $(dropdown_display_id).css("display", "none")
     }
 }
+
+function loadNavbar() {
+    $('#navbar-insert').load("html-elements.html");
+}
+
+function formClear() {
+    $(':input','#add-form').not(':button, :submit, :reset, :hidden').val('');
+}
+

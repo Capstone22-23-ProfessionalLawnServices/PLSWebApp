@@ -13,29 +13,29 @@
   <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
   <script th:src="@{/js/appointments.js}" src="../static/js/appointments.js"></script>
 </head>
-<body>
+<body onload="loadNavbar()">
 <div class="overlay">
 
-  <div th:insert="html-elements.html::#navbar-container">
+  <div id="navbar-insert" th:insert="html-elements.html::#navbar-container">
   </div>
 
   <div class="container main-container center-block">
 
     <div id="row1" class="row center-block">
 
-      <div class="column col-md-3 text-center">
+      <div class="column col-xl-3 text-center">
         <h1>Appointments</h1>
       </div>
 
-      <div class="column col-md-3 text-center" style="margin-top: 15px">
+      <div class="column col-xl-3 text-center" style="margin-top: 15px">
         <input type="text" class="inner-add-elements" placeholder="Search Appointments">
         <button id="search-appointment-button" class="btn btn-primary">
-          <span id="search-appointment-button-text"> Search </span>
+         <!-- <span id="search-appointment-button-text"> Search </span> -->
           <img th:src="@{/images/search.svg}" src="../static/images/search.svg" height="20" width="20">
         </button>
       </div>
 
-      <div id="stacking-column" class="column col-md-5 text-center" style="margin-top: 15px">
+      <div id="stacking-column" class="column col-xl-5 text-center" style="margin-top: 15px">
 
         <div class="center-stacking-column"></div>
 
@@ -63,8 +63,8 @@
       </div>
 
 
-      <div class="column col-md-1 text-center" style="margin-top: 15px">
-        <a href="add-appointment.html">
+      <div class="column col-xl-1 text-center" style="margin-top: 15px">
+        <a th:href="@{/add-appointment}" href="add-appointment.html">
           <button id="add-appointment-button" class="btn btn-primary">
             <span id="add-appointment-button-text"> Add </span>
             <img th:src="@{/images/calendar-plus.svg}" src="../static/images/calendar-plus.svg" style="margin-left: 3px">
@@ -77,33 +77,23 @@
     <div class="row center-block">
 
       <table class="table table-hover">
-        <!--Table is filled with sample data-->
         <thead class="thead">
         <tr>
           <th scope="col">#</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th scope="col">Handle</th>
+          <th scope="col">Cost</th>
+          <th scope="col">Date</th>
+          <th scope="col">Total Time</th>
+          <th scope="col">Customer Name</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>the Bird</td>
-          <td>@twitter</td>
+        <tr th:each="jobs : ${jobs}" onclick="rowClick(event)"
+            th:value="${jobs.jobId}">
+          <th th:text="${jobs.jobId}" scope="row"></th>
+          <td th:text="${jobs.cost}"></td>
+          <td th:text="${jobs.scheduledDate}"></td>
+          <td th:text="${jobs.totalTime}"></td>
+          <td th:text="${jobs.customer.customerName}"></td>
         </tr>
         </tbody>
       </table>
@@ -112,9 +102,9 @@
 
     <div id="row3" class="row center-block">
 
-      <div class="column col-sm-8 text-center"></div>
+      <div class="column col-sm-6 text-center"></div>
 
-      <div class="column col-sm-4 text-center">
+      <div class="column col-sm-6 text-center">
 
         <span style="margin: 0 5px 0 35px">Page: </span>
         <input type="text" id="current-page" size="1" maxlength="2">
