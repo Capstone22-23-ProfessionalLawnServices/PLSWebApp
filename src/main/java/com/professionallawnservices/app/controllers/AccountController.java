@@ -16,46 +16,40 @@ import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 @Controller
 public class AccountController {
 
-    @Autowired
-    JdbcUserDetailsManager jdbcUserDetailsManager;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     @GetMapping("/account")
     public String accountView(Model model) {
         RolesEnum userRole = SecurityHelpers.getPrimaryUserRole();
         var systemUser = SecurityHelpers.getUser();
-        User user = new User();
-        user.setUsername(systemUser.getName());
-        user.setRoll(systemUser.getAuthorities().toString());
+        UserRequest userRequest = new UserRequest();
+        userRequest.setUsername(systemUser.getName());
+        userRequest.setRoll(systemUser.getAuthorities().toString());
 
         model.addAttribute("userAccessLevel", userRole.accessLevel);
         model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
-        model.addAttribute("user", user);
+        model.addAttribute("user", userRequest);
 
         return "account";
     }
 
     @GetMapping("/add-account")
     public String addAccountView(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new UserRequest());
         return "add-account";
     }
 
     @PostMapping("/create-account")
-    public RedirectView createAccount(@ModelAttribute User user) {
-        jdbcUserDetailsManager.createUser(org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
-                .password(passwordEncoder.encode(user.getPassword()))
-                .authorities(user.getRoll()).build());
+    public RedirectView createAccount(@ModelAttribute UserRequest userRequest, Model model) {
+        if(!ValidationHelpers.isNull(userRequest)
+                || !ValidationHelpers.isNullOrBlank(userRequest.getUsername())
+                || !ValidationHelpers.isNullOrBlank(userRequest.getNewPassword())
+                || !ValidationHelpers.isNullOrBlank(userRequest.getRoll())
         return new RedirectView("/add-contact");
     }
 
 
     @PostMapping("/update-account")
-    public String updateAccount(@ModelAttribute User user, Model model) {
-        jdbcUserDetailsManager.changePassword(user.getPassword(), passwordEncoder.encode(user.getNewPassword()));
+    public String updateAccount(@ModelAttribute UserRequest userRequest, Model model) {
+        if(!ValidationHelpers.isNull(userRequest)
         return "account";
     }
 

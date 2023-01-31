@@ -1,8 +1,6 @@
-package com.professionallawnservices.app.models;
+package com.professionallawnservices.app.models.request;
 
-import java.util.ArrayList;
-
-public class User {
+public class UserRequest {
 
     private String username;
 
