@@ -2,10 +2,8 @@ package com.professionallawnservices.app.controllers;
 
 import com.professionallawnservices.app.enums.RolesEnum;
 import com.professionallawnservices.app.helpers.SecurityHelpers;
-import com.professionallawnservices.app.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import com.professionallawnservices.app.helpers.ValidationHelpers;
+import com.professionallawnservices.app.models.request.UserRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,14 +40,20 @@ public class AccountController {
         if(!ValidationHelpers.isNull(userRequest)
                 || !ValidationHelpers.isNullOrBlank(userRequest.getUsername())
                 || !ValidationHelpers.isNullOrBlank(userRequest.getNewPassword())
-                || !ValidationHelpers.isNullOrBlank(userRequest.getRoll())
+                || !ValidationHelpers.isNullOrBlank(userRequest.getRoll()))
+        {
+
+        }
+
         return new RedirectView("/add-contact");
     }
 
 
     @PostMapping("/update-account")
     public String updateAccount(@ModelAttribute UserRequest userRequest, Model model) {
-        if(!ValidationHelpers.isNull(userRequest)
+        if(!ValidationHelpers.isNull(userRequest)) {
+
+        }
         return "account";
     }
 
