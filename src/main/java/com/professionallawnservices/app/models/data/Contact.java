@@ -30,6 +30,16 @@ public class Contact {
     @OneToMany(mappedBy = "contact")
     private Set<Help> help = new HashSet<>();
 
+    public Contact() {
+
+    }
+
+    public Contact(@NonNull String contactName, @NonNull String contactPhone, @NonNull String contactEmail) {
+        this.contactName = contactName;
+        this.contactPhone = contactPhone;
+        this.contactEmail = contactEmail;
+    }
+
     public long getContactId() {
         return contactId;
     }

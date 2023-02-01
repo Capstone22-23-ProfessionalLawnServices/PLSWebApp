@@ -4,7 +4,7 @@ public class Result {
 
     public Object data;
 
-    public boolean complete;
+    public boolean complete = false;
 
     public String errorMessage;
 

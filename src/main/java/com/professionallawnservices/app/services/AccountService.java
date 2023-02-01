@@ -22,9 +22,11 @@ public class AccountService {
 
         try {
 
+            var newPassword = passwordEncoder.encode(userRequest.getNewPassword());
+
             jdbcUserDetailsManager.createUser(org.springframework.security.core.userdetails.User
                     .withUsername(userRequest.getUsername())
-                    .password(passwordEncoder.encode(userRequest.getPassword()))
+                    .password(newPassword)
                     .authorities(userRequest.getRole()).build());
 
             result.complete = true;

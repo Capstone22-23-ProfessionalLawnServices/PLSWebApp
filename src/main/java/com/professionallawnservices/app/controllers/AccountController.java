@@ -44,7 +44,7 @@ public class AccountController {
     }
 
     @PostMapping("/create-account")
-    public RedirectView createAccount(@ModelAttribute UserRequest userRequest, Model model) {
+    public RedirectView createAccount(@ModelAttribute UserRequest userRequest) {
         if(
                 ValidationHelpers.isNull(userRequest)
                 || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
@@ -54,8 +54,6 @@ public class AccountController {
         {
             throw new PlsRequestException("Request must contain username, new password, and role");
         }
-
-        AccountService accountService = new AccountService();
 
         Result result = accountService.createAccount(userRequest);
 
@@ -68,7 +66,7 @@ public class AccountController {
 
 
     @PostMapping("/update-account")
-    public String updateAccount(@ModelAttribute UserRequest userRequest, Model model) {
+    public String updateAccount(@ModelAttribute UserRequest userRequest) {
         if(
                 ValidationHelpers.isNull(userRequest)
                         || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
@@ -77,8 +75,6 @@ public class AccountController {
         {
             throw new PlsRequestException("Request must contain username and new password");
         }
-
-        AccountService accountService = new AccountService();
 
         Result result = accountService.updateAccount(userRequest);
 
@@ -90,7 +86,7 @@ public class AccountController {
     }
 
     @PostMapping("/delete-account")
-    public String deleteAccount(@ModelAttribute UserRequest userRequest) {
+    public String deleteAccount(@RequestBody UserRequest userRequest) {
         if(
                 ValidationHelpers.isNull(userRequest)
                         || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
