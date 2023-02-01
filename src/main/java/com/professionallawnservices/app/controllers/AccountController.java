@@ -43,9 +43,9 @@ public class AccountController {
     public RedirectView createAccount(@ModelAttribute UserRequest userRequest, Model model) {
         if(
                 ValidationHelpers.isNull(userRequest)
-                || !ValidationHelpers.isNullOrBlank(userRequest.getUsername())
-                || !ValidationHelpers.isNullOrBlank(userRequest.getNewPassword())
-                || !ValidationHelpers.isNullOrBlank(userRequest.getRole())
+                || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
+                || ValidationHelpers.isNullOrBlank(userRequest.getNewPassword())
+                || ValidationHelpers.isNullOrBlank(userRequest.getRole())
         )
         {
             throw new PlsRequestException("Request must contain username, new password, and role");
@@ -67,8 +67,8 @@ public class AccountController {
     public String updateAccount(@ModelAttribute UserRequest userRequest, Model model) {
         if(
                 ValidationHelpers.isNull(userRequest)
-                        || !ValidationHelpers.isNullOrBlank(userRequest.getUsername())
-                        || !ValidationHelpers.isNullOrBlank(userRequest.getNewPassword())
+                        || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
+                        || ValidationHelpers.isNullOrBlank(userRequest.getNewPassword())
         )
         {
             throw new PlsRequestException("Request must contain username and new password");
