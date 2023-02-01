@@ -58,6 +58,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Used to validate model fields -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
