@@ -56,4 +56,20 @@ public class AccountService {
         return result;
     }
 
+    public Result deleteAccount(UserRequest userRequest) {
+        Result result = new Result();
+
+        try{
+
+            jdbcUserDetailsManager.deleteUser(userRequest.getUsername());
+            result.complete = true;
+        }
+        catch (Exception e) {
+            result.complete = false;
+            result.errorMessage = "There was an error deleting the account with username: " + userRequest.getUsername();
+        }
+
+        return result;
+    }
+
 }

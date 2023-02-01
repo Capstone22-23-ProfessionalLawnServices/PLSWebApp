@@ -8,6 +8,7 @@ import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.request.UserRequest;
 import com.professionallawnservices.app.services.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 
 @Controller
 public class AccountController {
+
+    @Autowired
+    private AccountService accountService;
 
     @GetMapping("/account")
     public String accountView(Model model) {
@@ -85,6 +89,23 @@ public class AccountController {
         return "account";
     }
 
+    @PostMapping("/delete-account")
+    public String deleteAccount(@ModelAttribute UserRequest userRequest) {
+        if(
+                ValidationHelpers.isNull(userRequest)
+                        || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
+        )
+        {
+            throw new PlsRequestException("Request must contain username");
+        }
 
+        Result result = accountService.deleteAccount(userRequest);
+
+        if (!result.complete) {
+            throw new PlsServiceException(result.errorMessage);
+        }
+
+        return "account";
+    }
 
 }
