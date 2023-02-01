@@ -10,6 +10,14 @@ public class UserRequest {
 
     private String role;
 
+    public UserRequest() {
+
+    }
+
+    public UserRequest(String username) {
+        this.username = username;
+    }
+
     public String getUsername() {
         return username;
     }

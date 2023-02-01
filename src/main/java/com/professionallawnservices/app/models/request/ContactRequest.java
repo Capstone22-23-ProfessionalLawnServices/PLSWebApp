@@ -10,6 +10,14 @@ public class ContactRequest {
 
     private String phone;
 
+    public ContactRequest() {
+
+    }
+
+    public ContactRequest(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

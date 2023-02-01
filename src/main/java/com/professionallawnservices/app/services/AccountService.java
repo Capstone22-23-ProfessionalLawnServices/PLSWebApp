@@ -29,11 +29,11 @@ public class AccountService {
                     .password(newPassword)
                     .authorities(userRequest.getRole()).build());
 
-            result.complete = true;
+            result.setComplete(true);
         }
         catch (Exception e) {
-            result.complete = false;
-            result.errorMessage = "There was an error creating the account with username: " + userRequest.getUsername();
+            result.setComplete(false);
+            result.setErrorMessage("There was an error creating the account with username: " + userRequest.getUsername());
         }
 
         return result;
@@ -48,27 +48,28 @@ public class AccountService {
             jdbcUserDetailsManager.changePassword(userRequest.getPassword(),
                     passwordEncoder.encode(userRequest.getNewPassword()));
 
-            result.complete = true;
+            result.setComplete(true);
         }
         catch (Exception e) {
-            result.complete = false;
-            result.errorMessage = "There was an error updating the account with username: " + userRequest.getUsername();
+            result.setComplete(false);
+            result.setErrorMessage("There was an error updating the account with username: " + userRequest.getUsername());
         }
 
         return result;
     }
 
     public Result deleteAccount(UserRequest userRequest) {
+
         Result result = new Result();
 
         try{
 
             jdbcUserDetailsManager.deleteUser(userRequest.getUsername());
-            result.complete = true;
+            result.setComplete(true);
         }
         catch (Exception e) {
-            result.complete = false;
-            result.errorMessage = "There was an error deleting the account with username: " + userRequest.getUsername();
+            result.setComplete(false);
+            result.setErrorMessage("There was an error deleting the account with username: " + userRequest.getUsername());
         }
 
         return result;

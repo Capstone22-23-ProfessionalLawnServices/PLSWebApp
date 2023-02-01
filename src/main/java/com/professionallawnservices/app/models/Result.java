@@ -2,11 +2,11 @@ package com.professionallawnservices.app.models;
 
 public class Result {
 
-    public Object data;
+    private Object data;
 
-    public boolean complete = false;
+    private boolean complete = false;
 
-    public String errorMessage;
+    private String errorMessage;
 
     public Object getData() {
         return data;
