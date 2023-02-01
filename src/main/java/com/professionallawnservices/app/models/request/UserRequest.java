@@ -8,14 +8,14 @@ public class UserRequest {
 
     private String newPassword;
 
-    private String roll;
+    private String role;
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String email) {
-        this.username = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -34,12 +34,12 @@ public class UserRequest {
         this.newPassword = newPassword;
     }
 
-    public String getRoll() {
-        return roll;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoll(String roll) {
-        this.roll = roll;
+    public void setRole(String role) {
+        this.role = role;
     }
 
 }

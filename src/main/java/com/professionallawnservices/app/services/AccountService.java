@@ -3,7 +3,6 @@ package com.professionallawnservices.app.services;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.request.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
@@ -26,13 +25,13 @@ public class AccountService {
             jdbcUserDetailsManager.createUser(org.springframework.security.core.userdetails.User
                     .withUsername(userRequest.getUsername())
                     .password(passwordEncoder.encode(userRequest.getPassword()))
-                    .authorities(userRequest.getRoll()).build());
+                    .authorities(userRequest.getRole()).build());
 
             result.complete = true;
         }
         catch (Exception e) {
             result.complete = false;
-            result.errorMessage = "There was an error creating the new User.";
+            result.errorMessage = "There was an error creating the account with username: " + userRequest.getUsername();
         }
 
         return result;
@@ -51,7 +50,7 @@ public class AccountService {
         }
         catch (Exception e) {
             result.complete = false;
-            result.errorMessage = "There was an error updating the user User.";
+            result.errorMessage = "There was an error updating the account with username: " + userRequest.getUsername();
         }
 
         return result;
