@@ -25,22 +25,24 @@
       <div class="col-lg-6">
         <form id="add-form" action="#" th:action="@{/update-account}" th:object="${user}" method="post">
 
+
           <label for="username" class="form-label">Username:</label>
           <input type="text" id="username" th:field="*{username}" class="form-control form-input"
                  readonly="readonly">
           <!--
-          <label for="old-password" class="form-label">Old Password:</label>
-          <input type="password" id="old-password" th:field="*{password}" class="form-control form-input"
-                 required="required">
-                 -->
+                    <label for="old-password" class="form-label">Old Password:</label>
+                    <input type="password" id="old-password" th:field="*{password}" class="form-control form-input"
+                           required="required">
+          -->
           <label for="new-password" class="form-label">New Password:</label>
           <input type="password" id="new-password" th:field="*{newPassword}" class="form-control form-input"
-                 pattern="[A-Za-z0-9]{8,16}" required="required">
+                 pattern="(?=(.*[0-9]))((?=.*[A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z]))^.{8,}$" required="required">
           <label for="role" class="form-label">Role:</label>
           <div class="clear inner-add-elements"></div>
           <p id="role" th:text="*{role}"> </p>
           <div class="clear inner-add-elements"></div>
           <input type="submit" class="btn btn-primary form-submit-btn" value="Update Password"/>
+
         </form>
         <form th:action="@{/logout}" method="post">
           <input type="submit" class="btn btn-primary form-submit-btn" value="Sign Out"/>

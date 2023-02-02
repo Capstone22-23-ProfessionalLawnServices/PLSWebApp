@@ -11,11 +11,15 @@ import com.professionallawnservices.app.services.AccountService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+
+import javax.validation.Valid;
 
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 
@@ -26,6 +30,7 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping("/account")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER', 'ROLE_ADMIN')")
     public String accountView(Model model) {
         RolesEnum userRole = SecurityHelpers.getPrimaryUserRole();
         var systemUser = SecurityHelpers.getUser();
@@ -47,7 +52,7 @@ public class AccountController {
     }
 
     @PostMapping("/create-account")
-    public RedirectView createAccount(@ModelAttribute UserRequest userRequest) {
+    public String createAccount(@ModelAttribute UserRequest userRequest) {
         if(
                 ValidationHelpers.isNull(userRequest)
                 || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
@@ -64,12 +69,18 @@ public class AccountController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return new RedirectView("/add-contact");
+        return "redirect:/add-contact";
     }
 
 
     @PostMapping("/update-account")
-    public String updateAccount(@ModelAttribute UserRequest userRequest) {
+    public String updateAccount(@ModelAttribute @Valid UserRequest userRequest, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            throw new PlsRequestException("Request must contain a new password with at least one capital, lowercase, " +
+                    "and one number.");
+        }
+
         if(
                 ValidationHelpers.isNull(userRequest)
                         || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
@@ -85,11 +96,16 @@ public class AccountController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "account";
+        return "redirect:/account";
     }
 
     @PostMapping("/rest/create-account")
-    public ResponseEntity<String> createAccountRest(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<String> createAccountRest(@RequestBody @Valid UserRequest userRequest, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getFieldErrors().toString());
+        }
+
         if(
                 ValidationHelpers.isNull(userRequest)
                         || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
