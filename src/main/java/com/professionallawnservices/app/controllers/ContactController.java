@@ -129,12 +129,27 @@ public class ContactController {
         return ResponseEntity.ok("Successfully deleted contact");
     }
 
-    /*
+
     @GetMapping("/search-contacts")
-    public ResponseEntity<List<Contact>> getEmployeeByName(@RequestParam(name = "search") String search) {
-        List<Contact> contacts = contactRepo.findByContactName(search);
+    public ResponseEntity<ArrayList<Contact>> getEmployeeByName(
+            @RequestParam(name = "search", required = true) String search
+    )
+    {
+        ContactRequest contactRequest = new ContactRequest();
+        contactRequest.setName(search);
+
+        Result result = contactService.searchContacts(contactRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
+
         return ResponseEntity.ok(contacts);
     }
+
+    /*
 
     @PostMapping("/search-contacts-post")
     public ResponseEntity<List<Contact>> getEmployeeByNamePost(@RequestBody Contact contact) {

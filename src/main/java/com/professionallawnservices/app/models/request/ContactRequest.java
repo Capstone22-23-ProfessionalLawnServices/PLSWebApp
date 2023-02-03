@@ -4,7 +4,7 @@ import com.professionallawnservices.app.models.data.Contact;
 
 public class ContactRequest {
 
-    private long id;
+    private long id = -1;
 
     private String email;
 

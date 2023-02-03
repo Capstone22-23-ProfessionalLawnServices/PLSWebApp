@@ -1,5 +1,6 @@
 package com.professionallawnservices.app.services;
 
+import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.repos.ContactRepo;
@@ -111,6 +112,33 @@ public class ContactService {
         return result;
     }
 
+    public Result searchContacts(ContactRequest contactRequest) {
 
+        Result result = new Result();
+
+        try {
+
+            if(contactRequest.getId() != -1) {
+                result.setData(contactRepo.findById(contactRequest.getId()));
+            }
+            else if(!ValidationHelpers.isNullOrBlank(contactRequest.getName())) {
+                result.setData(contactRepo.findByContactName(contactRequest.getName()));
+            }
+            else if(!ValidationHelpers.isNullOrBlank(contactRequest.getEmail())){
+                //result.setData(contactRepo.findByContactEmail(contactRequest.getName()));
+            }
+            else if(!ValidationHelpers.isNullOrBlank(contactRequest.getPhone())) {
+                //result.setData(contactRepo.findByContactPhone(contactRequest.getName()));
+            }
+
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue searching for the contact.");
+        }
+
+        return result;
+    }
 
 }
