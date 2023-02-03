@@ -6,7 +6,6 @@ function rowClick(e) {
 
 function searchContacts() {
     let searchString = $("#search-contacts-field").val();
-    console.log(searchString);
 
     window.location.href = ("/search-contacts?name=" + searchString);
 }
