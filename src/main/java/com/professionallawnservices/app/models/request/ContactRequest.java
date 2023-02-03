@@ -1,5 +1,7 @@
 package com.professionallawnservices.app.models.request;
 
+import com.professionallawnservices.app.models.data.Contact;
+
 public class ContactRequest {
 
     private long id;
@@ -16,6 +18,13 @@ public class ContactRequest {
 
     public ContactRequest(long id) {
         this.id = id;
+    }
+
+    public ContactRequest(Contact contact) {
+        id = contact.getContactId();
+        email = contact.getContactEmail();
+        name = contact.getContactName();
+        phone = contact.getContactPhone();
     }
 
     public long getId() {

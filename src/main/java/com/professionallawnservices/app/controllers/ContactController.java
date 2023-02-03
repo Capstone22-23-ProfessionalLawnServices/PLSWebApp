@@ -62,9 +62,10 @@ public class ContactController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        Contact contact = (Contact) result.getData();
+        ContactRequest contact = (ContactRequest) result.getData();
 
         model.addAttribute("contact", contact);
+        model.addAttribute("id", contact.getId());
         return "update-contact";
     }
 

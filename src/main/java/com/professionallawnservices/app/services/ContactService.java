@@ -37,11 +37,7 @@ public class ContactService {
 
         try {
 
-            Contact contact = new Contact(
-                    contactRequest.getName(),
-                    contactRequest.getPhone(),
-                    contactRequest.getEmail()
-            );
+            Contact contact = new Contact(contactRequest);
 
             contactRepo.save(contact);
 
@@ -64,7 +60,7 @@ public class ContactService {
             Contact contact = contactRepo.findById(contactRequest.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id:" + contactRequest.getId()));
 
-            result.setData(contact);
+            result.setData(new ContactRequest(contact));
             result.setComplete(true);
         }
         catch (Exception e) {
@@ -81,11 +77,7 @@ public class ContactService {
 
         try {
 
-            Contact contact = new Contact(
-                    contactRequest.getName(),
-                    contactRequest.getPhone(),
-                    contactRequest.getEmail()
-            );
+            Contact contact = new Contact(contactRequest);
 
             contactRepo.save(contact);
 

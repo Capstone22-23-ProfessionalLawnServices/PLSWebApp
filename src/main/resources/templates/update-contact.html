@@ -23,16 +23,16 @@
         <h1 class="form-header">Update Contact Form</h1>
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <form id="add-form" action="#" th:action="@{/update-contact/{id}(id=${contact.contactId})}"
+                <form id="add-form" action="#" th:action="@{/update-contact/{id}(id=${id})}"
                       th:object="${contact}" method="post">
                     <label for="name" class="form-label">Name:</label>
-                    <input type="text" id="name" th:field="*{contactName}" class="form-control form-input"
+                    <input type="text" id="name" th:field="*{name}" class="form-control form-input"
                            placeholder="John Smith">
                     <label for="email" class="form-label">Email:</label>
-                    <input type="email" id="email" th:field="*{contactEmail}" class="form-control form-input"
+                    <input type="email" id="email" th:field="*{email}" class="form-control form-input"
                            placeholder="john.smith@gmail.com">
                     <label for="phone" class="form-label">Phone Number:</label>
-                    <input type="text" id="phone" th:field="*{contactPhone}" class="form-control form-input"
+                    <input type="text" id="phone" th:field="*{phone}" class="form-control form-input"
                            placeholder="8439999999">
                     <input type="submit" class="btn btn-primary form-submit-btn" value="Submit" />
                 </form>
