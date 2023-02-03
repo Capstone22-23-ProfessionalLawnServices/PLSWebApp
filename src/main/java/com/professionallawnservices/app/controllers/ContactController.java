@@ -71,7 +71,7 @@ public class ContactController {
 
 
     @PostMapping("/create-contact")
-    public RedirectView createContact(@ModelAttribute ContactRequest contactRequest) {
+    public String createContact(@ModelAttribute ContactRequest contactRequest) {
         if(
                 ValidationHelpers.isNull(contactRequest)
                         || ValidationHelpers.isNullOrBlank(contactRequest.getName())
@@ -86,13 +86,13 @@ public class ContactController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return new RedirectView("/add-contact");
+        return "redirect:/add-contact";
     }
 
 
 
     @PostMapping("/update-contact/{id}")
-    public RedirectView updateContact(
+    public String updateContact(
             @PathVariable(value = "id",required = true) long id,
             @ModelAttribute ContactRequest contactRequest,
             Model model
@@ -114,7 +114,7 @@ public class ContactController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return new RedirectView("/update-contact/" + id);
+        return "redirect:/update-contact/" + id;
     }
 
     @GetMapping("/delete-contact/{id}")
@@ -161,7 +161,7 @@ public class ContactController {
      */
 
     @PostMapping("/rest/create-contact")
-    public RedirectView createContactRest(@RequestBody ContactRequest contactRequest) {
+    public String createContactRest(@RequestBody ContactRequest contactRequest) {
         if(
                 ValidationHelpers.isNull(contactRequest)
                         || ValidationHelpers.isNullOrBlank(contactRequest.getName())
@@ -176,7 +176,7 @@ public class ContactController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return new RedirectView("/add-contact");
+        return "redirect:/add-contact";
     }
 
 }
