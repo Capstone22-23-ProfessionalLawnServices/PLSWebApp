@@ -78,6 +78,9 @@ body {
 
 .btn {
     margin: 2px;
+}
+
+.default-btn{
     background-color: #3394B7;
 }
 

@@ -40,6 +40,7 @@ public class ContactController {
         ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
 
         model.addAttribute("contacts", contacts);
+        model.addAttribute("contact", new ContactRequest());
         return "contacts";
     }
 
@@ -118,7 +119,7 @@ public class ContactController {
     }
 
     @GetMapping("/delete-contact/{id}")
-    public ResponseEntity<String> deleteContact(@PathVariable("id") long id) {
+    public String deleteContact(@PathVariable(value = "id", required = true) long id) {
 
         Result result = contactService.deleteContact(new ContactRequest(id));
 
@@ -126,7 +127,7 @@ public class ContactController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return ResponseEntity.ok("Successfully deleted contact");
+        return "redirect:/contacts";
     }
 
 
@@ -146,7 +147,10 @@ public class ContactController {
 
         ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
 
-        return ResponseEntity.ok(contacts);
+        model.addAttribute("contacts", contacts);
+        model.addAttribute("contact", new ContactRequest());
+
+        return "contacts";
     }
 
     /*

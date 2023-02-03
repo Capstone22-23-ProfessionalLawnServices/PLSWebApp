@@ -34,7 +34,10 @@
                     <label for="phone" class="form-label">Phone Number:</label>
                     <input type="text" id="phone" th:field="*{phone}" class="form-control form-input"
                            placeholder="8439999999">
-                    <input type="submit" class="btn btn-primary form-submit-btn" value="Submit" />
+                    <input type="submit" class="btn default-btn btn-primary form-submit-btn" value="Submit" />
+                </form>
+                <form th:action="@{/delete-contact/{id}(id=${id})}" method="get">
+                    <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>
                 </form>
             </div>
         </div>
