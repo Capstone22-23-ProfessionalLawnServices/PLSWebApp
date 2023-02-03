@@ -13,9 +13,11 @@ import com.professionallawnservices.app.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 
 import static com.professionallawnservices.app.enums.RolesEnum.*;
@@ -46,7 +48,9 @@ public class CustomerController {
 
     @GetMapping("/add-customer")
     public String addCustomerView(Model model) {
-        model.addAttribute("customer", new CustomerRequest());
+
+        CustomerRequest customerRequest = new CustomerRequest();
+        model.addAttribute("customer", customerRequest);
 
         return "add-customer";
     }
@@ -69,7 +73,16 @@ public class CustomerController {
     }
 
     @PostMapping("/create-customer")
-    public RedirectView createCustomer(@ModelAttribute CustomerRequest customerRequest) {
+    public RedirectView createCustomer(
+            @Valid @ModelAttribute("customer") CustomerRequest customerRequest,
+            BindingResult bindingResult
+    )
+    {
+
+        if (bindingResult.hasErrors()) {
+            throw new PlsRequestException("Request must contain a non negative integer value for frequency.");
+        }
+
         if(
                 ValidationHelpers.isNull(customerRequest)
                         || ValidationHelpers.isNullOrBlank(customerRequest.getName())

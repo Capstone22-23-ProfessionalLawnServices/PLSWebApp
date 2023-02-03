@@ -26,7 +26,7 @@
                 <form id="add-form" action="#" th:action="@{/create-customer}" th:object="${customer}" method="post">
                     <label for="name" class="form-label">Name:</label>
                     <input type="text" id="name" th:field="*{name}" class="form-control form-input"
-                           placeholder="John Smith" minlength="5" required="required" pattern="^(\w\w+)\s(\w+)$">
+                           placeholder="John Smith" minlength="4" required="required">
                     <label for="email" class="form-label">Email:</label>
                     <input type="email" id="email" th:field="*{email}" class="form-control form-input"
                            placeholder="john.smith@gmail.com"
@@ -38,8 +38,8 @@
                     <input type="text" id="location" th:field="*{location}" class="form-control form-input"
                            placeholder="120 Smith St" minlength="5" required="required">
                     <label for="frequency" class="form-label">Frequency:</label>
-                    <input type="number" id="frequency" th:field="*{frequency}" class="form-control form-input"
-                           placeholder="5">
+                    <input type="number" id="frequency" th:field="*{frequency}" th:value="*{frequency}"
+                           class="form-control form-input" placeholder="5" required="required">
                     <div class="clear inner-add-elements"></div>
                     <input type="submit" class="btn btn-primary form-submit-btn" value="Submit" />
                 </form>

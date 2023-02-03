@@ -2,6 +2,9 @@ package com.professionallawnservices.app.models.request;
 
 import com.professionallawnservices.app.models.data.Customer;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class CustomerRequest {
 
     private long id;
@@ -14,7 +17,9 @@ public class CustomerRequest {
 
     private String email;
 
-    private int frequency;
+    @NotNull
+    @Min(0)
+    private int frequency = 0;
 
     public CustomerRequest() {
 
