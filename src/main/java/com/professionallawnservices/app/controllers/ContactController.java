@@ -132,12 +132,13 @@ public class ContactController {
 
 
     @GetMapping("/search-contacts")
-    public ResponseEntity<ArrayList<Contact>> getEmployeeByName(
-            @RequestParam(name = "search", required = true) String search
+    public String getEmployeeByName(
+            @RequestParam(value = "name", required = true) String name,
+            Model model
     )
     {
         ContactRequest contactRequest = new ContactRequest();
-        contactRequest.setName(search);
+        contactRequest.setName(name);
 
         Result result = contactService.searchContacts(contactRequest);
 
