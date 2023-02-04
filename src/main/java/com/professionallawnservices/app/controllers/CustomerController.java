@@ -126,12 +126,4 @@ public class CustomerController {
         return "redirect:/update-customer/" + id;
     }
 
-
-    /*
-    public Customer getUser(@RequestParam(name="name", required=true, defaultValue="World") String name, Model model) {
-
-    }
-
-     */
-
 }
