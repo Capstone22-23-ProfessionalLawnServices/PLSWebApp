@@ -1,8 +1,11 @@
 package com.professionallawnservices.app.services;
 
+import com.professionallawnservices.app.models.openweather.Interval;
 import com.professionallawnservices.app.models.openweather.OpenWeatherResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Date;
 
 @Service
 public class HomeService {
@@ -18,15 +21,14 @@ public class HomeService {
         String result = restTemplate.postForObject(uri, reqBody, String.class);
         OpenWeatherResponse result1 = restTemplate.postForObject(uri, reqBody, OpenWeatherResponse.class);
 
-        /*
+
         for (Interval dayInterval:
              result1.getDaysList()) {
             long test = dayInterval.getDateTime();
-            java.sql.Date date = new java.sql.Date(test + 1000000000);
+            Date date = new Date(test * 1000);
             System.out.println(date);
         }
 
-         */
 
     }
 
