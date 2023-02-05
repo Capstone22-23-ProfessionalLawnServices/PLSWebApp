@@ -1,5 +1,6 @@
 package com.professionallawnservices.app.models.request;
 
+import com.professionallawnservices.app.helpers.DateHelper;
 import com.professionallawnservices.app.models.data.Job;
 
 import java.sql.Date;
@@ -37,8 +38,8 @@ public class JobRequest {
     public JobRequest(Job job) {
         id = job.getJobId();
         cost = job.getCost();
-        endTime = job.getEndTime().toString();
-        startTime = job.getStartTime().toString();
+        endTime = DateHelper.sqlDateToString(job.getScheduledDate(), job.getEndTime());
+        startTime = DateHelper.sqlDateToString(job.getScheduledDate(), job.getStartTime());
         location = job.getJobLocation();
         scheduledDate = job.getScheduledDate();
         totalTime = (int) Math.round(job.getTotalTime());

@@ -13,7 +13,7 @@
   <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
   <script th:src="@{/js/add-appointment.js}" src="../static/js/add-appointment.js"></script>
 </head>
-<body onload="loadNavbar(); formClear()">
+<body onload="loadNavbar();">
 <div class="overlay">
 
   <div id="navbar-insert" th:insert="html-elements.html::#navbar-container">
@@ -40,10 +40,10 @@
           <input type="datetime-local" id="end-time" th:field="*{endTime}" class="form-control form-input">
           <label for="customer" class="form-label">Client: </label>
           <div class="clear inner-add-elements"></div>
-          <input type="number" id="customer" th:field="*{customerId}" required="required">
+          <input type="number" id="customer" th:field="*{customerId}" class="form-control form-input"
+                 placeholder="5" required="required">
           <div class="clear inner-add-elements"></div>
-          <input type="submit" class="btn btn-primary form-submit-btn" value="Submit" />
-
+          <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Submit" />
         </form>
       </div>
     </div>

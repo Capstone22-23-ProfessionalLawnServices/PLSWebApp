@@ -2,16 +2,13 @@ package com.professionallawnservices.app.helpers;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class DateHelper {
 
-    public static Time formatTime(String timeString) {
+    public static Time stringToSqlDate(String timeString) {
 
         Time time;
         LocalDateTime dateLocal;
@@ -28,6 +25,19 @@ public class DateHelper {
         }
 
         return time;
+    }
+
+    /*
+    Html formats their dates in this manner: 2023-02-05T13:00
+     */
+
+    public static String sqlDateToString(Date scheduledDate, Time time) {
+
+        String htmlDate = "";
+
+        htmlDate = scheduledDate.toString() + "T" + time.toString().substring(0, 5);
+
+        return htmlDate;
     }
 
 }

@@ -52,8 +52,8 @@ public class Job {
 
     public Job(JobRequest jobRequest, Customer customer) {
         jobId = jobRequest.getId();
-        startTime = DateHelper.formatTime(jobRequest.getStartTime());
-        endTime = DateHelper.formatTime(jobRequest.getEndTime());
+        startTime = DateHelper.stringToSqlDate(jobRequest.getStartTime());
+        endTime = DateHelper.stringToSqlDate(jobRequest.getEndTime());
         totalTime = (double) jobRequest.getTotalTime();
         cost = jobRequest.getCost();
         jobLocation = jobRequest.getLocation();
