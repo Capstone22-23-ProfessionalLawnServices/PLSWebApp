@@ -40,7 +40,7 @@ public class ContactController {
         ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
 
         model.addAttribute("contacts", contacts);
-        model.addAttribute("contact", new ContactRequest());
+        //model.addAttribute("contact", new ContactRequest());
         return "contacts";
     }
 

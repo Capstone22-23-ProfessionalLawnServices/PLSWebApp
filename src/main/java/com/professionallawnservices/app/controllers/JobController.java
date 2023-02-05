@@ -1,9 +1,17 @@
 package com.professionallawnservices.app.controllers;
 
+import com.professionallawnservices.app.exceptions.PlsRequestException;
+import com.professionallawnservices.app.exceptions.PlsServiceException;
+import com.professionallawnservices.app.helpers.ValidationHelpers;
+import com.professionallawnservices.app.models.Result;
+import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Job;
+import com.professionallawnservices.app.models.request.ContactRequest;
+import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.repos.CustomerRepo;
 import com.professionallawnservices.app.repos.JobRepo;
+import com.professionallawnservices.app.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,67 +19,104 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
+
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 
 @Controller
 public class JobController {
 
     @Autowired
-    JobRepo jobRepo;
-
-    @Autowired
-    CustomerRepo customerRepo;
+    JobService jobService;
 
     private static final String managerRole = MANAGER.roleName;
 
     @GetMapping("/appointments")
     public String jobsView(Model model) {
-        model.addAttribute("jobs", jobRepo.findAll());
+
+        Result result = jobService.getAllJobs();
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        ArrayList<Job> jobs = (ArrayList<Job>) result.getData();
+
+        model.addAttribute("jobs", jobs);
+        //model.addAttribute("job", new JobRequest());
         return "appointments";
     }
 
     @GetMapping("/add-appointment")
     public String addJobView(Model model) {
-        model.addAttribute("job", new Job());
+        model.addAttribute("job", new JobRequest());
+
         return "add-appointment";
     }
 
     @GetMapping("/update-appointment/{id}")
     public String updateContactView(@PathVariable("id") long id, Model model) {
-        Job job = jobRepo.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id:" + id));
-        model.addAttribute("contact", job);
-        return "update-contact";
+
+        Result result = jobService.getJobById(new JobRequest(id));
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        JobRequest job = (JobRequest) result.getData();
+
+        model.addAttribute("job", job);
+        model.addAttribute("id", job.getId());
+        return "update-appointment";
     }
 
     @PostMapping("/create-appointment")
-    public RedirectView createJob(@ModelAttribute Job job) {
-        job.setCustomer(customerRepo.getById(job.getCustomer().getCustomerId()));
-        jobRepo.save(job);
-        return new RedirectView("/add-appointment");
+    public String createJob(@ModelAttribute JobRequest jobRequest) {
+
+        if(ValidationHelpers.isNull(jobRequest)) {
+            throw new PlsRequestException("Request must contain customer id");
+        }
+
+        Result result = jobService.createJob(jobRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/add-appointment";
     }
 
     @PostMapping("/update-appointment/{id}")
-    public RedirectView updateJob(@PathVariable("id") long id, @ModelAttribute Job job,Model model) {
-        job.setJobId(id);
-        jobRepo.save(job);
-        return new RedirectView("/update-appointment/" + id);
+    public String updateJob(
+            @PathVariable(value = "id",required = true) long id,
+            @ModelAttribute JobRequest jobRequest,
+            Model model
+    )
+    {
+        if(ValidationHelpers.isNull(jobRequest)) {
+            throw new PlsRequestException("Request must contain name");
+        }
+
+        jobRequest.setId(id);
+
+        Result result = jobService.updateJob(jobRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/update-appointment/" + id;
     }
 
     @GetMapping("/delete-appointment/{id}")
-    public ResponseEntity<Job> deleteJob(@PathVariable("id") long id) {
-        Job job = jobRepo.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id:" + id));
-        jobRepo.delete(job);
-        return ResponseEntity.ok(job);
-    }
+    public String deleteJob(@PathVariable(value = "id", required = true) long id) {
 
-    @PostMapping("/test")
-    public RedirectView test(@ModelAttribute Job job) {
-        Customer customer = customerRepo.findById(job.getCustomer().getCustomerId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id"));
-        job.setCustomer(customer);
-        jobRepo.save(job);
-        return new RedirectView("/add-appointment");
+        Result result = jobService.deleteJob(new JobRequest(id));
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/appointments";
     }
 }

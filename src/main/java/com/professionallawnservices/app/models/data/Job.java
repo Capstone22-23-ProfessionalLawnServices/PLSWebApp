@@ -1,5 +1,6 @@
 package com.professionallawnservices.app.models.data;
 
+import com.professionallawnservices.app.models.request.JobRequest;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -43,6 +44,21 @@ public class Job {
 
     @OneToMany(mappedBy = "job")
     private Set<Help> help = new HashSet<>();
+
+    public Job() {
+
+    }
+
+    public Job(JobRequest jobRequest, Customer customer) {
+        jobId = jobRequest.getId();
+        startTime = jobRequest.getStartTime();
+        endTime = jobRequest.getEndTime();
+        totalTime = (double) jobRequest.getTotalTime();
+        cost = jobRequest.getCost();
+        jobLocation = jobRequest.getLocation();
+        scheduledDate = jobRequest.getScheduledDate();
+        this.customer = customer;
+    }
 
     public long getJobId() {
         return jobId;

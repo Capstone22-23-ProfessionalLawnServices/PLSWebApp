@@ -1,4 +1,4 @@
-package com.professionallawnservices.app.models;
+package com.professionallawnservices.app.models.attribute;
 
 import java.util.Date;
 

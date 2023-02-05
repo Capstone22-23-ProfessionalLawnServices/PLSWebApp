@@ -1,8 +1,9 @@
 package com.professionallawnservices.app.services;
 
+import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.openweather.Interval;
 import com.professionallawnservices.app.models.openweather.OpenWeatherResponse;
-import com.professionallawnservices.app.models.PlsWeather;
+import com.professionallawnservices.app.models.attribute.PlsWeather;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -91,5 +92,12 @@ public class HomeService {
 
         return weatherList;
     }
+
+    /*
+    public ArrayList<Job> getCalendarAppointments() {
+
+    }
+    
+     */
 
 }

@@ -2,10 +2,9 @@ package com.professionallawnservices.app.controllers;
 
 import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.enums.RolesEnum;
-import com.professionallawnservices.app.models.PlsWeather;
+import com.professionallawnservices.app.models.attribute.PlsWeather;
 import com.professionallawnservices.app.services.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
