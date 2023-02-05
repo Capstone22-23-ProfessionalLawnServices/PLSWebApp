@@ -82,6 +82,12 @@ body {
 
 .default-btn{
     background-color: #3394B7;
+    border: 0;
+}
+
+.default-btn:hover {
+    background-color: #2e84a3;
+    transition-duration: .3s;
 }
 
 .table {
