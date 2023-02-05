@@ -2,7 +2,7 @@ package com.professionallawnservices.app.controllers;
 
 import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.enums.RolesEnum;
-import com.professionallawnservices.app.models.attribute.PlsWeather;
+import com.professionallawnservices.app.models.openweather.PlsWeather;
 import com.professionallawnservices.app.services.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

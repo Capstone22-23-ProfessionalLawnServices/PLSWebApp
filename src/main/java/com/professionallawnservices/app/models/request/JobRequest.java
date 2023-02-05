@@ -4,16 +4,19 @@ import com.professionallawnservices.app.models.data.Job;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 
 public class JobRequest {
+
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private long id;
 
     private double cost;
 
-    private Time endTime;
+    private String endTime;
 
-    private Time startTime;
+    private String startTime;
 
     private String location;
 
@@ -34,8 +37,8 @@ public class JobRequest {
     public JobRequest(Job job) {
         id = job.getJobId();
         cost = job.getCost();
-        endTime = job.getEndTime();
-        startTime = job.getStartTime();
+        endTime = job.getEndTime().toString();
+        startTime = job.getStartTime().toString();
         location = job.getJobLocation();
         scheduledDate = job.getScheduledDate();
         totalTime = (int) Math.round(job.getTotalTime());
@@ -58,19 +61,19 @@ public class JobRequest {
         this.cost = cost;
     }
 
-    public Time getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
-    public Time getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 

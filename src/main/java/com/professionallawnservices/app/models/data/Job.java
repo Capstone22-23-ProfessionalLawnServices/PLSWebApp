@@ -1,5 +1,6 @@
 package com.professionallawnservices.app.models.data;
 
+import com.professionallawnservices.app.helpers.DateHelper;
 import com.professionallawnservices.app.models.request.JobRequest;
 import org.springframework.lang.NonNull;
 
@@ -51,8 +52,8 @@ public class Job {
 
     public Job(JobRequest jobRequest, Customer customer) {
         jobId = jobRequest.getId();
-        startTime = jobRequest.getStartTime();
-        endTime = jobRequest.getEndTime();
+        startTime = DateHelper.formatTime(jobRequest.getStartTime());
+        endTime = DateHelper.formatTime(jobRequest.getEndTime());
         totalTime = (double) jobRequest.getTotalTime();
         cost = jobRequest.getCost();
         jobLocation = jobRequest.getLocation();
