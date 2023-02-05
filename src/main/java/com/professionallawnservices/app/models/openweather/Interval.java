@@ -2,6 +2,8 @@ package com.professionallawnservices.app.models.openweather;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
+
 public class Interval {
 
     @JsonProperty("dt")
@@ -10,6 +12,8 @@ public class Interval {
     @JsonProperty("main")
     private WeatherDay weatherDay;
 
+    @JsonProperty("weather")
+    private ArrayList<WeatherDescription> weatherDescription;
 
     public long getDateTime() {
         return dateTime;
@@ -25,5 +29,13 @@ public class Interval {
 
     public void setWeatherDay(WeatherDay weatherDay) {
         this.weatherDay = weatherDay;
+    }
+
+    public ArrayList<WeatherDescription> getWeatherDescription() {
+        return weatherDescription;
+    }
+
+    public void setWeatherDescription(ArrayList<WeatherDescription> weatherDescription) {
+        this.weatherDescription = weatherDescription;
     }
 }
