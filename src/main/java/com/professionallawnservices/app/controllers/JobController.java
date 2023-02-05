@@ -55,7 +55,7 @@ public class JobController {
     }
 
     @GetMapping("/update-appointment/{id}")
-    public String updateContactView(@PathVariable("id") long id, Model model) {
+    public String updateContactView(@PathVariable(value = "id", required = true) long id, Model model) {
 
         Result result = jobService.getJobById(new JobRequest(id));
 
