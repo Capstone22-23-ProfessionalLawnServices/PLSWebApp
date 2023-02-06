@@ -66,7 +66,6 @@ public class JobController {
         JobRequest job = (JobRequest) result.getData();
 
         model.addAttribute("job", job);
-        model.addAttribute("cost", job.getCost());
         model.addAttribute("id", job.getId());
         return "update-appointment";
     }

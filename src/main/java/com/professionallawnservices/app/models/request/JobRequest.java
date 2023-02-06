@@ -1,15 +1,12 @@
 package com.professionallawnservices.app.models.request;
 
 import com.professionallawnservices.app.helpers.DateHelper;
+import com.professionallawnservices.app.models.data.Help;
 import com.professionallawnservices.app.models.data.Job;
 
 import java.sql.Date;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 
 public class JobRequest {
-
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private long id;
 
@@ -26,6 +23,8 @@ public class JobRequest {
     private int totalTime;
 
     private long customerId;
+
+    private long contactId;
 
     public JobRequest() {
 
@@ -44,6 +43,18 @@ public class JobRequest {
         scheduledDate = job.getScheduledDate();
         totalTime = (int) Math.round(job.getTotalTime());
         customerId = job.getCustomer().getCustomerId();
+    }
+
+    public JobRequest(Job job, Help help) {
+        id = job.getJobId();
+        cost = job.getCost();
+        endTime = DateHelper.sqlDateToString(job.getScheduledDate(), job.getEndTime());
+        startTime = DateHelper.sqlDateToString(job.getScheduledDate(), job.getStartTime());
+        location = job.getJobLocation();
+        scheduledDate = job.getScheduledDate();
+        totalTime = (int) Math.round(job.getTotalTime());
+        customerId = job.getCustomer().getCustomerId();
+        contactId = help.getContact().getContactId();
     }
 
     public long getId() {
@@ -110,4 +121,11 @@ public class JobRequest {
         this.customerId = customerId;
     }
 
+    public long getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(long contactId) {
+        this.contactId = contactId;
+    }
 }
