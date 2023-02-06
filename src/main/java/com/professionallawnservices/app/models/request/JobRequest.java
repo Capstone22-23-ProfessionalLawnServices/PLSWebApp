@@ -5,6 +5,7 @@ import com.professionallawnservices.app.models.data.Help;
 import com.professionallawnservices.app.models.data.Job;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class JobRequest {
 
@@ -24,7 +25,7 @@ public class JobRequest {
 
     private long customerId;
 
-    private long contactId;
+    private ArrayList<Long> contactIds;
 
     public JobRequest() {
 
@@ -54,7 +55,7 @@ public class JobRequest {
         scheduledDate = job.getScheduledDate();
         totalTime = (int) Math.round(job.getTotalTime());
         customerId = job.getCustomer().getCustomerId();
-        contactId = help.getContact().getContactId();
+        contactIds.add(help.getContact().getContactId());
     }
 
     public long getId() {
@@ -121,11 +122,11 @@ public class JobRequest {
         this.customerId = customerId;
     }
 
-    public long getContactId() {
-        return contactId;
+    public ArrayList<Long> getContactIds() {
+        return contactIds;
     }
 
-    public void setContactId(long contactId) {
-        this.contactId = contactId;
+    public void setContactIds(ArrayList<Long> contactIds) {
+        this.contactIds = contactIds;
     }
 }

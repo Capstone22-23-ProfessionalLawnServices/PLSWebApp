@@ -34,6 +34,7 @@ public class CustomerService {
     }
 
     public Result getCustomerById(CustomerRequest customerRequest) {
+
         Result result = new Result();
 
         try {

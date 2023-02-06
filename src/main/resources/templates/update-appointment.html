@@ -38,17 +38,47 @@
           <input type="datetime-local" id="start-time" th:field="*{startTime}" class="form-control form-input">
           <label for="end-time" class="form-label">End Time:</label>
           <input type="datetime-local" id="end-time" th:field="*{endTime}" class="form-control form-input">
-          <label for="customer" class="form-label">Client: </label>
-          <div class="clear inner-add-elements"></div>
-          <input type="number" id="customer" class="form-control form-input"
-                 th:field="*{customerId}" required="required">
-          <div class="clear inner-add-elements"></div>
-          <label for="contact" class="form-label">Help: </label>
-          <div class="clear inner-add-elements"></div>
-          <input type="number" id="contact" class="form-control form-input"
-                 th:field="*{contactId}" required="required">
-          <div class="clear inner-add-elements"></div>
+          <label for="customers" class="form-label">Client: </label>
+          <table id="customers" class="table table-hover">
+            <thead class="thead">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th class="location-column" scope="col">Location</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer : ${customer}" onclick="rowClick(event)"
+                th:value="${customer.customerId}">
+              <th th:text="${customer.customerId}" scope="row"></th>
+              <td th:text="${customer.customerName}"></td>
+              <td class="location-column" th:text="${customer.customerLocation}"></td>
+            </tr>
+            </tbody>
+          </table>
+          <label for="contacts" class="form-label">Help: </label>
+          <table id="contacts" class="table table-hover">
+            <thead class="thead">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr  class="table-row" th:each="contact : ${contacts}" onclick="rowClick(event)"
+                 th:value="${contact.contactId}">
+              <td th:text="${contact.contactId}"></td>
+              <td th:text="${contact.contactName}"></td>
+              <td th:text="${contact.contactEmail}"></td>
+              <td th:text="${contact.contactPhone}"></td>
+            </tr>
+            </tbody>
+          </table>
+
           <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Submit" />
+
         </form>
         <form th:action="@{/delete-appointment/{id}(id=${id})}" method="get">
           <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>

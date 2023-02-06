@@ -1,9 +1,12 @@
 package com.professionallawnservices.app.models.data;
 
+import org.hibernate.annotations.Proxy;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "help")
+@Proxy(lazy=false)
 public class Help {
 
     @Id

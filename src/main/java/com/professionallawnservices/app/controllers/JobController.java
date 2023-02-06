@@ -2,22 +2,18 @@ package com.professionallawnservices.app.controllers;
 
 import com.professionallawnservices.app.exceptions.PlsRequestException;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
+import com.professionallawnservices.app.helpers.DataHelper;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Job;
-import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
-import com.professionallawnservices.app.repos.CustomerRepo;
-import com.professionallawnservices.app.repos.JobRepo;
 import com.professionallawnservices.app.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
 
@@ -48,14 +44,29 @@ public class JobController {
     }
 
     @GetMapping("/add-appointment")
-    public String addJobView(Model model) {
+    public String addJobView(
+            @RequestParam(value="customer-id", required = false) Long customerId,
+            @RequestParam(value="contact-ids", required = false) ArrayList<Long> contactIds,
+            Model model
+    )
+    {
+        Customer customer = (Customer) jobService.getCustomerByIdList(customerId).getData();
+        ArrayList<Contact> contacts = (ArrayList<Contact>) jobService.getContactsByIdList(contactIds).getData();
+
         model.addAttribute("job", new JobRequest());
+        model.addAttribute("customer", customer);
+        model.addAttribute("contacts", contacts);
 
         return "add-appointment";
     }
 
     @GetMapping("/update-appointment/{id}")
-    public String updateContactView(@PathVariable(value = "id", required = true) long id, Model model) {
+    public String updateContactView(
+            @PathVariable(value = "id", required = true) long id,
+            @RequestParam(value="contact-ids", required = false) ArrayList<Long> contactIds,
+            Model model
+    )
+    {
 
         Result result = jobService.getJobById(new JobRequest(id));
 
@@ -64,9 +75,16 @@ public class JobController {
         }
 
         JobRequest job = (JobRequest) result.getData();
+        Customer customer = (Customer) jobService.getCustomerByJob(job).getData();
+        ArrayList<Contact> contacts = (ArrayList<Contact>) jobService.getContactsByJob(job).getData();
+        ArrayList<Contact> paramContacts = (ArrayList<Contact>) jobService.getContactsByIdList(contactIds).getData();
+        ArrayList<Contact> combinedContacts = jobService.combineContactArrayLists(contacts, paramContacts);
 
         model.addAttribute("job", job);
         model.addAttribute("id", job.getId());
+        model.addAttribute("customer", customer);
+        model.addAttribute("contacts", combinedContacts);
+
         return "update-appointment";
     }
 

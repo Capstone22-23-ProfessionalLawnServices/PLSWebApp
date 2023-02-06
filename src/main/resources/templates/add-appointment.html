@@ -42,11 +42,55 @@
           <input type="number" id="customer" class="form-control form-input"
                  th:field="*{customerId}" required="required">
           <div class="clear inner-add-elements"></div>
+          <table class="table table-hover">
+            <thead class="thead">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th class="location-column" scope="col">Location</th>
+              <th scope="col">Phone</th>
+              <th class="email-column" scope="col">Email</th>
+              <th scope="col">Frequency</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer : ${customers}" onclick="rowClick(event)"
+                th:value="${customer.customerId}">
+              <th th:text="${customer.customerId}" scope="row"></th>
+              <td th:text="${customer.customerName}"></td>
+              <td class="location-column" th:text="${customer.customerLocation}"></td>
+              <td th:text="${customer.customerPhone}"></td>
+              <td class="email-column" th:text="${customer.customerEmail}"></td>
+              <td th:text="${customer.frequency}"></td>
+            </tr>
+            </tbody>
+          </table>
+
           <label for="contact" class="form-label">Help: </label>
           <div class="clear inner-add-elements"></div>
           <input type="number" id="contact" class="form-control form-input"
-                 th:field="*{contactId}" required="required">
+                 th:field="*{contactIds}" required="required">
           <div class="clear inner-add-elements"></div>
+          <table class="table table-hover">
+            <thead class="thead">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr  class="table-row" th:each="contact : ${contacts}" onclick="rowClick(event)"
+                 th:value="${contact.contactId}">
+              <td th:text="${contact.contactId}"></td>
+              <td th:text="${contact.contactName}"></td>
+              <td th:text="${contact.contactEmail}"></td>
+              <td th:text="${contact.contactPhone}"></td>
+            </tr>
+            </tbody>
+          </table>
+
           <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Submit" />
         </form>
       </div>

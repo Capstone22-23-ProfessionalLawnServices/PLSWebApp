@@ -2,6 +2,7 @@ package com.professionallawnservices.app.models.data;
 
 import com.professionallawnservices.app.helpers.DateHelper;
 import com.professionallawnservices.app.models.request.JobRequest;
+import org.hibernate.annotations.Proxy;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "job")
+@Proxy(lazy=false)
 public class Job {
 
     @Id
