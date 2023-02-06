@@ -4,6 +4,7 @@ import com.professionallawnservices.app.helpers.DateHelper;
 import com.professionallawnservices.app.models.data.Help;
 import com.professionallawnservices.app.models.data.Job;
 
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -98,6 +99,7 @@ public class JobRequest {
         this.location = location;
     }
 
+    @NotNull
     public Date getScheduledDate() {
         return scheduledDate;
     }

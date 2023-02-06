@@ -16,7 +16,7 @@
 <body onload="loadNavbar();">
 <div class="overlay">
 
-  <div id="navbar-insert" th:insert="html-elements.html::#navbar-container">
+  <div id="navbar-insert" th:insert="/elements/_navbar.html::#navbar-container">
   </div>
 
   <div class="container main-container add-content-div">
@@ -80,7 +80,8 @@
           <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Submit" />
 
         </form>
-        <form th:action="@{/delete-appointment/{id}(id=${id})}" method="get">
+        <form th:action="@{/delete-appointment/{id}(id=${id})}" method="get"
+              th:if="${job.getScheduledDate() != null}">
           <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>
         </form>
       </div>

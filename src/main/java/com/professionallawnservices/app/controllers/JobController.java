@@ -2,7 +2,6 @@ package com.professionallawnservices.app.controllers;
 
 import com.professionallawnservices.app.exceptions.PlsRequestException;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
-import com.professionallawnservices.app.helpers.DataHelper;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Contact;
@@ -85,7 +84,7 @@ public class JobController {
         model.addAttribute("customer", customer);
         model.addAttribute("contacts", combinedContacts);
 
-        return "update-appointment";
+        return "alter-appointment";
     }
 
     @PostMapping("/create-appointment")
