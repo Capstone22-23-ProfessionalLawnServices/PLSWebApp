@@ -56,9 +56,15 @@ public class JobService {
 
             Job job = jobRepo.findById(jobRequest.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid job Id:" + jobRequest.getId()));
-            ArrayList<Help> help = helpRepo.getAllHelpByJobId(job.getJobId());
+            ArrayList<Help> helpArrayList = helpRepo.getAllHelpByJobId(job.getJobId());
 
-            result.setData(new JobRequest(job, help.get(0)));
+            if (helpArrayList.size() > 0) {
+                result.setData(new JobRequest(job, helpArrayList.get(0)));
+            }
+            else {
+                result.setData(new JobRequest(job));
+            }
+
             result.setComplete(true);
         }
         catch (Exception e) {
