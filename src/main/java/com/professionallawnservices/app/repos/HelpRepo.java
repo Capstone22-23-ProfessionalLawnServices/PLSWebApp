@@ -15,4 +15,7 @@ public interface HelpRepo extends JpaRepository<Help, Long> {
 
     @Query(value = "SELECT h FROM Help h WHERE h.job.jobId = ?1")
     ArrayList<Help> getAllHelpByJobId(@Param("jobId") Long jobId);
+
+    @Query(value = "SELECT h FROM Help h WHERE h.contact.contactId = ?1")
+    ArrayList<Help> getAllHelpByContactId(@Param("contactId") Long contactId);
 }

@@ -35,7 +35,9 @@ public class DateHelper {
 
         String htmlDate = "";
 
-        htmlDate = scheduledDate.toString() + "T" + time.toString().substring(0, 5);
+        if (time != null) {
+            htmlDate = scheduledDate.toString() + "T" + time.toString().substring(0, 5);
+        }
 
         return htmlDate;
     }

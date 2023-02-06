@@ -2,17 +2,24 @@ package com.professionallawnservices.app.services;
 
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.data.Contact;
+import com.professionallawnservices.app.models.data.Help;
 import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.repos.ContactRepo;
+import com.professionallawnservices.app.repos.HelpRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.professionallawnservices.app.models.*;
+
+import java.util.ArrayList;
 
 @Service
 public class ContactService {
 
     @Autowired
     ContactRepo contactRepo;
+
+    @Autowired
+    HelpRepo helpRepo;
 
     public Result getAllContacts() {
 
@@ -100,6 +107,9 @@ public class ContactService {
 
             Contact contact = contactRepo.findById(contactRequest.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id:" + contactRequest.getId()));
+            ArrayList<Help> helpArrayList = helpRepo.getAllHelpByContactId(contact.getContactId());
+
+            helpRepo.deleteAll(helpArrayList);
             contactRepo.delete(contact);
 
             result.setComplete(true);
