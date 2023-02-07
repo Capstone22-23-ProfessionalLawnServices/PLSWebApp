@@ -1,12 +1,15 @@
 package com.professionallawnservices.app.helpers;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 
-public class DataHelper {
+@Component("dataHelper")
+public class DataHelper<T> {
 
-    public static ArrayList<Object> combineArrayLists(ArrayList<Object> list1, ArrayList<Object> list2) {
+    public ArrayList<T> combineArrayLists(ArrayList<T> list1, ArrayList<T> list2) {
 
-        ArrayList<Object> combinedList = new ArrayList<Object>();
+        ArrayList<T> combinedList = new ArrayList<T>();
 
         if (list1 != null) {
             combinedList.addAll(list1);

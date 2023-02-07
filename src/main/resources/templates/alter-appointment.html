@@ -11,7 +11,7 @@
   <link rel="stylesheet" type="text/css" media="all" href="../static/css/common.css" th:href="@{/css/common.css}" />
   <link rel="stylesheet" type="text/css" media="all" href="../static/css/account.css" th:href="@{/css/add-appointment.css}" />
   <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
-  <script th:src="@{/js/add-appointment.js}" src="../static/js/add-appointment.js"></script>
+  <script th:src="@{/js/alter-appointment.js}" src="../static/js/alter-appointment.js"></script>
 </head>
 <body onload="loadNavbar();">
 <div class="overlay">
@@ -20,66 +20,27 @@
   </div>
 
   <div class="container main-container add-content-div">
-    <h1 class="form-header">Update Appointment Form</h1>
+    <h1 th:if="${job.getScheduledDate() != null}" class="form-header">Update Appointment Form</h1>
+    <h1 th:if="${job.getScheduledDate() == null}" class="form-header">Add Appointment Form</h1>
     <div class="row justify-content-center">
       <div class="col-lg-6">
-        <form id="add-form" action="#" th:action="@{/update-appointment/{id}(id=${id})}"
-              th:object="${job}" method="post">
-          <label for="cost" class="form-label">Cost:</label>
-          <input type="text" id="cost" th:field="*{cost}" class="form-control form-input"
-                 placeholder="30.00" pattern="^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$">
-          <label for="location" class="form-label">Location:</label>
-          <input type="text" id="location" th:field="*{location}" class="form-control form-input"
-                 placeholder="120 Smith St" minlength="5">
-          <label for="date" class="form-label">Scheduled Date:</label>
-          <input type="date" id="date" th:field="*{scheduledDate}" class="form-control form-input"
-                 required="required">
-          <label for="start-time" class="form-label">Start Time:</label>
-          <input type="datetime-local" id="start-time" th:field="*{startTime}" class="form-control form-input">
-          <label for="end-time" class="form-label">End Time:</label>
-          <input type="datetime-local" id="end-time" th:field="*{endTime}" class="form-control form-input">
-          <label for="customers" class="form-label">Client: </label>
-          <table id="customers" class="table table-hover">
-            <thead class="thead">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th class="location-column" scope="col">Location</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="customer : ${customer}" onclick="rowClick(event)"
-                th:value="${customer.customerId}">
-              <th th:text="${customer.customerId}" scope="row"></th>
-              <td th:text="${customer.customerName}"></td>
-              <td class="location-column" th:text="${customer.customerLocation}"></td>
-            </tr>
-            </tbody>
-          </table>
-          <label for="contacts" class="form-label">Help: </label>
-          <table id="contacts" class="table table-hover">
-            <thead class="thead">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Phone</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr  class="table-row" th:each="contact : ${contacts}" onclick="rowClick(event)"
-                 th:value="${contact.contactId}">
-              <td th:text="${contact.contactId}"></td>
-              <td th:text="${contact.contactName}"></td>
-              <td th:text="${contact.contactEmail}"></td>
-              <td th:text="${contact.contactPhone}"></td>
-            </tr>
-            </tbody>
-          </table>
 
-          <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Submit" />
+        <form id="add-form" action="#" th:action="@{/update-appointment/{id}(id=${id})}"
+              th:object="${job}" th:if="${job.getScheduledDate() != null}" method="post">
+
+          <div th:insert="/elements/_alter-appointment-form.html::#appointment-form-contents">
+          </div>
 
         </form>
+
+        <form th:id="add-form" action="#" th:action="@{/create-appointment}"
+              th:object="${job}" th:if="${job.getScheduledDate() == null}" method="post">
+
+          <div th:insert="/elements/_alter-appointment-form.html::#appointment-form-contents">
+          </div>
+
+        </form>
+
         <form th:action="@{/delete-appointment/{id}(id=${id})}" method="get"
               th:if="${job.getScheduledDate() != null}">
           <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>
@@ -87,6 +48,8 @@
       </div>
     </div>
   </div>
+
+  <input id="jobId" type="hidden" th:value="${job.id}">
 
 </div>
 </body>

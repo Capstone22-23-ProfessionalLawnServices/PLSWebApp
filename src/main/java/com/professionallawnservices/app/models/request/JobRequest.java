@@ -24,6 +24,7 @@ public class JobRequest {
 
     private int totalTime;
 
+    @NotNull
     private long customerId;
 
     private ArrayList<Long> contactIds;

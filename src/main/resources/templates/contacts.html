@@ -55,8 +55,15 @@
         </tr>
         </thead>
         <tbody>
-          <tr  class="table-row" th:each="contacts : ${contacts}" onclick="rowClick(event)"
-               th:value="${contacts.contactId}">
+          <tr  class="table-row" th:each="contacts : ${contacts}" onclick="rowSearch(event)"
+               th:if="${selectSearch == 'SEARCH'}" th:value="${contacts.contactId}">
+            <td th:text="${contacts.contactId}"></td>
+            <td th:text="${contacts.contactName}"></td>
+            <td th:text="${contacts.contactEmail}"></td>
+            <td th:text="${contacts.contactPhone}"></td>
+          </tr>
+          <tr  class="table-row" th:each="contacts : ${contacts}" onclick="rowSelect(event)"
+               th:if="${selectSearch == 'SELECT'}" th:value="${contacts.contactId}">
             <td th:text="${contacts.contactId}"></td>
             <td th:text="${contacts.contactName}"></td>
             <td th:text="${contacts.contactEmail}"></td>
@@ -86,6 +93,7 @@
 
   </div>
 
+  <input id="jobId" th:if="${selectSearch == 'SELECT'}" type="hidden" th:value="${job.id}">
 
 </div>
 </body>

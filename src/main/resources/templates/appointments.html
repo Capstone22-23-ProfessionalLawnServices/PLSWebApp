@@ -64,7 +64,7 @@
 
 
       <div class="column col-xl-1 text-center" style="margin-top: 15px">
-        <a th:href="@{/add-appointment}" href="add-appointment.html">
+        <a th:href="@{/add-appointment}" href="alter-appointment.html">
           <button id="add-appointment-button" class="btn btn-primary default-btn">
             <span id="add-appointment-button-text"> Add </span>
             <img th:src="@{/images/calendar-plus.svg}" src="../static/images/calendar-plus.svg" style="margin-left: 3px">
@@ -87,16 +87,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="jobs : ${jobs}" onclick="rowClick(event)"
-            th:value="${jobs.jobId}">
-          <th th:text="${jobs.jobId}" scope="row"></th>
-          <td th:text="${jobs.cost}"></td>
-          <td th:text="${jobs.scheduledDate}"></td>
-          <td th:text="${jobs.totalTime}"></td>
-          <td th:text="${jobs.customer.customerName}"></td>
+        <tr th:each="job : ${jobs}" onclick="rowClick(event)"
+            th:value="${job.jobId}">
+          <th th:text="${job.jobId}" scope="row"></th>
+          <td th:text="${job.cost}"></td>
+          <td th:text="${job.scheduledDate}"></td>
+          <td th:text="${job.totalTime}"></td>
+          <td th:text="${job.customer.customerName}"></td>
         </tr>
         </tbody>
       </table>
+
 
     </div>
 
@@ -114,6 +115,7 @@
         <button id="prev-page"> <img th:src="@{/images/arrow-right-square-fill.svg}" src="../static/images/arrow-right-square-fill.svg"></button>
 
       </div>
+
 
     </div>
 
