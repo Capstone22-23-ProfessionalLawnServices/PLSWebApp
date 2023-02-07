@@ -19,6 +19,14 @@ public class Help {
     @JoinColumn(name = "job_id")
     private Job job;
 
+    public Help() {
+
+    }
+
+    public Help(Contact contact, Job job) {
+        this.contact = contact;
+        this.job = job;
+    }
 
     public long getId() {
         return helpId;

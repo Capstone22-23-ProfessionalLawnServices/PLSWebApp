@@ -1,5 +1,7 @@
 package com.professionallawnservices.app.models.data;
 
+import com.professionallawnservices.app.models.request.CustomerRequest;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +32,19 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private Set<Job> jobs = new HashSet<>();
+
+    public Customer() {
+
+    }
+
+    public Customer(CustomerRequest customerRequest) {
+        customerId = customerRequest.getId();
+        customerName = customerRequest.getName();
+        customerLocation = customerRequest.getLocation();
+        customerPhone = customerRequest.getPhone();
+        customerEmail = customerRequest.getEmail();
+        frequency = customerRequest.getFrequency();
+    }
 
     public long getCustomerId() {
         return customerId;

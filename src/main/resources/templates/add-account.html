@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Contact</title>
+  <title>Add Account</title>
   <link rel="icon" type="image/x-icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}">
   <link rel="stylesheet" type="text/css" media="all" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
   <script th:src="@{/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
@@ -32,7 +32,7 @@
                  minlength="8" required="required">
           <label for="role" class="form-label">Role:</label>
           <div class="clear inner-add-elements"></div>
-          <select id="role" th:field="*{roll}" required="required">
+          <select id="role" th:field="*{role}" required="required">
             <option value="ROLE_USER">User</option>
             <option value="ROLE_EMPLOYEE">Employee</option>
             <option value="ROLE_MANAGER">Manager</option>

@@ -13,17 +13,18 @@
   <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
   <script th:src="@{/js/add-appointment.js}" src="../static/js/add-appointment.js"></script>
 </head>
-<body onload="loadNavbar(); formClear()">
+<body onload="loadNavbar();">
 <div class="overlay">
 
   <div id="navbar-insert" th:insert="html-elements.html::#navbar-container">
   </div>
 
   <div class="container main-container add-content-div">
-    <h1 class="form-header">Add Appointment Form</h1>
+    <h1 class="form-header">Update Appointment Form</h1>
     <div class="row justify-content-center">
       <div class="col-lg-6">
-        <form id="add-form" action="#" th:action="@{/create-appointment}" th:object="${job}" method="post">
+        <form id="add-form" action="#" th:action="@{/update-appointment/{id}(id=${id})}"
+              th:object="${job}" method="post">
           <label for="cost" class="form-label">Cost:</label>
           <input type="text" id="cost" th:field="*{cost}" class="form-control form-input"
                  placeholder="30.00" pattern="^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$">
@@ -48,6 +49,9 @@
                  th:field="*{contactId}" required="required">
           <div class="clear inner-add-elements"></div>
           <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Submit" />
+        </form>
+        <form th:action="@{/delete-appointment/{id}(id=${id})}" method="get">
+          <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>
         </form>
       </div>
     </div>

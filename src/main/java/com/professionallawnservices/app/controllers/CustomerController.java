@@ -1,12 +1,24 @@
 package com.professionallawnservices.app.controllers;
 
+import com.professionallawnservices.app.exceptions.PlsRequestException;
+import com.professionallawnservices.app.exceptions.PlsServiceException;
+import com.professionallawnservices.app.helpers.ValidationHelpers;
+import com.professionallawnservices.app.models.Result;
+import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Customer;
+import com.professionallawnservices.app.models.request.ContactRequest;
+import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.repos.CustomerRepo;
+import com.professionallawnservices.app.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
 
 import static com.professionallawnservices.app.enums.RolesEnum.*;
 
@@ -14,48 +26,104 @@ import static com.professionallawnservices.app.enums.RolesEnum.*;
 public class CustomerController {
 
     @Autowired
-    CustomerRepo customerRepo;
+    CustomerService customerService;
 
     private static final String managerRole = MANAGER.roleName;
 
     @GetMapping("/customers")
     public String customersView(Model model) {
-        model.addAttribute("customers", customerRepo.findAll());
+
+        Result result = customerService.getAllCustomers();
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        ArrayList<Customer> customers = (ArrayList<Customer>) result.getData();
+
+        model.addAttribute("customers", customers);
+
         return "customers";
     }
 
     @GetMapping("/add-customer")
     public String addCustomerView(Model model) {
-        model.addAttribute("customer", new Customer());
+
+        CustomerRequest customerRequest = new CustomerRequest();
+        model.addAttribute("customer", customerRequest);
+
         return "add-customer";
     }
 
     @GetMapping("/update-customer/{id}")
     public String updateCustomerView(@PathVariable("id") long id, Model model) {
-        Customer customer = customerRepo.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + id));
+
+        Result result = customerService.getCustomerById(new CustomerRequest(id));
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        CustomerRequest customer = (CustomerRequest) result.getData();
+
         model.addAttribute("customer", customer);
+        model.addAttribute("id", customer.getId());
+
         return "update-customer";
     }
 
     @PostMapping("/create-customer")
-    public RedirectView createCustomer(@ModelAttribute Customer customer) {
-        customerRepo.save(customer);
+    public RedirectView createCustomer(
+            @Valid @ModelAttribute("customer") CustomerRequest customerRequest,
+            BindingResult bindingResult
+    )
+    {
+
+        if (bindingResult.hasErrors()) {
+            throw new PlsRequestException("Request must contain a non negative integer value for frequency.");
+        }
+
+        if(
+                ValidationHelpers.isNull(customerRequest)
+                        || ValidationHelpers.isNullOrBlank(customerRequest.getName())
+        )
+        {
+            throw new PlsRequestException("Request must contain name");
+        }
+
+        Result result = customerService.createCustomer(customerRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
         return new RedirectView("/add-customer");
     }
 
     @PostMapping("/update-customer/{id}")
-    public RedirectView updateCustomer(@PathVariable("id") long id, @ModelAttribute Customer customer,Model model) {
-        customer.setCustomerId(id);
-        customerRepo.save(customer);
-        return new RedirectView("/update-customer/" + id);
+    public String updateCustomer(
+            @PathVariable(value = "id",required = true) long id,
+            @ModelAttribute CustomerRequest customerRequest,
+            Model model
+    )
+    {
+        if(
+                ValidationHelpers.isNull(customerRequest)
+                        || ValidationHelpers.isNullOrBlank(customerRequest.getName())
+        )
+        {
+            throw new PlsRequestException("Request must contain name");
+        }
+
+        customerRequest.setId(id);
+
+        Result result = customerService.updateCustomer(customerRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/update-customer/" + id;
     }
-
-    /*
-    public Customer getUser(@RequestParam(name="name", required=true, defaultValue="World") String name, Model model) {
-
-    }
-
-     */
 
 }

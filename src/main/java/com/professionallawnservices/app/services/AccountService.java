@@ -3,7 +3,6 @@ package com.professionallawnservices.app.services;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.request.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
@@ -23,16 +22,18 @@ public class AccountService {
 
         try {
 
+            var newPassword = passwordEncoder.encode(userRequest.getNewPassword());
+
             jdbcUserDetailsManager.createUser(org.springframework.security.core.userdetails.User
                     .withUsername(userRequest.getUsername())
-                    .password(passwordEncoder.encode(userRequest.getPassword()))
-                    .authorities(userRequest.getRoll()).build());
+                    .password(newPassword)
+                    .authorities(userRequest.getRole()).build());
 
-            result.complete = true;
+            result.setComplete(true);
         }
         catch (Exception e) {
-            result.complete = false;
-            result.errorMessage = "There was an error creating the new User.";
+            result.setComplete(false);
+            result.setErrorMessage("There was an error creating the account with username: " + userRequest.getUsername());
         }
 
         return result;
@@ -47,11 +48,28 @@ public class AccountService {
             jdbcUserDetailsManager.changePassword(userRequest.getPassword(),
                     passwordEncoder.encode(userRequest.getNewPassword()));
 
-            result.complete = true;
+            result.setComplete(true);
         }
         catch (Exception e) {
-            result.complete = false;
-            result.errorMessage = "There was an error updating the user User.";
+            result.setComplete(false);
+            result.setErrorMessage("There was an error updating the account with username: " + userRequest.getUsername());
+        }
+
+        return result;
+    }
+
+    public Result deleteAccount(UserRequest userRequest) {
+
+        Result result = new Result();
+
+        try{
+
+            jdbcUserDetailsManager.deleteUser(userRequest.getUsername());
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an error deleting the account with username: " + userRequest.getUsername());
         }
 
         return result;

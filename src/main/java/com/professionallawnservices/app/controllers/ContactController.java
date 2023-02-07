@@ -1,7 +1,13 @@
 package com.professionallawnservices.app.controllers;
 
+import com.professionallawnservices.app.exceptions.PlsRequestException;
+import com.professionallawnservices.app.exceptions.PlsServiceException;
+import com.professionallawnservices.app.helpers.ValidationHelpers;
+import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Contact;
+import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.repos.ContactRepo;
+import com.professionallawnservices.app.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -9,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
@@ -17,62 +24,164 @@ import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 public class ContactController {
 
     @Autowired
-    ContactRepo contactRepo;
+    ContactService contactService;
 
     private static final String managerRole = MANAGER.roleName;
 
     @GetMapping("/contacts")
     public String contactsView(Model model) {
-        model.addAttribute("contacts", contactRepo.findAll());
+
+        Result result = contactService.getAllContacts();
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
+
+        model.addAttribute("contacts", contacts);
+        //model.addAttribute("contact", new ContactRequest());
         return "contacts";
     }
 
+
+
     @GetMapping("/add-contact")
     public String addContactView(Model model) {
-        model.addAttribute("contact", new Contact());
+        model.addAttribute("contact", new ContactRequest());
+
         return "add-contact";
     }
 
+
     @GetMapping("/update-contact/{id}")
-    public String updateContactView(@PathVariable("id") long id, Model model) {
-        Contact contact = contactRepo.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id:" + id));
+    public String updateContactView(@PathVariable(value = "id", required = true) long id, Model model) {
+
+        Result result = contactService.getContactById(new ContactRequest(id));
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        ContactRequest contact = (ContactRequest) result.getData();
+
         model.addAttribute("contact", contact);
+        model.addAttribute("id", contact.getId());
         return "update-contact";
     }
 
+
     @PostMapping("/create-contact")
-    public RedirectView createContact(@ModelAttribute Contact contact) {
-        contactRepo.save(contact);
-        return new RedirectView("/add-contact");
+    public String createContact(@ModelAttribute ContactRequest contactRequest) {
+        if(
+                ValidationHelpers.isNull(contactRequest)
+                        || ValidationHelpers.isNullOrBlank(contactRequest.getName())
+        )
+        {
+            throw new PlsRequestException("Request must contain name");
+        }
+
+        Result result = contactService.createContact(contactRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/add-contact";
     }
 
+
+
     @PostMapping("/update-contact/{id}")
-    public RedirectView updateContact(@PathVariable("id") long id, @ModelAttribute Contact contact,Model model) {
-        contact.setContactId(id);
-        contactRepo.save(contact);
-        return new RedirectView("/update-contact/" + id);
+    public String updateContact(
+            @PathVariable(value = "id",required = true) long id,
+            @ModelAttribute ContactRequest contactRequest,
+            Model model
+    )
+    {
+        if(
+                ValidationHelpers.isNull(contactRequest)
+                        || ValidationHelpers.isNullOrBlank(contactRequest.getName())
+        )
+        {
+            throw new PlsRequestException("Request must contain name");
+        }
+
+        contactRequest.setId(id);
+
+        Result result = contactService.updateContact(contactRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/update-contact/" + id;
     }
 
     @GetMapping("/delete-contact/{id}")
-    public ResponseEntity<Contact> deleteContact(@PathVariable("id") long id) {
-        Contact contact = contactRepo.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id:" + id));
-        contactRepo.delete(contact);
-        return ResponseEntity.ok(contact);
+    public String deleteContact(@PathVariable(value = "id", required = true) long id) {
+
+        Result result = contactService.deleteContact(new ContactRequest(id));
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/contacts";
     }
 
+
     @GetMapping("/search-contacts")
-    public ResponseEntity<List<Contact>> getEmployeeByName(@RequestParam(name = "search") String search) {
-        List<Contact> contacts = contactRepo.findByContactName(search);
-        return ResponseEntity.ok(contacts);
+    public String getEmployeeByName(
+            @RequestParam(value = "name", required = true) String name,
+            Model model
+    )
+    {
+        ContactRequest contactRequest = new ContactRequest();
+        contactRequest.setName(name);
+
+        Result result = contactService.searchContacts(contactRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
+
+        model.addAttribute("contacts", contacts);
+        model.addAttribute("contact", new ContactRequest());
+
+        return "contacts";
     }
+
+    /*
 
     @PostMapping("/search-contacts-post")
     public ResponseEntity<List<Contact>> getEmployeeByNamePost(@RequestBody Contact contact) {
         String contactName = contact.getContactName();
         List<Contact> contacts = contactRepo.findByContactName(contactName);
         return ResponseEntity.ok(contacts);
+    }
+
+     */
+
+    @PostMapping("/rest/create-contact")
+    public String createContactRest(@RequestBody ContactRequest contactRequest) {
+        if(
+                ValidationHelpers.isNull(contactRequest)
+                        || ValidationHelpers.isNullOrBlank(contactRequest.getName())
+        )
+        {
+            throw new PlsRequestException("Request must contain name");
+        }
+
+        Result result = contactService.createContact(contactRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/add-contact";
     }
 
 }

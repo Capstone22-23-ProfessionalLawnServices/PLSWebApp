@@ -1,5 +1,6 @@
 package com.professionallawnservices.app.models.data;
 
+import com.professionallawnservices.app.models.request.ContactRequest;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -29,6 +30,17 @@ public class Contact {
 
     @OneToMany(mappedBy = "contact")
     private Set<Help> help = new HashSet<>();
+
+    public Contact() {
+
+    }
+
+    public Contact(ContactRequest contactRequest) {
+        contactId = contactRequest.getId();
+        contactName = contactRequest.getName();
+        contactPhone = contactRequest.getPhone();
+        contactEmail = contactRequest.getEmail();
+    }
 
     public long getContactId() {
         return contactId;
