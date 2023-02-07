@@ -1,5 +1,7 @@
 package com.professionallawnservices.app.models.request;
 
+import com.professionallawnservices.app.enums.RolesEnum;
+
 import javax.validation.constraints.Pattern;
 
 public class UserRequest {
@@ -15,12 +17,16 @@ public class UserRequest {
 
     private String role;
 
+    private RolesEnum rolesEnum;
+
     public UserRequest() {
 
     }
 
-    public UserRequest(String username) {
+    public UserRequest(String username, String role, RolesEnum rolesEnum) {
         this.username = username;
+        this.role = role;
+        this.rolesEnum = rolesEnum;
     }
 
     public String getUsername() {
@@ -55,4 +61,11 @@ public class UserRequest {
         this.role = role;
     }
 
+    public RolesEnum getRolesEnum() {
+        return rolesEnum;
+    }
+
+    public void setRolesEnum(RolesEnum rolesEnum) {
+        this.rolesEnum = rolesEnum;
+    }
 }

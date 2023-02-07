@@ -1,9 +1,12 @@
 package com.professionallawnservices.app.controllers;
 
-import com.professionallawnservices.app.enums.RolesEnum;
+/*
+The AccountController houses all the account endpoints. Communication from the AccountController
+to the AccountService is accomplished primarily through the UserRequest.
+ */
+
 import com.professionallawnservices.app.exceptions.PlsRequestException;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
-import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.request.UserRequest;
@@ -29,13 +32,16 @@ public class AccountController {
     @GetMapping("/account")
     @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER', 'ROLE_ADMIN')")
     public String accountView(Model model) {
-        RolesEnum userRole = SecurityHelpers.getPrimaryUserRole();
-        var systemUser = SecurityHelpers.getUser();
-        UserRequest userRequest = new UserRequest();
-        userRequest.setUsername(systemUser.getName());
-        userRequest.setRole(systemUser.getAuthorities().toString());
 
-        model.addAttribute("userAccessLevel", userRole.accessLevel);
+        Result result = accountService.accountView();
+
+        if (!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        UserRequest userRequest = (UserRequest) result.getData();
+
+        model.addAttribute("userAccessLevel", userRequest.getRolesEnum().accessLevel);
         model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
         model.addAttribute("user", userRequest);
 
@@ -44,12 +50,16 @@ public class AccountController {
 
     @GetMapping("/add-account")
     public String addAccountView(Model model) {
-        model.addAttribute("user", new UserRequest());
+
+        UserRequest userRequest = new UserRequest();
+
+        model.addAttribute("user", userRequest);
+
         return "add-account";
     }
 
-    @PostMapping("/create-account")
-    public String createAccount(@ModelAttribute UserRequest userRequest) {
+    @PostMapping("/add-account")
+    public String createAccount(@ModelAttribute("userRequest") UserRequest userRequest) {
         if(
                 ValidationHelpers.isNull(userRequest)
                 || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
@@ -71,7 +81,11 @@ public class AccountController {
 
 
     @PostMapping("/update-account")
-    public String updateAccount(@ModelAttribute @Valid UserRequest userRequest, BindingResult bindingResult) {
+    public String updateAccount(
+            @ModelAttribute("userRequest") @Valid UserRequest userRequest,
+            BindingResult bindingResult
+    )
+    {
 
         if (bindingResult.hasErrors()) {
             throw new PlsRequestException("Request must contain a new password with at least one capital, lowercase, " +
@@ -97,7 +111,11 @@ public class AccountController {
     }
 
     @PostMapping("/rest/create-account")
-    public ResponseEntity<String> createAccountRest(@RequestBody @Valid UserRequest userRequest, BindingResult bindingResult) {
+    public ResponseEntity<String> createAccountRest(
+            @RequestBody @Valid UserRequest userRequest,
+            BindingResult bindingResult
+    )
+    {
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getFieldErrors().toString());

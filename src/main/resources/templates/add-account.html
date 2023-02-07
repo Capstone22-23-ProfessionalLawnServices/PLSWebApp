@@ -23,7 +23,7 @@
     <h1 class="form-header">Add Account Form</h1>
     <div class="row justify-content-center">
       <div class="col-lg-6">
-        <form id="add-form" action="#" th:action="@{/create-account}" th:object="${user}" method="post">
+        <form id="add-form" action="#" th:action="@{/add-account}" th:object="${user}" method="post">
           <label for="username" class="form-label">Username:</label>
           <input type="text" id="username" th:field="*{username}" class="form-control form-input"
                  placeholder="jsmith23" minlength="5" required="required">
