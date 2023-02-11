@@ -68,7 +68,7 @@ public class ContactService {
             Contact contact = contactRepo.findById(contactRequest.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid contact Id:" + contactRequest.getId()));
 
-            result.setData(new ContactRequest(contact));
+            result.setData(contact);
             result.setComplete(true);
         }
         catch (Exception e) {
@@ -99,6 +99,29 @@ public class ContactService {
         return result;
     }
 
+    public Result deleteContact(Contact contact) {
+
+        Result result = new Result();
+
+        try {
+
+            ArrayList<Help> helpArrayList = helpRepo.getAllHelpByContactId(contact.getContactId());
+
+            helpRepo.deleteAll(helpArrayList);
+            contactRepo.delete(contact);
+
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue deleting the contact with id: " + contact.getContactId());
+        }
+
+        return result;
+    }
+
+
+    /*
     public Result deleteContact(ContactRequest contactRequest) {
 
         Result result = new Result();
@@ -121,6 +144,8 @@ public class ContactService {
 
         return result;
     }
+
+     */
 
     public Result searchContacts(ContactRequest contactRequest) {
 

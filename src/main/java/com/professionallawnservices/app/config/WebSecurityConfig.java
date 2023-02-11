@@ -53,7 +53,7 @@ public class WebSecurityConfig {
                 "/manager**"
         };
 
-        //Added .cors().and().csrf().disable() to allow for post requests from postman
+        //Added .cors().and().csrf().disable() to allow for post requests
 
         http.cors().and().csrf().disable()
                 .authorizeHttpRequests((requests) -> requests

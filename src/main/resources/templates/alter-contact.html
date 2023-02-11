@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Contact</title>
+    <title>Add Contact</title>
     <link rel="icon" type="image/x-icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}">
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
     <script th:src="@{/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
@@ -13,32 +13,40 @@
     <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
     <script th:src="@{/js/add-contact.js}" src="../static/js/add-contact.js"></script>
 </head>
-<body onload="loadNavbar()">
+<body onload="loadNavbar(); formClear()">
 <div class="overlay">
 
     <div id="navbar-insert" th:insert="/elements/_navbar.html::#navbar-container">
     </div>
 
     <div class="container main-container add-content-div">
-        <h1 class="form-header">Update Contact Form</h1>
+        <h1 th:if="${addUpdate == 'ADD'}" class="form-header">Add Contact Form</h1>
+        <h1 th:if="${addUpdate == 'UPDATE'}" class="form-header">Add Contact Form</h1>
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <form id="add-form" action="#" th:action="@{/update-contact/{id}(id=${id})}"
-                      th:object="${contact}" method="post">
-                    <label for="name" class="form-label">Name:</label>
-                    <input type="text" id="name" th:field="*{name}" class="form-control form-input"
-                           placeholder="John Smith">
-                    <label for="email" class="form-label">Email:</label>
-                    <input type="email" id="email" th:field="*{email}" class="form-control form-input"
-                           placeholder="john.smith@gmail.com">
-                    <label for="phone" class="form-label">Phone Number:</label>
-                    <input type="text" id="phone" th:field="*{phone}" class="form-control form-input"
-                           placeholder="8439999999">
-                    <input type="submit" class="btn default-btn btn-primary form-submit-btn" value="Submit" />
+
+                <form id="add-form" action="#" th:action="@{/add-contact}" th:if="${addUpdate == 'ADD'}"
+                      th:object="${contactRequest}" method="post">
+
+                    <div th:insert="/elements/_alter-contact-form.html::#contact-form-contents">
+                    </div>
+
                 </form>
-                <form th:action="@{/delete-contact/{id}(id=${id})}" method="get">
+
+                <form action="#" th:action="@{/update-contact/{id}(id=${id})}" th:if="${addUpdate == 'UPDATE'}"
+                      th:object="${contactRequest}" method="post">
+
+                    <div th:insert="/elements/_alter-contact-form.html::#contact-form-contents">
+                    </div>
+
+                </form>
+
+                <form th:action="@{/delete-contact}" th:if="${addUpdate == 'UPDATE'}"
+                      th:object="${contact}" method="post">
+                    <!--<input type="hidden" th:field="${contact.contactId}"/>-->
                     <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>
                 </form>
+
             </div>
         </div>
     </div>

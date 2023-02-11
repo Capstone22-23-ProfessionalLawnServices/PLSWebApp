@@ -2,7 +2,9 @@ package com.professionallawnservices.app.controllers;
 
 /*
 The AccountController houses all the account endpoints. Communication from the AccountController
-to the AccountService is accomplished primarily through the UserRequest.
+to the AccountService is accomplished primarily through the UserRequest. Model attributes utilized in forms
+should be of the request type (i.e. UserRequest) and not of data models, unless necessary. Objects exchanged between
+endpoints should be of the data model type and not the request type.
  */
 
 import com.professionallawnservices.app.exceptions.PlsRequestException;
@@ -43,9 +45,10 @@ public class AccountController {
 
         model.addAttribute("userAccessLevel", userRequest.getRolesEnum().accessLevel);
         model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
-        model.addAttribute("user", userRequest);
+        model.addAttribute("userRequest", userRequest);
+        model.addAttribute("addUpdate", "UPDATE");
 
-        return "account";
+        return "alter-account";
     }
 
     @GetMapping("/add-account")
@@ -53,13 +56,14 @@ public class AccountController {
 
         UserRequest userRequest = new UserRequest();
 
-        model.addAttribute("user", userRequest);
+        model.addAttribute("userRequest", userRequest);
+        model.addAttribute("addUpdate", "ADD");
 
-        return "add-account";
+        return "alter-account";
     }
 
     @PostMapping("/add-account")
-    public String createAccount(@ModelAttribute("userRequest") UserRequest userRequest) {
+    public String addAccount(@ModelAttribute("userRequest") UserRequest userRequest) {
         if(
                 ValidationHelpers.isNull(userRequest)
                 || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
