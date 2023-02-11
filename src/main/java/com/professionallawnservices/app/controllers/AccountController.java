@@ -51,6 +51,36 @@ public class AccountController {
         return "alter-account";
     }
 
+    @PostMapping("/update-account")
+    public String updateAccount(
+            @ModelAttribute("userRequest") @Valid UserRequest userRequest,
+            BindingResult bindingResult
+    )
+    {
+
+        if (bindingResult.hasErrors()) {
+            throw new PlsRequestException("Request must contain a new password with at least one capital, lowercase, " +
+                    "and one number.");
+        }
+
+        if(
+                ValidationHelpers.isNull(userRequest)
+                        || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
+                        || ValidationHelpers.isNullOrBlank(userRequest.getNewPassword())
+        )
+        {
+            throw new PlsRequestException("Request must contain username and new password");
+        }
+
+        Result result = accountService.updateAccount(userRequest);
+
+        if (!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/account";
+    }
+
     @GetMapping("/add-account")
     public String addAccountView(Model model) {
 
@@ -83,36 +113,9 @@ public class AccountController {
         return "redirect:/add-contact";
     }
 
-
-    @PostMapping("/update-account")
-    public String updateAccount(
-            @ModelAttribute("userRequest") @Valid UserRequest userRequest,
-            BindingResult bindingResult
-    )
-    {
-
-        if (bindingResult.hasErrors()) {
-            throw new PlsRequestException("Request must contain a new password with at least one capital, lowercase, " +
-                    "and one number.");
-        }
-
-        if(
-                ValidationHelpers.isNull(userRequest)
-                        || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
-                        || ValidationHelpers.isNullOrBlank(userRequest.getNewPassword())
-        )
-        {
-            throw new PlsRequestException("Request must contain username and new password");
-        }
-
-        Result result = accountService.updateAccount(userRequest);
-
-        if (!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        return "redirect:/account";
-    }
+    /*
+    The rest methods are intended for use with a api application like Postman and not with webpages.
+     */
 
     @PostMapping("/rest/create-account")
     public ResponseEntity<String> createAccountRest(
@@ -182,5 +185,4 @@ public class AccountController {
 
         return ResponseEntity.ok("Account successfully deleted");
     }
-
 }

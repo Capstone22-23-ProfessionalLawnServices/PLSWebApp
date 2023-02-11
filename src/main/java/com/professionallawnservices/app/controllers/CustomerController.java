@@ -6,9 +6,7 @@ import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Customer;
-import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.CustomerRequest;
-import com.professionallawnservices.app.repos.CustomerRepo;
 import com.professionallawnservices.app.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,29 +49,14 @@ public class CustomerController {
 
         CustomerRequest customerRequest = new CustomerRequest();
         model.addAttribute("customer", customerRequest);
+        model.addAttribute("addUpdate", "ADD");
 
-        return "add-customer";
+
+        return "alter-customer";
     }
 
-    @GetMapping("/update-customer/{id}")
-    public String updateCustomerView(@PathVariable("id") long id, Model model) {
-
-        Result result = customerService.getCustomerById(new CustomerRequest(id));
-
-        if(!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        CustomerRequest customer = (CustomerRequest) result.getData();
-
-        model.addAttribute("customer", customer);
-        model.addAttribute("id", customer.getId());
-
-        return "update-customer";
-    }
-
-    @PostMapping("/create-customer")
-    public RedirectView createCustomer(
+    @PostMapping("/add-customer")
+    public RedirectView addCustomer(
             @Valid @ModelAttribute("customer") CustomerRequest customerRequest,
             BindingResult bindingResult
     )
@@ -100,6 +83,28 @@ public class CustomerController {
         return new RedirectView("/add-customer");
     }
 
+    @GetMapping("/update-customer/{id}")
+    public String updateCustomerView(@PathVariable("id") long id, Model model) {
+
+        Result result = customerService.getCustomerById(new CustomerRequest(id));
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        Customer customer = (Customer) result.getData();
+        CustomerRequest customerRequest = new CustomerRequest(customer) ;
+
+
+        model.addAttribute("customer", customer);
+        model.addAttribute("customerRequest", customerRequest);
+        //model.addAttribute("id", customerRequest.getId());
+        model.addAttribute("addUpdate", "UPDATE");
+
+
+        return "alter-customer";
+    }
+
     @PostMapping("/update-customer/{id}")
     public String updateCustomer(
             @PathVariable(value = "id",required = true) long id,
@@ -124,6 +129,22 @@ public class CustomerController {
         }
 
         return "redirect:/update-customer/" + id;
+    }
+
+    @PostMapping("/delete-customer")
+    public String deleteCustomer(
+            @ModelAttribute("customer") Customer customer,
+            Model model
+    )
+    {
+
+        Result result = customerService.deleteCustomer(customer);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/customers";
     }
 
 }

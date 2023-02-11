@@ -17,9 +17,7 @@ import com.professionallawnservices.app.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -92,6 +90,7 @@ public class ContactController {
         Contact contact = (Contact) result.getData();
         ContactRequest contactRequest = new ContactRequest(contact);
 
+        model.addAttribute("contact", contact);
         model.addAttribute("contactRequest", contactRequest);
         model.addAttribute("id", contactRequest.getId());
         model.addAttribute("addUpdate", "UPDATE");
@@ -126,7 +125,11 @@ public class ContactController {
     }
 
     @PostMapping("/delete-contact")
-    public String deleteContact(@ModelAttribute("contact") Contact contact, Model model) {
+    public String deleteContact(
+            @ModelAttribute("contact") Contact contact,
+            Model model
+    )
+    {
 
         Result result = contactService.deleteContact(contact);
 
@@ -185,6 +188,10 @@ public class ContactController {
         return ResponseEntity.ok(contacts);
     }
 
+     */
+
+    /*
+    The rest methods are intended for use with a api application like Postman and not with webpages.
      */
 
     @PostMapping("/rest/create-contact")
