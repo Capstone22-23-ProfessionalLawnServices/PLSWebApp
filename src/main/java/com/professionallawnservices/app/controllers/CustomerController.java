@@ -1,5 +1,12 @@
 package com.professionallawnservices.app.controllers;
 
+/*
+The CustomerController houses all the customer endpoints. Communication from the CustomerController
+to the CustomerService is accomplished primarily through the CustomerRequest. Model attributes utilized in forms
+should be of the request type (i.e. CustomerRequest) and not of data models, unless necessary. Objects exchanged between
+endpoints should be of the data model type and not the request type, unless request form data is being sent.
+ */
+
 import com.professionallawnservices.app.exceptions.PlsRequestException;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
@@ -48,7 +55,7 @@ public class CustomerController {
     public String addCustomerView(Model model) {
 
         CustomerRequest customerRequest = new CustomerRequest();
-        model.addAttribute("customer", customerRequest);
+        model.addAttribute("customerRequest", customerRequest);
         model.addAttribute("addUpdate", "ADD");
 
 
@@ -57,7 +64,7 @@ public class CustomerController {
 
     @PostMapping("/add-customer")
     public RedirectView addCustomer(
-            @Valid @ModelAttribute("customer") CustomerRequest customerRequest,
+            @Valid @ModelAttribute("customerRequest") CustomerRequest customerRequest,
             BindingResult bindingResult
     )
     {
@@ -84,7 +91,11 @@ public class CustomerController {
     }
 
     @GetMapping("/update-customer/{id}")
-    public String updateCustomerView(@PathVariable("id") long id, Model model) {
+    public String updateCustomerView(
+            @PathVariable("id") long id,
+            Model model
+    )
+    {
 
         Result result = customerService.getCustomerById(new CustomerRequest(id));
 
@@ -98,7 +109,6 @@ public class CustomerController {
 
         model.addAttribute("customer", customer);
         model.addAttribute("customerRequest", customerRequest);
-        //model.addAttribute("id", customerRequest.getId());
         model.addAttribute("addUpdate", "UPDATE");
 
 
@@ -108,7 +118,7 @@ public class CustomerController {
     @PostMapping("/update-customer/{id}")
     public String updateCustomer(
             @PathVariable(value = "id",required = true) long id,
-            @ModelAttribute CustomerRequest customerRequest,
+            @ModelAttribute("customerRequest") CustomerRequest customerRequest,
             Model model
     )
     {

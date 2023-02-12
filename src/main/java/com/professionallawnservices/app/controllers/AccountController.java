@@ -4,7 +4,7 @@ package com.professionallawnservices.app.controllers;
 The AccountController houses all the account endpoints. Communication from the AccountController
 to the AccountService is accomplished primarily through the UserRequest. Model attributes utilized in forms
 should be of the request type (i.e. UserRequest) and not of data models, unless necessary. Objects exchanged between
-endpoints should be of the data model type and not the request type.
+endpoints should be of the data model type and not the request type, unless request form data is being sent.
  */
 
 import com.professionallawnservices.app.exceptions.PlsRequestException;

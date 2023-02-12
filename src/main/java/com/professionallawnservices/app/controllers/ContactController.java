@@ -4,7 +4,7 @@ package com.professionallawnservices.app.controllers;
 The ContactController houses all the contact endpoints. Communication from the ContactController
 to the ContactService is accomplished primarily through the ContactRequest. Model attributes utilized in forms
 should be of the request type (i.e. ContactRequest) and not of data models, unless necessary. Objects exchanged between
-endpoints should be of the data model type and not the request type.
+endpoints should be of the data model type and not the request type, unless request form data is being sent.
  */
 
 import com.professionallawnservices.app.exceptions.PlsRequestException;
@@ -56,7 +56,7 @@ public class ContactController {
     }
 
     @PostMapping("/add-contact")
-    public String addContact(@ModelAttribute ContactRequest contactRequest) {
+    public String addContact(@ModelAttribute("contactRequest") ContactRequest contactRequest) {
         if(
                 ValidationHelpers.isNull(contactRequest)
                         || ValidationHelpers.isNullOrBlank(contactRequest.getName())
@@ -101,7 +101,7 @@ public class ContactController {
     @PostMapping("/update-contact/{id}")
     public String updateContact(
             @PathVariable(value = "id",required = true) long id,
-            @ModelAttribute ContactRequest contactRequest,
+            @ModelAttribute("contactRequest") ContactRequest contactRequest,
             Model model
     )
     {
