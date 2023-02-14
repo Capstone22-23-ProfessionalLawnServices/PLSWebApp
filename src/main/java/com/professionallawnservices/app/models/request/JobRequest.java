@@ -1,6 +1,8 @@
 package com.professionallawnservices.app.models.request;
 
 import com.professionallawnservices.app.helpers.DateHelper;
+import com.professionallawnservices.app.models.data.Contact;
+import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Help;
 import com.professionallawnservices.app.models.data.Job;
 
@@ -24,10 +26,9 @@ public class JobRequest {
 
     private int totalTime;
 
-    @NotNull
-    private long customerId;
+    private Customer customer;
 
-    private ArrayList<Long> contactIds;
+    private ArrayList<Contact> contacts;
 
     public JobRequest() {
 
@@ -45,9 +46,11 @@ public class JobRequest {
         location = job.getJobLocation();
         scheduledDate = job.getScheduledDate();
         totalTime = (int) Math.round(job.getTotalTime());
-        customerId = job.getCustomer().getCustomerId();
+        customer = job.getCustomer();
+        //contacts = job.getContacts();
     }
 
+    /*
     public JobRequest(Job job, Help help) {
         id = job.getJobId();
         cost = job.getCost();
@@ -56,9 +59,11 @@ public class JobRequest {
         location = job.getJobLocation();
         scheduledDate = job.getScheduledDate();
         totalTime = (int) Math.round(job.getTotalTime());
-        customerId = job.getCustomer().getCustomerId();
-        contactIds.add(help.getContact().getContactId());
+        customer = job.getCustomer();
+        contacts.add(help.getContact().getContactId());
     }
+
+     */
 
     public long getId() {
         return id;
@@ -117,19 +122,19 @@ public class JobRequest {
         this.totalTime = totalTime;
     }
 
-    public long getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(long customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public ArrayList<Long> getContactIds() {
-        return contactIds;
+    public ArrayList<Contact> getContacts() {
+        return contacts;
     }
 
-    public void setContactIds(ArrayList<Long> contactIds) {
-        this.contactIds = contactIds;
+    public void setContacts(ArrayList<Contact> contactIds) {
+        this.contacts = contactIds;
     }
 }

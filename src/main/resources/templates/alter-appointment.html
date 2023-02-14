@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Appointment</title>
+  <title th:if="${addUpdate == 'ADD'}">Add Appointment</title>
+  <title th:if="${addUpdate == 'UPDATE'}">Update Appointment</title>
   <link rel="icon" type="image/x-icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}">
   <link rel="stylesheet" type="text/css" media="all" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
   <script th:src="@{/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
@@ -20,36 +21,53 @@
   </div>
 
   <div class="container main-container add-content-div">
-    <h1 th:if="${job.getScheduledDate() != null}" class="form-header">Update Appointment Form</h1>
-    <h1 th:if="${job.getScheduledDate() == null}" class="form-header">Add Appointment Form</h1>
+    <h1 th:if="${addUpdate == 'UPDATE'}" class="form-header">Update Appointment Form</h1>
+    <h1 th:if="${addUpdate == 'ADD'}" class="form-header">Add Appointment Form</h1>
     <div class="row justify-content-center">
       <div class="col-lg-6">
 
-        <form id="add-form" action="#" th:action="@{/update-appointment/{id}(id=${id})}"
-              th:object="${job}" th:if="${job.getScheduledDate() != null}" method="post">
+        <form th:id="add-form" action="#" th:action="@{/add-appointment}"
+              th:object="${jobRequest}" th:if="${addUpdate == 'ADD'}" method="post">
 
           <div th:insert="/elements/_alter-appointment-form.html::#appointment-form-contents">
           </div>
 
         </form>
 
-        <form th:id="add-form" action="#" th:action="@{/create-appointment}"
-              th:object="${job}" th:if="${job.getScheduledDate() == null}" method="post">
+        <form th:id="update-form" action="#" th:action="@{/update-appointment/{id}(id=${id})}"
+              th:object="${jobRequest}" th:if="${addUpdate == 'UPDATE'}" method="post">
 
           <div th:insert="/elements/_alter-appointment-form.html::#appointment-form-contents">
           </div>
 
         </form>
 
-        <form th:action="@{/delete-appointment/{id}(id=${id})}" method="get"
-              th:if="${job.getScheduledDate() != null}">
+        <form th:action="@{/delete-appointment/{id}(id=${job.jobId})}" method="post"
+              th:if="${addUpdate == 'UPDATE'}">
           <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>
         </form>
       </div>
     </div>
   </div>
 
-  <input id="jobId" type="hidden" th:value="${job.id}">
+  <!--
+  <div id="jobRequest" th:if="${addUpdate == 'ADD'}" th:object="${jobRequest}" th:value="${jobRequest}">
+    <input th:id="jobId" type="hidden" th:value="${jobRequest.id}">
+    <input th:id="jobCost" type="hidden" th:value="${jobRequest.cost}">
+    <input th:id="jobEndTime" type="hidden" th:value="${jobRequest.endTime}">
+    <input th:id="jobStartTime" type="hidden" th:value="${jobRequest.startTime}">
+    <input th:id="jobLocation" type="hidden" th:value="${jobRequest.endTime}">
+    <input th:id="jobScheduledDate" type="hidden" th:value="${jobRequest.scheduledDate}">
+    <input th:id="jobTotalTime" type="hidden" th:value="${jobRequest.totalTime}">
+  </div>
+
+
+
+  <div id="job" >
+    <input th:id="jobId" type="hidden" th:value="${job.jobId}">
+  </div>
+ -->
+
 
 </div>
 </body>

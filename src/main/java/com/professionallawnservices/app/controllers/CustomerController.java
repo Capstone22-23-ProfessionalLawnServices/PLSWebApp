@@ -13,6 +13,7 @@ import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Customer;
+import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ public class CustomerController {
         ArrayList<Customer> customers = (ArrayList<Customer>) result.getData();
 
         model.addAttribute("customers", customers);
+        model.addAttribute("searchSelect", "SEARCH");
 
         return "customers";
     }
@@ -156,5 +158,21 @@ public class CustomerController {
 
         return "redirect:/customers";
     }
+
+    /*
+    @GetMapping("/update-appointment/{id}/select-customer")
+    public String updateAppointmentSelectCustomer(
+            @PathVariable(value = "id",required = true) long id,
+            @ModelAttribute("job") Job job,
+            Model model
+    )
+    {
+
+        model.addAttribute("searchSelect", "SELECT");
+
+        return "customers";
+    }
+
+     */
 
 }

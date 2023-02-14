@@ -8,6 +8,7 @@ import org.springframework.lang.NonNull;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,11 +49,22 @@ public class Job {
     @OneToMany(mappedBy = "job")
     private Set<Help> help = new HashSet<>();
 
+    /*
+    The contacts array is not part of the job schema. The attribute is part of the class because of the
+    structure of the alter-appointment form.
+     */
+
+    /*
+    @Transient
+    private ArrayList<Contact> contacts;
+
+     */
+
     public Job() {
 
     }
 
-    public Job(JobRequest jobRequest, Customer customer) {
+    public Job(JobRequest jobRequest) {
         jobId = jobRequest.getId();
         startTime = DateHelper.stringToSqlDate(jobRequest.getStartTime());
         endTime = DateHelper.stringToSqlDate(jobRequest.getEndTime());
@@ -60,7 +72,6 @@ public class Job {
         cost = jobRequest.getCost();
         jobLocation = jobRequest.getLocation();
         scheduledDate = jobRequest.getScheduledDate();
-        this.customer = customer;
     }
 
     public long getJobId() {
@@ -127,4 +138,14 @@ public class Job {
         this.customer = customer;
     }
 
+    /*
+    public ArrayList<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(ArrayList<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+     */
 }

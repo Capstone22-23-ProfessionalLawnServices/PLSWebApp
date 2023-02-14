@@ -57,15 +57,27 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="customers : ${customers}" onclick="rowClick(event)"
-            th:value="${customers.customerId}">
-          <th th:text="${customers.customerId}" scope="row"></th>
-          <td th:text="${customers.customerName}"></td>
-          <td class="location-column" th:text="${customers.customerLocation}"></td>
-          <td th:text="${customers.customerPhone}"></td>
-          <td class="email-column" th:text="${customers.customerEmail}"></td>
-          <td th:text="${customers.frequency}"></td>
-        </tr>
+
+          <tr th:each="customers : ${customers}" onclick="rowClick(event)" th:if="${searchSelect == 'SEARCH'}"
+              th:value="${customers.customerId}">
+            <th th:text="${customers.customerId}" scope="row"></th>
+            <td th:text="${customers.customerName}"></td>
+            <td class="location-column" th:text="${customers.customerLocation}"></td>
+            <td th:text="${customers.customerPhone}"></td>
+            <td class="email-column" th:text="${customers.customerEmail}"></td>
+            <td th:text="${customers.frequency}"></td>
+          </tr>
+
+          <tr th:each="customers : ${customers}" onclick="customerSelect(event)" th:if="${searchSelect == 'SELECT'}"
+              th:value="${customers.customerId}">
+            <th th:text="${customers.customerId}" scope="row"></th>
+            <td th:text="${customers.customerName}"></td>
+            <td class="location-column" th:text="${customers.customerLocation}"></td>
+            <td th:text="${customers.customerPhone}"></td>
+            <td class="email-column" th:text="${customers.customerEmail}"></td>
+            <td th:text="${customers.frequency}"></td>
+          </tr>
+
         </tbody>
       </table>
 
@@ -89,6 +101,8 @@
     </div>
 
   </div>
+
+  <input id="jobId" type="hidden" th:value="${job.jobId}" th:if="${searchSelect == 'SELECT'}">
 
 
 </div>

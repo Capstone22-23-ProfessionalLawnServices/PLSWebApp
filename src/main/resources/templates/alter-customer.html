@@ -20,7 +20,8 @@
   </div>
 
   <div class="container main-container add-content-div">
-    <h1 class="form-header">Update Customer Form</h1>
+    <h1 class="form-header" th:if="${addUpdate == 'ADD'}">Add Customer Form</h1>
+    <h1 class="form-header" th:if="${addUpdate == 'UPDATE'}">Update Customer Form</h1>
     <div class="row justify-content-center">
       <div class="col-lg-6">
 

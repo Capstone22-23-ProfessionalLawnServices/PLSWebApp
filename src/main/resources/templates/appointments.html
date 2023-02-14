@@ -93,7 +93,7 @@
           <td th:text="${job.cost}"></td>
           <td th:text="${job.scheduledDate}"></td>
           <td th:text="${job.totalTime}"></td>
-          <td th:text="${job.customer.customerName}"></td>
+          <td th:text="${job.customer?.customerName}"></td>
         </tr>
         </tbody>
       </table>
