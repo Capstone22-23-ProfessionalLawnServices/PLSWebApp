@@ -12,6 +12,8 @@ import com.professionallawnservices.app.exceptions.PlsServiceException;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Contact;
+import com.professionallawnservices.app.models.data.Customer;
+import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,29 @@ public class ContactController {
 
         model.addAttribute("contacts", contacts);
         model.addAttribute("selectSearch", "SEARCH");
+
+        return "contacts";
+    }
+
+    @GetMapping("/update-appointment/{id}/select-contact")
+    public String addAppointmentSelectCustomerView(
+            @PathVariable(value = "id",required = true) long id,
+            @ModelAttribute("job") Job job,
+            Model model
+    )
+    {
+
+        Result result = contactService.getAllContacts();
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
+
+        model.addAttribute("selectSearch", "SELECT");
+        model.addAttribute("contacts", contacts);
+        model.addAttribute("jobId", id);
 
         return "contacts";
     }

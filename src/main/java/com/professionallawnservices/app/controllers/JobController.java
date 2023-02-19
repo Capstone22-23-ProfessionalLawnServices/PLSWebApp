@@ -176,11 +176,49 @@ public class JobController {
         return ResponseEntity.ok("/update-appointment/" + id + "/select-customer");
     }
 
+    @PostMapping("/update-appointment/{id}/select-contact")
+    public ResponseEntity<String> addAppointmentSelectContactView(
+            @PathVariable(value = "id", required = true) long id,
+            @RequestParam(value = "cost", required = false) double cost,
+            @RequestParam(value = "location", required = false) String location,
+            @RequestParam(value = "scheduledDate", required = false) String scheduledDate,
+            @RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime,
+            @RequestParam(value = "customerId", required = false) Long customerId,
+            Model model
+    )
+    {
+
+        JobRequest jobRequest = new JobRequest();
+        jobRequest.setId(id);
+        jobRequest.setCost(cost);
+        jobRequest.setLocation(location);
+        jobRequest.setScheduledDate(scheduledDate);
+        jobRequest.setStartTime(startTime);
+        jobRequest.setEndTime(endTime);
+
+        Result result;
+
+        if (customerId != null) {
+            result = customerService.getCustomerById(new CustomerRequest(customerId));
+            Customer customer = (Customer) result.getData();
+            jobRequest.setCustomer(customer);
+        }
+
+        result = jobService.updateJob(jobRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return ResponseEntity.ok("/update-appointment/" + id + "/select-contact");
+    }
+
     @GetMapping("/update-appointment/{id}")
     public String updateJobView(
             @PathVariable(value = "id", required = true) long id,
-            @RequestParam(value = "contactId", required = false) Long contactId,
-            @RequestParam(value = "customerId", required = false) Long customerId,
+            //@RequestParam(value = "contactId", required = false) Long contactId,
+            //@RequestParam(value = "customerId", required = false) Long customerId,
             Model model
     )
     {
@@ -193,7 +231,13 @@ public class JobController {
 
         Job job = (Job) result.getData();
         JobRequest jobRequest = new JobRequest(job);
-        ArrayList<Help> contacts = (ArrayList<Help>) jobService.getHelpByJobId(new JobRequest(id)).getData();
+        ArrayList<Help> helpArrayList = (ArrayList<Help>) jobService.getHelpByJobId(new JobRequest(id)).getData();
+        ArrayList<Contact> contacts = new ArrayList<Contact>();
+
+        for (Help help:
+                helpArrayList) {
+            contacts.add(help.getContact());
+        }
 
         model.addAttribute("job", job);
         model.addAttribute("jobRequest", jobRequest);

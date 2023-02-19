@@ -74,3 +74,28 @@ function loadUpdateAppointmentSelectCustomer(jobId) {
 
     window.location.href = url;
 }
+
+function updateContactClick(e) {
+    let jobId = document.getElementById("jobId").value == null ? "":document.getElementById("jobId").value;
+    let customerId = document.getElementById("customerId").value == null ? "":document.getElementById("customerId").value;
+    let cost = document.getElementById("cost").value == null ? "0.0":document.getElementById("cost").value;
+    let location = document.getElementById("location").value == null ? "":document.getElementById("location").value;
+    let scheduledDate = document.getElementById("date").value == null ? "":document.getElementById("date").value;
+    let startTime = document.getElementById("start-time").value == null ? "":document.getElementById("start-time").value;
+    let endTime = document.getElementById("end-time").value == null ? "":document.getElementById("end-time").value;
+
+    if (scheduledDate === "") {
+        alert("An appointment must have a scheduled date.")
+        return;
+    }
+
+    let url = "/update-appointment/" + jobId + "/select-contact?"
+        + "cost=" + cost
+        + "&location=" + location
+        + "&scheduledDate=" + scheduledDate
+        + "&startTime=" + startTime
+        + "&endTime=" + endTime
+        + "&customerId=" + customerId;
+
+    window.location.href = $.ajax({type: "post", url: url, async: false}).responseText;
+}

@@ -65,6 +65,7 @@
 
   <div id="job" th:if="${addUpdate == 'UPDATE'}">
     <input th:id="jobId" type="hidden" th:value="${job.jobId}">
+    <input th:id="customerId" type="hidden" th:value="${jobRequest.customer?.customerId}">
   </div>
 
 

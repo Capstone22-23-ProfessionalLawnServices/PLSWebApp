@@ -22,3 +22,12 @@ function searchContacts() {
 
     window.location.href = ("/search-contacts?name=" + searchString);
 }
+
+function contactSelect(e) {
+    let contactId = e.target.parentNode.getAttribute("value");
+    let jobId = document.getElementById("jobId").getAttribute("value");
+
+    let url = ("/update-appointment/" + jobId + "?contactId=" + contactId);
+
+    window.location.href = $.ajax({type: "POST", url: url, async: false}).responseText;
+}

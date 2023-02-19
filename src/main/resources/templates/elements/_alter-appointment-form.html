@@ -36,7 +36,7 @@
             </thead>
             <tbody>
             <tr th:each="customer : ${jobRequest.customer}" onclick="rowSelect(event)"
-                th:value="${customer.customerId}">
+                th:if="${jobRequest.customer != null}" th:value="${customer.customerId}">
                 <th th:text="${customer.customerId}" scope="row"></th>
                 <td th:text="${customer.customerName}"></td>
                 <td class="location-column" th:text="${customer.customerLocation}"></td>
@@ -47,7 +47,7 @@
         <button class="btn btn-primary form-submit-btn default-btn" type="button" th:if="${addUpdate == 'ADD'}"
                 onclick="addCustomerClick(event)">Add Customer</button>
         <button class="btn btn-primary form-submit-btn default-btn" type="button" th:if="${addUpdate == 'UPDATE'}"
-                onclick="updateCustomerClick(event)">Add Customer</button>
+                onclick="updateCustomerClick(event)">Change Customer</button>
         <div class="clear inner-add-elements"></div>
 
         <label for="contacts" class="form-label">Help: </label>
@@ -74,7 +74,7 @@
         <button class="btn btn-primary form-submit-btn default-btn" th:if="${addUpdate == 'ADD'}" type="button"
                 disabled>Add Contact</button>
         <button class="btn btn-primary form-submit-btn default-btn" th:if="${addUpdate == 'UPDATE'}" type="button"
-                onclick="(event)">Add Contact</button>
+                onclick="updateContactClick(event)">Add Contact</button>
         <div class="clear inner-add-elements"></div>
 
         <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Submit" />
