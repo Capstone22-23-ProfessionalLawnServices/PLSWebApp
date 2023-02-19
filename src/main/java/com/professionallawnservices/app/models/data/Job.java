@@ -6,6 +6,7 @@ import org.hibernate.annotations.Proxy;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class Job {
 
     @Column(name = "scheduled_date")
     @NonNull
+    @NotNull
     private Date scheduledDate;
 
     @ManyToOne(fetch=FetchType.LAZY)
@@ -66,12 +68,12 @@ public class Job {
 
     public Job(JobRequest jobRequest) {
         jobId = jobRequest.getId();
-        startTime = DateHelper.stringToSqlDate(jobRequest.getStartTime());
-        endTime = DateHelper.stringToSqlDate(jobRequest.getEndTime());
+        startTime = DateHelper.stringToSqlTime(jobRequest.getStartTime());
+        endTime = DateHelper.stringToSqlTime(jobRequest.getEndTime());
         totalTime = (double) jobRequest.getTotalTime();
         cost = jobRequest.getCost();
         jobLocation = jobRequest.getLocation();
-        scheduledDate = jobRequest.getScheduledDate();
+        scheduledDate = DateHelper.stringToSqlDate(jobRequest.getScheduledDate());
     }
 
     public long getJobId() {

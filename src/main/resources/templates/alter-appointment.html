@@ -61,12 +61,12 @@
     <input th:id="jobTotalTime" type="hidden" th:value="${jobRequest.totalTime}">
   </div>
 
+-->
 
-
-  <div id="job" >
+  <div id="job" th:if="${addUpdate == 'UPDATE'}">
     <input th:id="jobId" type="hidden" th:value="${job.jobId}">
   </div>
- -->
+
 
 
 </div>

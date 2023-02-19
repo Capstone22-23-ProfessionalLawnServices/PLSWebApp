@@ -10,5 +10,5 @@ function customerSelect(e) {
 
     let url = ("/update-appointment/" + jobId + "?customerId=" + customerId);
 
-    $.post(url);
+    window.location.href = $.ajax({type: "POST", url: url, async: false}).responseText;
 }

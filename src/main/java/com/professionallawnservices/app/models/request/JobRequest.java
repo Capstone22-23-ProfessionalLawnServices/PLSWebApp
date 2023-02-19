@@ -8,6 +8,7 @@ import com.professionallawnservices.app.models.data.Job;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class JobRequest {
@@ -22,7 +23,7 @@ public class JobRequest {
 
     private String location;
 
-    private Date scheduledDate;
+    private String scheduledDate;
 
     private int totalTime;
 
@@ -41,10 +42,10 @@ public class JobRequest {
     public JobRequest(Job job) {
         id = job.getJobId();
         cost = job.getCost();
-        endTime = DateHelper.sqlDateToString(job.getScheduledDate(), job.getEndTime());
-        startTime = DateHelper.sqlDateToString(job.getScheduledDate(), job.getStartTime());
+        endTime = DateHelper.sqlTimeToString(job.getScheduledDate(), job.getEndTime());
+        startTime = DateHelper.sqlTimeToString(job.getScheduledDate(), job.getStartTime());
         location = job.getJobLocation();
-        scheduledDate = job.getScheduledDate();
+        scheduledDate = DateHelper.sqlDateToString(job.getScheduledDate());
         totalTime = (int) Math.round(job.getTotalTime());
         customer = job.getCustomer();
         //contacts = job.getContacts();
@@ -105,12 +106,12 @@ public class JobRequest {
         this.location = location;
     }
 
-    @NotNull
-    public Date getScheduledDate() {
+    //@NotNull
+    public String getScheduledDate() {
         return scheduledDate;
     }
 
-    public void setScheduledDate(Date scheduledDate) {
+    public void setScheduledDate(String scheduledDate) {
         this.scheduledDate = scheduledDate;
     }
 

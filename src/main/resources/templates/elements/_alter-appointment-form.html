@@ -44,8 +44,10 @@
             </tbody>
         </table>
 
-        <button class="btn btn-primary form-submit-btn default-btn" type="button"
+        <button class="btn btn-primary form-submit-btn default-btn" type="button" th:if="${addUpdate == 'ADD'}"
                 onclick="addCustomerClick(event)">Add Customer</button>
+        <button class="btn btn-primary form-submit-btn default-btn" type="button" th:if="${addUpdate == 'UPDATE'}"
+                onclick="updateCustomerClick(event)">Add Customer</button>
         <div class="clear inner-add-elements"></div>
 
         <label for="contacts" class="form-label">Help: </label>
@@ -72,7 +74,7 @@
         <button class="btn btn-primary form-submit-btn default-btn" th:if="${addUpdate == 'ADD'}" type="button"
                 disabled>Add Contact</button>
         <button class="btn btn-primary form-submit-btn default-btn" th:if="${addUpdate == 'UPDATE'}" type="button"
-                onclick="addContactClick(event)">Add Contact</button>
+                onclick="(event)">Add Contact</button>
         <div class="clear inner-add-elements"></div>
 
         <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Submit" />

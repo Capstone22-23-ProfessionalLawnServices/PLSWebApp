@@ -5,6 +5,7 @@ import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Help;
 import com.professionallawnservices.app.models.data.Job;
+import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.repos.ContactRepo;
 import com.professionallawnservices.app.repos.CustomerRepo;
@@ -135,9 +136,12 @@ public class JobService {
 
             ArrayList<Long> contactIds = new ArrayList<Long>();
 
-            for (Contact contact :
-                    jobRequest.getContacts()) {
-                contactIds.add(contact.getContactId());
+            if (jobRequest.getContacts() != null) {
+
+                for (Contact contact :
+                        jobRequest.getContacts()) {
+                    contactIds.add(contact.getContactId());
+                }
             }
 
             List<Contact> contacts = contactRepo.findAllById(contactIds);
@@ -151,6 +155,7 @@ public class JobService {
             jobRepo.save(job);
             helpRepo.saveAll(helpArrayList);
 
+            result.setData(job);
             result.setComplete(true);
         }
         catch (Exception e) {
@@ -199,6 +204,32 @@ public class JobService {
         catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue getting customer with id: " + customerId);
+        }
+
+        return result;
+    }
+
+    public Result createHelp(ContactRequest contactRequest, JobRequest jobRequest) {
+
+        Result result = new Result();
+
+        try {
+
+            Contact contact = contactRepo.findById(contactRequest.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + contactRequest.getId()));
+            Job job = jobRepo.findById(jobRequest.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + jobRequest.getId()));
+
+            Help help = new Help(contact, job);
+
+            helpRepo.save(help);
+
+            result.setData(help);
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue creating help for job with id:" + jobRequest.getId());
         }
 
         return result;
