@@ -97,5 +97,14 @@ function updateContactClick(e) {
         + "&endTime=" + endTime
         + "&customerId=" + customerId;
 
-    window.location.href = $.ajax({type: "post", url: url, async: false}).responseText;
+    window.location.href = $.ajax({type: "POST", url: url, async: false}).responseText;
+}
+
+function removeContactClick(e) {
+    let contactId = e.target.parentNode.getAttribute("value");
+    let jobId = document.getElementById("jobId").getAttribute("value");
+
+    let url = "/update-appointment/" + jobId + "/delete-help?contactId=" + contactId;
+
+    window.location.href = $.ajax({type: "POST", url: url, async: false}).responseText;
 }
