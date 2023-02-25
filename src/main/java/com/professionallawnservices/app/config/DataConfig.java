@@ -45,7 +45,4 @@ public class DataConfig {
         dataSourceBuilder.password(password);
         return dataSourceBuilder.build();
     }
-
-
-    char charcter = (char) 4;
 }
