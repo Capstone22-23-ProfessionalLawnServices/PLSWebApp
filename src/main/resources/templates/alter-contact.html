@@ -17,7 +17,7 @@
 <body onload="loadNavbar(); formClear()">
 <div class="overlay">
 
-    <div id="navbar-insert" th:insert="/elements/_navbar.html::#navbar-container">
+    <div id="navbar-insert" th:insert="elements/_navbar.html::#navbar-container">
     </div>
 
     <div class="container main-container add-content-div">
@@ -29,7 +29,7 @@
                 <form id="add-form" action="#" th:action="@{/add-contact}" th:if="${addUpdate == 'ADD'}"
                       th:object="${contactRequest}" method="post">
 
-                    <div th:insert="/elements/_alter-contact-form.html::#contact-form-contents">
+                    <div th:insert="elements/_alter-contact-form.html::#contact-form-contents">
                     </div>
 
                 </form>
@@ -37,7 +37,7 @@
                 <form action="#" th:action="@{/update-contact/{id}(id=${id})}" th:if="${addUpdate == 'UPDATE'}"
                       th:object="${contactRequest}" method="post">
 
-                    <div th:insert="/elements/_alter-contact-form.html::#contact-form-contents">
+                    <div th:insert="elements/_alter-contact-form.html::#contact-form-contents">
                     </div>
 
                 </form>

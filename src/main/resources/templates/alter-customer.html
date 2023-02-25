@@ -16,7 +16,7 @@
 <body onload="loadNavbar()">
 <div class="overlay">
 
-  <div id="navbar-insert" th:insert="/elements/_navbar.html::#navbar-container">
+  <div id="navbar-insert" th:insert="elements/_navbar.html::#navbar-container">
   </div>
 
   <div class="container main-container add-content-div">
@@ -28,7 +28,7 @@
         <form th:id="add-form" action="#" th:action="@{/add-customer}" th:if="${addUpdate == 'ADD'}"
               th:object="${customerRequest}" method="post">
 
-          <div th:insert="/elements/_alter-customer-form.html::#customer-form-contents">
+          <div th:insert="elements/_alter-customer-form.html::#customer-form-contents">
           </div>
 
         </form>
@@ -36,7 +36,7 @@
         <form th:id="add-form" action="#" th:action="@{/update-customer/{id}(id=${id})}"
               th:if="${addUpdate == 'UPDATE'}" th:object="${customerRequest}" method="post">
 
-          <div th:insert="/elements/_alter-customer-form.html::#customer-form-contents">
+          <div th:insert="elements/_alter-customer-form.html::#customer-form-contents">
           </div>
 
         </form>
