@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:if="${addUpdate == 'ADD'}">Add Appointment</title>
+  <title th:if="${addUpdate == 'UPDATE'}">Update Appointment</title>
+  <link rel="icon" type="image/x-icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}">
+  <link rel="stylesheet" type="text/css" media="all" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+  <script th:src="@{/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" media="all" href="../static/css/common.css" th:href="@{/css/common.css}" />
+  <link rel="stylesheet" type="text/css" media="all" href="../static/css/account.css" th:href="@{/css/add-appointment.css}" />
+  <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
+  <script th:src="@{/js/alter-appointment.js}" src="../static/js/alter-appointment.js"></script>
+</head>
+<body onload="loadNavbar();">
+<div class="overlay">
+
+  <div id="navbar-insert" th:insert="elements/_navbar.html::#navbar-container">
+  </div>
+
+  <div class="container main-container add-content-div">
+    <h1 th:if="${addUpdate == 'UPDATE'}" class="form-header">Update Appointment Form</h1>
+    <h1 th:if="${addUpdate == 'ADD'}" class="form-header">Add Appointment Form</h1>
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+
+        <form th:id="add-form" action="#" th:action="@{/add-appointment}"
+              th:object="${jobRequest}" th:if="${addUpdate == 'ADD'}" method="post">
+
+          <div th:insert="elements/_alter-appointment-form.html::#appointment-form-contents">
+          </div>
+
+        </form>
+
+        <form th:id="update-form" action="#" th:action="@{/update-appointment/{id}(id=${id})}"
+              th:object="${jobRequest}" th:if="${addUpdate == 'UPDATE'}" method="post">
+
+          <div th:insert="elements/_alter-appointment-form.html::#appointment-form-contents">
+          </div>
+
+        </form>
+
+        <form th:action="@{/delete-appointment/{id}(id=${job.jobId})}" method="post"
+              th:if="${addUpdate == 'UPDATE'}">
+
+          <div class="container">
+                <div class="row">
+                  <div class="col text-center">
+                    <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>
+                </div>
+              </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!--
+  <div id="jobRequest" th:if="${addUpdate == 'ADD'}" th:object="${jobRequest}" th:value="${jobRequest}">
+    <input th:id="jobId" type="hidden" th:value="${jobRequest.id}">
+    <input th:id="jobCost" type="hidden" th:value="${jobRequest.cost}">
+    <input th:id="jobEndTime" type="hidden" th:value="${jobRequest.endTime}">
+    <input th:id="jobStartTime" type="hidden" th:value="${jobRequest.startTime}">
+    <input th:id="jobLocation" type="hidden" th:value="${jobRequest.endTime}">
+    <input th:id="jobScheduledDate" type="hidden" th:value="${jobRequest.scheduledDate}">
+    <input th:id="jobTotalTime" type="hidden" th:value="${jobRequest.totalTime}">
+  </div>
+
+-->
+
+  <div id="job" th:if="${addUpdate == 'UPDATE'}">
+    <input th:id="jobId" type="hidden" th:value="${job.jobId}">
+    <input th:id="customerId" type="hidden" th:value="${jobRequest.customer?.customerId}">
+  </div>
+
+
+
+</div>
+</body>
+</html>

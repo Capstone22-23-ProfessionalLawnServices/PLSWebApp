@@ -1,8 +1,17 @@
 package com.professionallawnservices.app.services;
 
+/*
+The AccountService houses all the service layer work for the AccountController.
+Communication from the AccountService to the AccountController is accomplished primarily through the UserRequest.
+ */
+
+import com.professionallawnservices.app.enums.RolesEnum;
+import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.request.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
@@ -43,7 +52,7 @@ public class AccountService {
 
         Result result = new Result();
 
-        try{
+        try {
 
             jdbcUserDetailsManager.changePassword(userRequest.getPassword(),
                     passwordEncoder.encode(userRequest.getNewPassword()));
@@ -62,9 +71,10 @@ public class AccountService {
 
         Result result = new Result();
 
-        try{
+        try {
 
             jdbcUserDetailsManager.deleteUser(userRequest.getUsername());
+
             result.setComplete(true);
         }
         catch (Exception e) {
@@ -73,6 +83,31 @@ public class AccountService {
         }
 
         return result;
+    }
+
+    public Result accountView() {
+
+        Result result = new Result();
+
+        try {
+
+            Authentication systemUser = SecurityHelpers.getUser();
+            UserRequest userRequest = new UserRequest(
+                    systemUser.getName(),
+                    systemUser.getAuthorities().toString(),
+                    SecurityHelpers.getPrimaryUserRole()
+            );
+
+            result.setData(userRequest);
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue executing accountView()");
+        }
+
+        return result;
+
     }
 
 }

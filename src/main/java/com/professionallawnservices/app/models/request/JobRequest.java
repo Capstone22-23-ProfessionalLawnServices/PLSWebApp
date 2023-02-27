@@ -1,10 +1,15 @@
 package com.professionallawnservices.app.models.request;
 
 import com.professionallawnservices.app.helpers.DateHelper;
+import com.professionallawnservices.app.models.data.Contact;
+import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Help;
 import com.professionallawnservices.app.models.data.Job;
 
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
+import java.sql.Time;
+import java.util.ArrayList;
 
 public class JobRequest {
 
@@ -18,13 +23,13 @@ public class JobRequest {
 
     private String location;
 
-    private Date scheduledDate;
+    private String scheduledDate;
 
     private int totalTime;
 
-    private long customerId;
+    private Customer customer;
 
-    private long contactId;
+    private ArrayList<Contact> contacts;
 
     public JobRequest() {
 
@@ -37,14 +42,16 @@ public class JobRequest {
     public JobRequest(Job job) {
         id = job.getJobId();
         cost = job.getCost();
-        endTime = DateHelper.sqlDateToString(job.getScheduledDate(), job.getEndTime());
-        startTime = DateHelper.sqlDateToString(job.getScheduledDate(), job.getStartTime());
+        endTime = DateHelper.sqlTimeToString(job.getScheduledDate(), job.getEndTime());
+        startTime = DateHelper.sqlTimeToString(job.getScheduledDate(), job.getStartTime());
         location = job.getJobLocation();
-        scheduledDate = job.getScheduledDate();
+        scheduledDate = DateHelper.sqlDateToString(job.getScheduledDate());
         totalTime = (int) Math.round(job.getTotalTime());
-        customerId = job.getCustomer().getCustomerId();
+        customer = job.getCustomer();
+        //contacts = job.getContacts();
     }
 
+    /*
     public JobRequest(Job job, Help help) {
         id = job.getJobId();
         cost = job.getCost();
@@ -53,9 +60,11 @@ public class JobRequest {
         location = job.getJobLocation();
         scheduledDate = job.getScheduledDate();
         totalTime = (int) Math.round(job.getTotalTime());
-        customerId = job.getCustomer().getCustomerId();
-        contactId = help.getContact().getContactId();
+        customer = job.getCustomer();
+        contacts.add(help.getContact().getContactId());
     }
+
+     */
 
     public long getId() {
         return id;
@@ -97,11 +106,12 @@ public class JobRequest {
         this.location = location;
     }
 
-    public Date getScheduledDate() {
+    //@NotNull
+    public String getScheduledDate() {
         return scheduledDate;
     }
 
-    public void setScheduledDate(Date scheduledDate) {
+    public void setScheduledDate(String scheduledDate) {
         this.scheduledDate = scheduledDate;
     }
 
@@ -113,19 +123,19 @@ public class JobRequest {
         this.totalTime = totalTime;
     }
 
-    public long getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(long customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public long getContactId() {
-        return contactId;
+    public ArrayList<Contact> getContacts() {
+        return contacts;
     }
 
-    public void setContactId(long contactId) {
-        this.contactId = contactId;
+    public void setContacts(ArrayList<Contact> contactIds) {
+        this.contacts = contactIds;
     }
 }

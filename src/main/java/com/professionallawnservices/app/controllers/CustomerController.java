@@ -1,14 +1,20 @@
 package com.professionallawnservices.app.controllers;
 
+/*
+The CustomerController houses all the customer endpoints. Communication from the CustomerController
+to the CustomerService is accomplished primarily through the CustomerRequest. Model attributes utilized in forms
+should be of the request type (i.e. CustomerRequest) and not of data models, unless necessary. Objects exchanged between
+endpoints should be of the data model type and not the request type, unless request form data is being sent.
+ */
+
 import com.professionallawnservices.app.exceptions.PlsRequestException;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Customer;
-import com.professionallawnservices.app.models.request.ContactRequest;
+import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.CustomerRequest;
-import com.professionallawnservices.app.repos.CustomerRepo;
 import com.professionallawnservices.app.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +48,31 @@ public class CustomerController {
         ArrayList<Customer> customers = (ArrayList<Customer>) result.getData();
 
         model.addAttribute("customers", customers);
+        model.addAttribute("searchSelect", "SEARCH");
+
+        return "customers";
+    }
+
+    @GetMapping("/update-appointment/{id}/select-customer")
+    public String addAppointmentSelectCustomerView(
+            @PathVariable(value = "id",required = true) long id,
+            @ModelAttribute("job") Job job,
+            Model model
+    )
+    {
+
+        Result result = customerService.getAllCustomers();
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        ArrayList<Customer> customers = (ArrayList<Customer>) result.getData();
+        job.setJobId(id);
+
+        model.addAttribute("customers", customers);
+        model.addAttribute("job", job);
+        model.addAttribute("searchSelect", "SELECT");
 
         return "customers";
     }
@@ -50,31 +81,16 @@ public class CustomerController {
     public String addCustomerView(Model model) {
 
         CustomerRequest customerRequest = new CustomerRequest();
-        model.addAttribute("customer", customerRequest);
+        model.addAttribute("customerRequest", customerRequest);
+        model.addAttribute("addUpdate", "ADD");
 
-        return "add-customer";
+
+        return "alter-customer";
     }
 
-    @GetMapping("/update-customer/{id}")
-    public String updateCustomerView(@PathVariable("id") long id, Model model) {
-
-        Result result = customerService.getCustomerById(new CustomerRequest(id));
-
-        if(!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        CustomerRequest customer = (CustomerRequest) result.getData();
-
-        model.addAttribute("customer", customer);
-        model.addAttribute("id", customer.getId());
-
-        return "update-customer";
-    }
-
-    @PostMapping("/create-customer")
-    public RedirectView createCustomer(
-            @Valid @ModelAttribute("customer") CustomerRequest customerRequest,
+    @PostMapping("/add-customer")
+    public RedirectView addCustomer(
+            @Valid @ModelAttribute("customerRequest") CustomerRequest customerRequest,
             BindingResult bindingResult
     )
     {
@@ -100,10 +116,35 @@ public class CustomerController {
         return new RedirectView("/add-customer");
     }
 
+    @GetMapping("/update-customer/{id}")
+    public String updateCustomerView(
+            @PathVariable("id") long id,
+            Model model
+    )
+    {
+
+        Result result = customerService.getCustomerById(new CustomerRequest(id));
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        Customer customer = (Customer) result.getData();
+        CustomerRequest customerRequest = new CustomerRequest(customer) ;
+
+
+        model.addAttribute("customer", customer);
+        model.addAttribute("customerRequest", customerRequest);
+        model.addAttribute("addUpdate", "UPDATE");
+
+
+        return "alter-customer";
+    }
+
     @PostMapping("/update-customer/{id}")
     public String updateCustomer(
             @PathVariable(value = "id",required = true) long id,
-            @ModelAttribute CustomerRequest customerRequest,
+            @ModelAttribute("customerRequest") CustomerRequest customerRequest,
             Model model
     )
     {
@@ -125,5 +166,37 @@ public class CustomerController {
 
         return "redirect:/update-customer/" + id;
     }
+
+    @PostMapping("/delete-customer")
+    public String deleteCustomer(
+            @ModelAttribute("customer") Customer customer,
+            Model model
+    )
+    {
+
+        Result result = customerService.deleteCustomer(customer);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/customers";
+    }
+
+    /*
+    @GetMapping("/update-appointment/{id}/select-customer")
+    public String updateAppointmentSelectCustomer(
+            @PathVariable(value = "id",required = true) long id,
+            @ModelAttribute("job") Job job,
+            Model model
+    )
+    {
+
+        model.addAttribute("searchSelect", "SELECT");
+
+        return "customers";
+    }
+
+     */
 
 }

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:src="@{/js/alter-appointment.js}" src="../../static/js/alter-appointment.js"></script>
+</head>
+<body>
+
+    <div id="appointment-form-contents">
+
+        <label for="cost" class="form-label">Cost:</label>
+        <input type="text" id="cost" th:field="*{cost}" class="form-control form-input"
+               placeholder="30.00" pattern="^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$">
+
+        <label for="location" class="form-label">Location:</label>
+        <input type="text" id="location" th:field="*{location}"
+               class="form-control form-input" placeholder="120 Smith St" minlength="5">
+
+        <label for="date" class="form-label">Scheduled Date:</label>
+        <input type="date" id="date" th:field="*{scheduledDate}" class="form-control form-input"
+               required="required">
+        <label for="start-time" class="form-label">Start Time:</label>
+        <input type="datetime-local" id="start-time" th:field="*{startTime}" class="form-control form-input">
+        <label for="end-time" class="form-label">End Time:</label>
+        <input type="datetime-local" id="end-time" th:field="*{endTime}" class="form-control form-input">
+
+        <label for="customers" class="form-label" style="margin-top: 40px">Client: </label>
+        <table th:id="customers" class="table table-hover">
+            <thead class="thead">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th class="location-column" scope="col">Location</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer : ${jobRequest.customer}" onclick="rowSelect(event)"
+                th:if="${jobRequest.customer != null}" th:value="${customer.customerId}">
+                <th th:text="${customer.customerId}" scope="row"></th>
+                <td th:text="${customer.customerName}"></td>
+                <td class="location-column" th:text="${customer.customerLocation}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <button class="btn form-submit-btn default-btn" type="button" th:if="${addUpdate == 'ADD'}"
+                            onclick="addCustomerClick(event)">Add Customer</button>
+                    <button class="btn form-submit-btn default-btn" type="button" th:if="${addUpdate == 'UPDATE'}"
+                            onclick="updateCustomerClick(event)">Change Customer</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="clear inner-add-elements"></div>
+
+        <label for="contacts" class="form-label" style="margin-top: 40px">Help: </label>
+        <table id="contacts" class="table table-hover">
+            <thead class="thead">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr  class="table-row" th:each="contact : ${contacts}" onclick="removeContactClick(event)"
+                 th:value="${contact.contactId}">
+                <td th:text="${contact.contactId}"></td>
+                <td th:text="${contact.contactName}"></td>
+                <td th:text="${contact.contactEmail}"></td>
+                <td th:text="${contact.contactPhone}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="container" style="margin-bottom: 40px">
+            <div class="row">
+                <div class="col text-center">
+                    <button class="btn form-submit-btn default-btn" th:if="${addUpdate == 'ADD'}" type="button"
+                            disabled>Add Contact</button>
+                    <button class="btn form-submit-btn default-btn" th:if="${addUpdate == 'UPDATE'}" type="button"
+                            onclick="updateContactClick(event)">Add Contact</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="clear inner-add-elements"></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <input type="submit" class="btn form-submit-btn default-btn" value="Submit" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

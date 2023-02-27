@@ -4,6 +4,7 @@ import com.professionallawnservices.app.models.openweather.Interval;
 import com.professionallawnservices.app.models.openweather.OpenWeatherResponse;
 import com.professionallawnservices.app.models.openweather.PlsWeather;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @Service
+@PropertySource("classpath:/application.properties")
 public class HomeService {
 
     @Value("${apikey.openweatherapi}")

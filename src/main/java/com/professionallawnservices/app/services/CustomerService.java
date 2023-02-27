@@ -3,17 +3,25 @@ package com.professionallawnservices.app.services;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Customer;
+import com.professionallawnservices.app.models.data.Help;
+import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.repos.CustomerRepo;
+import com.professionallawnservices.app.repos.JobRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class CustomerService {
 
     @Autowired
     CustomerRepo customerRepo;
+
+    @Autowired
+    JobRepo jobRepo;
 
     public Result getAllCustomers() {
 
@@ -34,6 +42,7 @@ public class CustomerService {
     }
 
     public Result getCustomerById(CustomerRequest customerRequest) {
+
         Result result = new Result();
 
         try {
@@ -41,7 +50,7 @@ public class CustomerService {
             Customer customer = customerRepo.findById(customerRequest.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + customerRequest.getId()));
 
-            result.setData(new CustomerRequest(customer));
+            result.setData(customer);
             result.setComplete(true);
         }
         catch (Exception e) {
@@ -92,5 +101,25 @@ public class CustomerService {
         return result;
     }
 
+    public Result deleteCustomer(Customer customer) {
+
+        Result result = new Result();
+
+        try {
+
+            ArrayList<Job> jobArrayList = jobRepo.getAllJobByCustomerId(customer.getCustomerId());
+
+            jobRepo.deleteAll(jobArrayList);
+            customerRepo.delete(customer);
+
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue deleting the customer with id: " + customer.getCustomerId());
+        }
+
+        return result;
+    }
 
 }

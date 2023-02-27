@@ -83,10 +83,12 @@ body {
 .default-btn{
     background-color: #3394B7;
     border: 0;
+    color: white;
 }
 
 .default-btn:hover {
-    background-color: #2e84a3;
+    background-color: #17aee5;
+    color: white;
     transition-duration: .3s;
 }
 

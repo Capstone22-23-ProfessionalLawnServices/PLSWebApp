@@ -1,6 +1,7 @@
 package com.professionallawnservices.app.models.data;
 
 import com.professionallawnservices.app.models.request.CustomerRequest;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "customer")
+@Proxy(lazy=false)
 public class Customer {
 
     @Id

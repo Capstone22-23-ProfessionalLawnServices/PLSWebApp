@@ -16,7 +16,7 @@
 <body onload="timeClock(); setDates(); loadNavbar()">
 <div class="overlay">
 
-  <div id="navbar-insert" th:insert="html-elements.html::#navbar-container">
+  <div id="navbar-insert" th:insert="elements/_navbar.html::#navbar-container">
   </div>
 
   <div class="container main-container center-block">
@@ -47,10 +47,12 @@
         <div class="inner-date-column">
           <div id="day-0" class="date-header"> Date 0 </div>
           <div id="day-0-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button id="weather-module-day-0" th:text="${'Weather ' + weatherZero.getHighAndLow()}"
-                    class="content-module" onclick="moduleInfo(event)">Weather 0</button>
+            <button id="weather-module-day-0" class="content-module"
+                    onclick="moduleInfo(event)" type="button">Weather</button>
             <div id="weather-module-day-0-info" class="module-info">
               <ul>
+                <li><span th:text="${'High: ' + weatherZero.getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' + weatherZero.getLow()}">Low: </span></li>
                 <li><span th:text="${'Humidity: ' + weatherZero.getHumidity()}">Humidity: </span></li>
                 <li><span th:text="${'Description: ' + weatherZero.getDescription()}">Description: </span></li>
               </ul>
@@ -69,10 +71,12 @@
         <div class="inner-date-column">
           <div id="day-1" class="date-header"> Date 1 </div>
           <div id="day-1-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button id="weather-module-day-1" th:text="${'Weather ' + weatherOne.getHighAndLow()}"
-                    class="content-module" onclick="moduleInfo(event)">Weather 1</button>
+            <button id="weather-module-day-1" type="button"
+                    class="content-module" onclick="moduleInfo(event)">Weather</button>
             <div id="weather-module-day-1-info" class="module-info">
               <ul>
+                <li><span th:text="${'High: ' + weatherOne.getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' + weatherOne.getLow()}">Low: </span></li>
                 <li><span th:text="${'Humidity: ' + weatherOne.getHumidity()}">Humidity: </span></li>
                 <li><span th:text="${'Description: ' + weatherOne.getDescription()}">Description: </span></li>
               </ul>
@@ -85,10 +89,12 @@
         <div class="inner-date-column">
           <div id="day-2" class="date-header"> Date 2 </div>
           <div id="day-2-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button id="weather-module-day-2" th:text="${'Weather ' + weatherTwo.getHighAndLow()}"
-                    class="content-module" onclick="moduleInfo(event)">Weather 2</button>
+            <button id="weather-module-day-2" type="button"
+                    class="content-module" onclick="moduleInfo(event)">Weather</button>
             <div id="weather-module-day-2-info" class="module-info">
               <ul>
+                <li><span th:text="${'High: ' + weatherTwo.getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' + weatherTwo.getLow()}">Low: </span></li>
                 <li><span th:text="${'Humidity: ' + weatherTwo.getHumidity()}">Humidity: </span></li>
                 <li><span th:text="${'Description: ' + weatherTwo.getDescription()}">Description: </span></li>
               </ul>
@@ -101,10 +107,12 @@
         <div class="inner-date-column">
           <div id="day-3" class="date-header"> Date 3 </div>
           <div id="day-3-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button id="weather-module-day-3" th:text="${'Weather ' + weatherThree.getHighAndLow()}"
-                    class="content-module" onclick="moduleInfo(event)">Weather 3</button>
+            <button id="weather-module-day-3" type="button"
+                    class="content-module" onclick="moduleInfo(event)">Weather</button>
             <div id="weather-module-day-3-info" class="module-info">
               <ul>
+                <li><span th:text="${'High: ' + weatherThree.getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' + weatherThree.getLow()}">Low: </span></li>
                 <li><span th:text="${'Humidity: ' + weatherThree.getHumidity()}">Humidity: </span></li>
                 <li><span th:text="${'Description: ' + weatherThree.getDescription()}">Description: </span></li>
               </ul>
@@ -132,10 +140,12 @@
         <div class="inner-date-column">
           <div id="day-4" class="date-header"> Date 4 </div>
           <div id="day-4-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button id="weather-module-day-4" th:text="${'Weather ' + weatherFour.getHighAndLow()}"
-                    class="content-module" onclick="moduleInfo(event)">Weather 4</button>
+            <button id="weather-module-day-4" type="button"
+                    class="content-module" onclick="moduleInfo(event)">Weather</button>
             <div id="weather-module-day-4-info" class="module-info">
               <ul>
+                <li><span th:text="${'High: ' + weatherFour.getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' + weatherFour.getLow()}">Low: </span></li>
                 <li><span th:text="${'Humidity: ' + weatherFour.getHumidity()}">Humidity: </span></li>
                 <li><span th:text="${'Description: ' + weatherFour.getDescription()}">Description: </span></li>
               </ul>
@@ -148,10 +158,12 @@
         <div class="inner-date-column">
           <div id="day-5" class="date-header"> Date 5 </div>
           <div id="day-5-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button id="weather-module-day-5" th:text="${'Weather ' + weatherFive.getHighAndLow()}"
-                    class="content-module" onclick="moduleInfo(event)">Weather 5</button>
+            <button id="weather-module-day-5" type="button"
+                    class="content-module" onclick="moduleInfo(event)">Weather</button>
             <div id="weather-module-day-5-info" class="module-info">
               <ul>
+                <li><span th:text="${'High: ' + weatherFive.getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' + weatherFive.getLow()}">Low: </span></li>
                 <li><span th:text="${'Humidity: ' + weatherFive.getHumidity()}">Humidity: </span></li>
                 <li><span th:text="${'Description: ' + weatherFive.getDescription()}">Description: </span></li>
               </ul>

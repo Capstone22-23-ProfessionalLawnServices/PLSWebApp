@@ -1,5 +1,12 @@
 package com.professionallawnservices.app.controllers;
 
+/*
+The AccountController houses all the account endpoints. Communication from the AccountController
+to the AccountService is accomplished primarily through the UserRequest. Model attributes utilized in forms
+should be of the request type (i.e. UserRequest) and not of data models, unless necessary. Objects exchanged between
+endpoints should be of the data model type and not the request type, unless request form data is being sent.
+ */
+
 import com.professionallawnservices.app.enums.RolesEnum;
 import com.professionallawnservices.app.exceptions.PlsRequestException;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
@@ -27,51 +34,31 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping("/account")
-    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
     public String accountView(Model model) {
-        RolesEnum userRole = SecurityHelpers.getPrimaryUserRole();
-        var systemUser = SecurityHelpers.getUser();
-        UserRequest userRequest = new UserRequest();
-        userRequest.setUsername(systemUser.getName());
-        userRequest.setRole(systemUser.getAuthorities().toString());
 
-        model.addAttribute("userAccessLevel", userRole.accessLevel);
-        model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
-        model.addAttribute("user", userRequest);
-
-        return "account";
-    }
-
-    @GetMapping("/add-account")
-    public String addAccountView(Model model) {
-        model.addAttribute("user", new UserRequest());
-        return "add-account";
-    }
-
-    @PostMapping("/create-account")
-    public String createAccount(@ModelAttribute UserRequest userRequest) {
-        if(
-                ValidationHelpers.isNull(userRequest)
-                || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
-                || ValidationHelpers.isNullOrBlank(userRequest.getNewPassword())
-                || ValidationHelpers.isNullOrBlank(userRequest.getRole())
-        )
-        {
-            throw new PlsRequestException("Request must contain username, new password, and role");
-        }
-
-        Result result = accountService.createAccount(userRequest);
+        Result result = accountService.accountView();
 
         if (!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/add-contact";
+        UserRequest userRequest = (UserRequest) result.getData();
+
+        model.addAttribute("userAccessLevel", userRequest.getRolesEnum().accessLevel);
+        model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
+        model.addAttribute("userRequest", userRequest);
+        model.addAttribute("addUpdate", "UPDATE");
+
+        return "alter-account";
     }
 
-
     @PostMapping("/update-account")
-    public String updateAccount(@ModelAttribute @Valid UserRequest userRequest, BindingResult bindingResult) {
+    public String updateAccount(
+            @ModelAttribute("userRequest") @Valid UserRequest userRequest,
+            BindingResult bindingResult
+    )
+    {
 
         if (bindingResult.hasErrors()) {
             throw new PlsRequestException("Request must contain a new password with at least one capital, lowercase, " +
@@ -96,8 +83,48 @@ public class AccountController {
         return "redirect:/account";
     }
 
+    @GetMapping("/add-account")
+    public String addAccountView(Model model) {
+
+        UserRequest userRequest = new UserRequest();
+
+        model.addAttribute("userRequest", userRequest);
+        model.addAttribute("addUpdate", "ADD");
+
+        return "alter-account";
+    }
+
+    @PostMapping("/add-account")
+    public String addAccount(@ModelAttribute("userRequest") UserRequest userRequest) {
+        if(
+                ValidationHelpers.isNull(userRequest)
+                || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
+                || ValidationHelpers.isNullOrBlank(userRequest.getNewPassword())
+                || ValidationHelpers.isNullOrBlank(userRequest.getRole())
+        )
+        {
+            throw new PlsRequestException("Request must contain username, new password, and role");
+        }
+
+        Result result = accountService.createAccount(userRequest);
+
+        if (!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/add-contact";
+    }
+
+    /*
+    The rest methods are intended for use with a api application like Postman and not with webpages.
+     */
+
     @PostMapping("/rest/create-account")
-    public ResponseEntity<String> createAccountRest(@RequestBody @Valid UserRequest userRequest, BindingResult bindingResult) {
+    public ResponseEntity<String> createAccountRest(
+            @RequestBody @Valid UserRequest userRequest,
+            BindingResult bindingResult
+    )
+    {
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getFieldErrors().toString());
@@ -160,5 +187,4 @@ public class AccountController {
 
         return ResponseEntity.ok("Account successfully deleted");
     }
-
 }

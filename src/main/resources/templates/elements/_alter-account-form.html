@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="account-add-form-contents">
+
+  <label for="username" class="form-label">Username:</label>
+  <input type="text" id="username" th:field="*{username}" class="form-control form-input"
+         pattern="^[.a-z0-9_-]{3,16}$" placeholder="jsmith23" minlength="5" required="required">
+  <label for="password" class="form-label">Password:</label>
+  <input type="password" id="password" th:field="*{newPassword}" class="form-control form-input"
+         minlength="8" required="required">
+  <label for="role" class="form-label">Role:</label>
+  <div class="clear inner-add-elements"></div>
+  <select id="role" th:field="*{role}" required="required">
+    <option value="ROLE_USER">User</option>
+    <option value="ROLE_EMPLOYEE">Employee</option>
+    <option value="ROLE_MANAGER">Manager</option>
+  </select>
+  <div class="clear inner-add-elements"></div>
+  <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Submit" />
+
+</div>
+
+<div id="account-update-form-contents">
+
+  <label for="username" class="form-label">Username:</label>
+  <input type="text" id="username" th:field="*{username}" class="form-control form-input"
+         pattern="^[.a-z0-9_-]{3,16}$" readonly="readonly">
+  <!--
+            <label for="old-password" class="form-label">Old Password:</label>
+            <input type="password" id="old-password" th:field="*{password}" class="form-control form-input"
+                   required="required">
+  -->
+  <label for="new-password" class="form-label">New Password:</label>
+  <input type="password" id="new-password" th:field="*{newPassword}" class="form-control form-input"
+         pattern="(?=(.*[0-9]))((?=.*[A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z]))^.{8,}$" required="required">
+  <label for="role" class="form-label">Role:</label>
+  <div class="clear inner-add-elements"></div>
+  <p id="role" th:text="*{role}"> </p>
+  <div class="clear inner-add-elements"></div>
+  <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Update Password"/>
+
+</div>
+
+</body>
+</html>

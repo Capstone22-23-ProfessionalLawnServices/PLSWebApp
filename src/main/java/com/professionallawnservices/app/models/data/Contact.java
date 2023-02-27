@@ -1,14 +1,17 @@
 package com.professionallawnservices.app.models.data;
 
 import com.professionallawnservices.app.models.request.ContactRequest;
+import org.hibernate.annotations.Proxy;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "contact")
+@Proxy(lazy=false)
 public class Contact {
 
     @Id

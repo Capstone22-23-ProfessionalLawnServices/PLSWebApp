@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:if="${addUpdate == 'ADD'}">Add Account</title>
+  <title th:if="${addUpdate == 'UPDATE'}">Account</title>
+  <link rel="icon" type="image/x-icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}">
+  <link rel="stylesheet" type="text/css" media="all" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+  <script th:src="@{/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" media="all" href="../static/css/common.css" th:href="@{/css/common.css}" />
+  <link rel="stylesheet" type="text/css" media="all" href="../static/css/account.css" th:href="@{/css/add-contact.css}" />
+  <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
+  <script th:src="@{/js/add-contact.js}" src="../static/js/add-contact.js"></script>
+</head>
+<body onload="loadNavbar()">
+<div class="overlay">
+
+  <div id="navbar-insert" th:insert="elements/_navbar.html::#navbar-container">
+  </div>
+
+  <div class="container main-container add-content-div">
+    <h1 th:if="${addUpdate == 'ADD'}" class="form-header">Add Account Form</h1>
+    <h1 th:if="${addUpdate == 'UPDATE'}" class="form-header">Account Form</h1>
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+
+        <form id="add-form" action="#" th:action="@{/add-account}" th:if="${addUpdate == 'ADD'}"
+              th:object="${userRequest}" method="post">
+
+          <div th:insert="elements/_alter-account-form.html::#account-add-form-contents">
+          </div>
+
+        </form>
+
+        <form action="#" th:action="@{/update-account}" th:if="${addUpdate == 'UPDATE'}"
+              th:object="${userRequest}" method="post">
+
+          <div th:insert="elements/_alter-account-form.html::#account-update-form-contents">
+          </div>
+
+        </form>
+
+        <form th:action="@{/logout}" th:if="${addUpdate == 'UPDATE'}" method="post">
+          <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Sign Out"/>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,13 +1,14 @@
 package com.professionallawnservices.app.models.request;
 
+import com.professionallawnservices.app.enums.RolesEnum;
+
 import javax.validation.constraints.Pattern;
 
 public class UserRequest {
 
-    @Pattern(regexp = "^[a-z0-9_-]{3,16}$")
+    @Pattern(regexp = "^[.a-z0-9_-]{3,16}$")
     private String username;
 
-    @Pattern(regexp = "(?=(.*[0-9]))((?=.*[A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z]))^.{8,}$")
     private String password;
 
     @Pattern(regexp = "(?=(.*[0-9]))((?=.*[A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z]))^.{8,}$")
@@ -15,12 +16,16 @@ public class UserRequest {
 
     private String role;
 
+    private RolesEnum rolesEnum;
+
     public UserRequest() {
 
     }
 
-    public UserRequest(String username) {
+    public UserRequest(String username, String role, RolesEnum rolesEnum) {
         this.username = username;
+        this.role = role;
+        this.rolesEnum = rolesEnum;
     }
 
     public String getUsername() {
@@ -55,4 +60,11 @@ public class UserRequest {
         this.role = role;
     }
 
+    public RolesEnum getRolesEnum() {
+        return rolesEnum;
+    }
+
+    public void setRolesEnum(RolesEnum rolesEnum) {
+        this.rolesEnum = rolesEnum;
+    }
 }

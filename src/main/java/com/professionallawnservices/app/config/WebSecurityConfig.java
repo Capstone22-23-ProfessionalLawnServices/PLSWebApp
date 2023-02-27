@@ -30,7 +30,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         /*
-        Contains the directories that can be accessed prior to logging in.
+        Contains the directories that can be accessed prior to logging in. This content is static and is necessary
+        for page layout.
          */
 
         String[] staticResources = {
@@ -53,7 +54,7 @@ public class WebSecurityConfig {
                 "/manager**"
         };
 
-        //Added .cors().and().csrf().disable() to allow for post requests from postman
+        //Added .cors().and().csrf().disable() to allow for post requests
 
         http.cors().and().csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
