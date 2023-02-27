@@ -42,11 +42,19 @@
 
                 </form>
 
-                <form th:action="@{/delete-contact}" th:if="${addUpdate == 'UPDATE'}"
-                      th:object="${contact}" method="post">
-                    <input type="hidden" th:field="${contact.contactId}"/>
-                    <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>
-                </form>
+                <div class="container" style="margin-bottom: 40px">
+                    <div class="row">
+                        <div class="col text-center">
+                            <form th:action="@{/delete-contact}" th:if="${addUpdate == 'UPDATE'}"
+                                  th:object="${contact}" method="post">
+                                <input type="hidden" th:field="${contact.contactId}"/>
+                                <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
 
             </div>
         </div>
