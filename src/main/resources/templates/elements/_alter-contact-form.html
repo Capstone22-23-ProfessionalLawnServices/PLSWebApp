@@ -24,6 +24,9 @@
         <div class="row">
             <div class="col text-center">
                 <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Submit" />
+                <div class="form-button-divider"> </div>
+                <input type="button" class="btn btn-danger form-submit-btn"
+                       value="Delete" th:if="${addUpdate == 'UPDATE'}" onclick="deleteContact(event)"/>
             </div>
         </div>
     </div>

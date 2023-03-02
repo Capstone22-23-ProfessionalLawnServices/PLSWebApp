@@ -99,11 +99,13 @@ public class ContactService {
         return result;
     }
 
-    public Result deleteContact(Contact contact) {
+    public Result deleteContactById(ContactRequest contactRequest) {
 
         Result result = new Result();
 
         try {
+
+            Contact contact = contactRepo.getReferenceById(contactRequest.getId());
 
             ArrayList<Help> helpArrayList = helpRepo.getAllHelpByContactId(contact.getContactId());
 
@@ -114,7 +116,7 @@ public class ContactService {
         }
         catch (Exception e) {
             result.setComplete(false);
-            result.setErrorMessage("There was an issue deleting the contact with id: " + contact.getContactId());
+            result.setErrorMessage("There was an issue deleting the contact with id: " + contactRequest.getId());
         }
 
         return result;

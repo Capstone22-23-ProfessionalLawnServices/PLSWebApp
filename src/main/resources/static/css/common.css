@@ -49,6 +49,12 @@ body {
     width: 100%;
 }
 
+.form-button-divider {
+    width: 60px;
+    height:auto;
+    display:inline-block;
+}
+
 .nav-links li {
     list-style: none;
     float:left;
@@ -198,7 +204,7 @@ body {
 
     #navbar-dropdown-content {
         display: none;
-        margin: 17px 0 0 -140px;
+        margin: 14px 0 0 -140px;
     }
 
     #nav-links-dropdown-button {

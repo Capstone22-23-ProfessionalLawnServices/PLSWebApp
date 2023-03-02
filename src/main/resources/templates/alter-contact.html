@@ -10,9 +10,8 @@
     <script th:src="@{/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
     <script th:src="@{/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/common.css" th:href="@{/css/common.css}" />
-    <link rel="stylesheet" type="text/css" media="all" href="../static/css/account.css" th:href="@{/css/add-contact.css}" />
     <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
-    <script th:src="@{/js/add-contact.js}" src="../static/js/add-contact.js"></script>
+    <script th:src="@{/js/alter-contact.js}" src="../static/js/alter-contact.js"></script>
 </head>
 <body onload="loadNavbar(); formClear()">
 <div class="overlay">
@@ -42,24 +41,15 @@
 
                 </form>
 
-                <div class="container" style="margin-bottom: 40px">
-                    <div class="row">
-                        <div class="col text-center">
-                            <form th:action="@{/delete-contact}" th:if="${addUpdate == 'UPDATE'}"
-                                  th:object="${contact}" method="post">
-                                <input type="hidden" th:field="${contact.contactId}"/>
-                                <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-
-
             </div>
         </div>
     </div>
 
 </div>
+
+<div th:if="${addUpdate == 'UPDATE'}">
+    <input th:id="contactId" type="hidden" th:if="${addUpdate == 'UPDATE'}" th:value="${contact.contactId}"/>
+</div>
+
 </body>
 </html>
