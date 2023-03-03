@@ -282,7 +282,10 @@ public class JobController {
     }
 
     @PostMapping("/delete-appointment/{id}")
-    public String deleteJob(@PathVariable(value = "id", required = true) long id) {
+    public ResponseEntity<String> deleteJob(
+            @PathVariable(value = "id", required = true) long id
+    )
+    {
 
         Result result = jobService.deleteJob(new JobRequest(id));
 
@@ -290,6 +293,6 @@ public class JobController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/appointments";
+        return ResponseEntity.ok("/appointments");
     }
 }
