@@ -151,7 +151,7 @@ public class ContactController {
     }
 
     @PostMapping("/delete-contact/{id}")
-    public ResponseEntity deleteContact(
+    public ResponseEntity<String> deleteContact(
             @PathVariable(value = "id",required = true) long id,
             Model model
     )

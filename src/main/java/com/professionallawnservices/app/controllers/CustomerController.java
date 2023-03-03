@@ -17,6 +17,7 @@ import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -167,20 +168,20 @@ public class CustomerController {
         return "redirect:/update-customer/" + id;
     }
 
-    @PostMapping("/delete-customer")
-    public String deleteCustomer(
-            @ModelAttribute("customer") Customer customer,
+    @PostMapping("/delete-customer/{id}")
+    public ResponseEntity<String> deleteCustomer(
+            @PathVariable(value = "id",required = true) long id,
             Model model
     )
     {
 
-        Result result = customerService.deleteCustomer(customer);
+        Result result = customerService.deleteCustomerById(new CustomerRequest(id));
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/customers";
+        return ResponseEntity.ok("/customers");
     }
 
     /*

@@ -47,8 +47,8 @@
 
 </div>
 
-<div th:if="${addUpdate == 'UPDATE'}">
-    <input th:id="contactId" type="hidden" th:if="${addUpdate == 'UPDATE'}" th:value="${contact.contactId}"/>
+<div th:if="${addUpdate == 'UPDATE'}" type="hidden">
+    <input th:id="contactId" th:value="${contact.contactId}"/>
 </div>
 
 </body>
