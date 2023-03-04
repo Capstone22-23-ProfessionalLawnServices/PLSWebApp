@@ -119,6 +119,10 @@ body {
     margin-top: 10px;
 }
 
+.form-label {
+    margin-top: 8px;
+}
+
 .form-header {
     text-align: center;
     padding-top: 30px;
