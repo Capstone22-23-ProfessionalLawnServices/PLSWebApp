@@ -65,7 +65,7 @@ public class WebSecurityConfig {
                 )
                 .formLogin((form) -> form
                         .loginPage("/login").permitAll()
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/home", true)
                 )
                 .logout((logout) -> logout.permitAll());
 
@@ -78,9 +78,11 @@ public class WebSecurityConfig {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
         jdbcUserDetailsManager.setDataSource(dataSource);
 
-                /*
+
+/*
         jdbcUserDetailsManager.createUser(User.withUsername("3").password(passwordEncoder().encode("3"))
                .authorities("ROLE_OWNER").build());
+
         userDetails.createUser(User.withUsername("2").password(SecurityHelpers.passwordEncoder().encode("2"))
                .authorities("ROLE_EMPLOYEE", "ROLE_USER").build());
 

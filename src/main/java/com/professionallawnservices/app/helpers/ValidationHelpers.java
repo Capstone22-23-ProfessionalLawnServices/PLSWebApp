@@ -16,11 +16,7 @@ public class ValidationHelpers {
 
     public static boolean isNull(Object object) {
 
-        if(object == null) {
-            return true;
-        }
-
-        return false;
+        return object == null;
     }
 
 }
