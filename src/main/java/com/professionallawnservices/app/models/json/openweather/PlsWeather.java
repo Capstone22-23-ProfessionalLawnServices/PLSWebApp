@@ -1,4 +1,4 @@
-package com.professionallawnservices.app.models.openweather;
+package com.professionallawnservices.app.models.json.openweather;
 
 import java.util.Date;
 

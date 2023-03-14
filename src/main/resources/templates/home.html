@@ -47,9 +47,9 @@
         <div class="inner-date-column">
           <div id="day-0" class="date-header"> Date 0 </div>
           <div id="day-0-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button id="weather-module-day-0" class="content-module"
+            <button id="weather-module-day-0" class="content-module" th:if="${weatherZero != null}"
                     onclick="moduleInfo(event)" type="button">Weather</button>
-            <div id="weather-module-day-0-info" class="module-info">
+            <div id="weather-module-day-0-info" class="module-info" th:if="${weatherZero != null}">
               <ul>
                 <li><span th:text="${'High: ' + weatherZero.getHigh()}">High: </span></li>
                 <li><span th:text="${'Low: ' + weatherZero.getLow()}">Low: </span></li>
