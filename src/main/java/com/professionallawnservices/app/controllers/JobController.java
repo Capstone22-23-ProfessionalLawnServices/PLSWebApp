@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 
 @Controller
+@RequestMapping("/appointments")
 public class JobController {
 
     @Autowired
@@ -38,7 +39,7 @@ public class JobController {
 
     private static final String managerRole = MANAGER.roleName;
 
-    @GetMapping("/appointments")
+    @GetMapping("")
     public String jobsView(Model model) {
 
         Result result = jobService.getAllJobs();
@@ -75,7 +76,7 @@ public class JobController {
 
      */
 
-    @GetMapping("/add-appointment")
+    @GetMapping("/add")
     public String addJobView(Model model) {
         JobRequest jobRequest = new JobRequest();
 
@@ -85,30 +86,13 @@ public class JobController {
         return "alter-appointment";
     }
 
-    @PostMapping("/add-appointment")
-    public String createJob(@ModelAttribute("jobRequest") JobRequest jobRequest) {
-
-        if(ValidationHelpers.isNull(jobRequest)) {
-            throw new PlsRequestException("Request must contain customer id");
-        }
-
-        Result result = jobService.createJob(jobRequest);
-
-        if(!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        return "redirect:/add-appointment";
-    }
-
-    @PostMapping("/add-appointment/select-customer")
+    @PostMapping("/add")
     public ResponseEntity<String> addAppointmentSelectCustomer(
             @RequestParam(value = "cost", required = false) double cost,
             @RequestParam(value = "location", required = false) String location,
             @RequestParam(value = "scheduledDate", required = false) String scheduledDate,
             @RequestParam(value = "startTime", required = false) String startTime,
             @RequestParam(value = "endTime", required = false) String endTime,
-            //RedirectAttributes redirectAttributes,
             Model model
     )
     {
@@ -134,11 +118,11 @@ public class JobController {
 
         //redirectAttributes.addFlashAttribute("job", job);
 
-        return ResponseEntity.ok("/update-appointment/" + job.getJobId() + "/select-customer");
+        return ResponseEntity.ok("/update/" + job.getJobId() + "/select-customer");
         //return ResponseEntity.ok("/update-appointment/" + job.getJobId());
     }
 
-    @PostMapping("/update-appointment/{id}/select-customer")
+    @PostMapping("/update/{id}/select-customer")
     public ResponseEntity<String> addAppointmentSelectCustomerView(
             @PathVariable(value = "id", required = true) long id,
             @RequestParam(value = "cost", required = false) double cost,
@@ -173,10 +157,10 @@ public class JobController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return ResponseEntity.ok("/update-appointment/" + id + "/select-customer");
+        return ResponseEntity.ok("Successfully updated job.");
     }
 
-    @PostMapping("/update-appointment/{id}/select-contact")
+    @PostMapping("/update/{id}/select-contact")
     public ResponseEntity<String> addAppointmentSelectContactView(
             @PathVariable(value = "id", required = true) long id,
             @RequestParam(value = "cost", required = false) double cost,
@@ -211,14 +195,12 @@ public class JobController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return ResponseEntity.ok("/update-appointment/" + id + "/select-contact");
+        return ResponseEntity.ok("Successfully updated job.");
     }
 
-    @GetMapping("/update-appointment/{id}")
+    @GetMapping("/update/{id}")
     public String updateJobView(
             @PathVariable(value = "id", required = true) long id,
-            //@RequestParam(value = "contactId", required = false) Long contactId,
-            //@RequestParam(value = "customerId", required = false) Long customerId,
             Model model
     )
     {
@@ -247,7 +229,7 @@ public class JobController {
         return "alter-appointment";
     }
 
-    @PostMapping("/update-appointment/{id}")
+    @PostMapping("/update/{id}")
     public ResponseEntity<String> updateJob(
             @PathVariable(value = "id",required = true) long id,
             @RequestParam(value = "contactId", required = false) Long contactId,
