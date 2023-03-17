@@ -21,44 +21,63 @@
 //     //window.location.href = $.ajax({type: "POST", url: url, async: false}).responseText;
 // }
 
-function updateCustomerClick(e) {
-    let jobId = document.getElementById("jobId") == null ? "":document.getElementById("jobId").value;
-    let cost = document.getElementById("cost") == null ? "0.0":document.getElementById("cost").value;
-    let location = document.getElementById("location") == null ? "":document.getElementById("location").value;
-    let scheduledDate = document.getElementById("date") == null ? "":document.getElementById("date").value;
-    let startTime = document.getElementById("start-time") == null ? "":document.getElementById("start-time").value;
-    let endTime = document.getElementById("end-time") == null ? "":document.getElementById("end-time").value;
+function addAppointment(e) {
 
-    if (scheduledDate === "" || scheduledDate === null) {
-        alert("An appointment must have a scheduled date.")
+    let params = getUrlParams();
+
+    if (params === null) {
         return;
     }
 
-    let url = "/update/" + jobId + "/select-customer?";
+    let url = "/appointments/add" + getUrlParams();
 
-    if (cost !== "") {
-        url += "cost=" + cost + "&";
+    console.log(url);
+
+    fetch(url, {
+        method: 'POST'
+    })
+        .then(response => {
+            window.location.href = "/appointments";
+        })
+        .catch(error => {
+            alert("There was an issue with the fetch request.")
+        });
+}
+
+function updateAppointment(e) {
+
+    let params = getUrlParams();
+
+    if (params === null) {
+        return;
     }
 
-    if (location !== "") {
-        url += "location=" + location + "&";
+    let jobId = document.getElementById("jobId") == null ? "":document.getElementById("jobId").value;
+
+    let url = "appointments/update/" + jobId + getUrlParams();
+
+    fetch(url, {
+        method: 'POST'
+    })
+        .then(response => {
+            window.location.href = "/appointments/update/" + jobId;
+        })
+        .catch(error => {
+            alert("There was an issue with the fetch request.")
+        });
+}
+
+function updateCustomerClick(e) {
+
+    let params = getUrlParams();
+
+    if (params === null) {
+        return;
     }
 
-    if (scheduledDate !== "") {
-        url += "scheduledDate=" + scheduledDate + "&";
-    }
+    let jobId = document.getElementById("jobId") == null ? "":document.getElementById("jobId").value;
 
-    if (startTime !== "") {
-        url += "startTime=" + startTime + "&";
-    }
-
-    if (endTime !== "") {
-        url += "endTime=" + endTime + "&";
-    }
-
-    if (url.charAt(url.length - 1) === '$') {
-        url = url.substring(0, (url.length - 1))
-    }
+    let url = "appointments/update/" + jobId + getUrlParams();
 
     fetch(url, {
         method: 'POST'
@@ -72,43 +91,16 @@ function updateCustomerClick(e) {
 }
 
 function updateContactClick(e) {
-    let jobId = document.getElementById("jobId") == null ? "":document.getElementById("jobId").value;
-    let cost = document.getElementById("cost") == null ? "0.0":document.getElementById("cost").value;
-    let location = document.getElementById("location") == null ? "":document.getElementById("location").value;
-    let scheduledDate = document.getElementById("date") == null ? "":document.getElementById("date").value;
-    let startTime = document.getElementById("start-time") == null ? "":document.getElementById("start-time").value;
-    let endTime = document.getElementById("end-time") == null ? "":document.getElementById("end-time").value;
 
-    if (scheduledDate === "" || scheduledDate === null) {
-        alert("An appointment must have a scheduled date.")
+    let params = getUrlParams();
+
+    if (params === null) {
         return;
     }
 
-    let url = "/update/" + jobId + "/select-contact?";
+    let jobId = document.getElementById("jobId") == null ? "":document.getElementById("jobId").value;
 
-    if (cost !== "") {
-        url += "cost=" + cost + "&";
-    }
-
-    if (location !== "") {
-        url += "location=" + location + "&";
-    }
-
-    if (scheduledDate !== "") {
-        url += "scheduledDate=" + scheduledDate + "&";
-    }
-
-    if (startTime !== "") {
-        url += "startTime=" + startTime + "&";
-    }
-
-    if (endTime !== "") {
-        url += "endTime=" + endTime + "&";
-    }
-
-    if (url.charAt(url.length - 1) === '$') {
-        url = url.substring(0, (url.length - 1))
-    }
+    let url = "appointments/update/" + jobId + getUrlParams();
 
     fetch(url, {
         method: 'POST'
@@ -133,8 +125,67 @@ function removeContactClick(e) {
 function deleteJob(e) {
     let jobId = document.getElementById("jobId").getAttribute("value");
 
-    let url = ("/delete-appointment/" + jobId);
+    let url = ("/appointments/delete/" + jobId);
 
-    window.location.href = $.ajax({type: "POST", url: url, async: false}).responseText;
+    $.ajax({type: "POST", url: url, async: false}).responseText;
+
+    window.location.href = "/appointments";
 }
 
+function getUrlParams() {
+    let cost = document.getElementById("cost") == null ? "0.0":document.getElementById("cost").value;
+    console.log(cost);
+    let location = document.getElementById("location") == null ? "":document.getElementById("location").value;
+    console.log(location);
+    let scheduledDate = document.getElementById("date") == null ? "":document.getElementById("date").value;
+    console.log(scheduledDate);
+    let startTime = document.getElementById("start-time") == null ? "":document.getElementById("start-time").value;
+    console.log(startTime);
+    let endTime = document.getElementById("end-time") == null ? "":document.getElementById("end-time").value;
+    console.log(endTime);
+
+    if (scheduledDate === "" || scheduledDate === null) {
+        alert("An appointment must have a scheduled date.")
+        return;
+    }
+
+    let params = "?";
+
+    if (cost !== "") {
+        params += "cost=" + paramSpaceReplace(cost) + "&";
+    }
+
+    if (location !== "") {
+        params += "location=" + paramSpaceReplace(location) + "&";
+    }
+
+    if (scheduledDate !== "") {
+        params += "scheduledDate=" + paramSpaceReplace(scheduledDate) + "&";
+    }
+
+    if (startTime !== "") {
+        params += "startTime=" + paramSpaceReplace(startTime) + "&";
+    }
+
+    if (endTime !== "") {
+        params += "endTime=" + paramSpaceReplace(endTime) + "&";
+    }
+
+    if (params.charAt(params.length - 1) === '$') {
+        params = params.substring(0, (params.length - 2))
+    }
+
+    return params;
+}
+
+function paramSpaceReplace(param) {
+
+    for (let i = 0; i < param.length; i++) {
+        if (param.charAt(i) === ' ') {
+            param = param.substring(0, i) + "%20" + param.substring(i + 1);
+        }
+    }
+
+    return param;
+
+}

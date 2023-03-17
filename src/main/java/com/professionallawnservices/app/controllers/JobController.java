@@ -11,6 +11,7 @@ import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
+import com.professionallawnservices.app.services.ContactService;
 import com.professionallawnservices.app.services.CustomerService;
 import com.professionallawnservices.app.services.JobService;
 import org.apache.coyote.Response;
@@ -36,6 +37,9 @@ public class JobController {
 
     @Autowired
     CustomerService customerService;
+
+    @Autowired
+    ContactService contactService;
 
     private static final String managerRole = MANAGER.roleName;
 
@@ -118,12 +122,13 @@ public class JobController {
 
         //redirectAttributes.addFlashAttribute("job", job);
 
-        return ResponseEntity.ok("/update/" + job.getJobId() + "/select-customer");
+        return ResponseEntity.ok("Successfully created job");
         //return ResponseEntity.ok("/update-appointment/" + job.getJobId());
     }
 
+    /*
     @PostMapping("/update/{id}/select-customer")
-    public ResponseEntity<String> addAppointmentSelectCustomerView(
+    public ResponseEntity<String> addAppointmentSelectCustomerOrContactView(
             @PathVariable(value = "id", required = true) long id,
             @RequestParam(value = "cost", required = false) double cost,
             @RequestParam(value = "location", required = false) String location,
@@ -131,6 +136,7 @@ public class JobController {
             @RequestParam(value = "startTime", required = false) String startTime,
             @RequestParam(value = "endTime", required = false) String endTime,
             @RequestParam(value = "customerId", required = false) Long customerId,
+            @RequestParam(value = "contactId", required = false) Long contactId,
             Model model
     )
     {
@@ -160,6 +166,9 @@ public class JobController {
         return ResponseEntity.ok("Successfully updated job.");
     }
 
+     */
+
+    /*
     @PostMapping("/update/{id}/select-contact")
     public ResponseEntity<String> addAppointmentSelectContactView(
             @PathVariable(value = "id", required = true) long id,
@@ -198,6 +207,8 @@ public class JobController {
         return ResponseEntity.ok("Successfully updated job.");
     }
 
+     */
+
     @GetMapping("/update/{id}")
     public String updateJobView(
             @PathVariable(value = "id", required = true) long id,
@@ -231,27 +242,34 @@ public class JobController {
 
     @PostMapping("/update/{id}")
     public ResponseEntity<String> updateJob(
-            @PathVariable(value = "id",required = true) long id,
-            @RequestParam(value = "contactId", required = false) Long contactId,
+            @PathVariable(value = "id", required = true) long id,
+            @RequestParam(value = "cost", required = false) double cost,
+            @RequestParam(value = "location", required = false) String location,
+            @RequestParam(value = "scheduledDate", required = false) String scheduledDate,
+            @RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime,
             @RequestParam(value = "customerId", required = false) Long customerId,
-            @ModelAttribute JobRequest jobRequest,
+            @RequestParam(value = "contactId", required = false) Long contactId,
             Model model
     )
     {
-        if(ValidationHelpers.isNull(jobRequest)) {
-            throw new PlsRequestException("Request must contain name");
-        }
 
+        JobRequest jobRequest = new JobRequest();
         jobRequest.setId(id);
-        Job job = (Job) jobService.getJobById(jobRequest).getData();
-        jobRequest = new JobRequest(job);
+        jobRequest.setCost(cost);
+        jobRequest.setLocation(location);
+        jobRequest.setScheduledDate(scheduledDate);
+        jobRequest.setStartTime(startTime);
+        jobRequest.setEndTime(endTime);
+        jobRequest.setId(id);
 
         if (customerId != null) {
-            jobRequest.setCustomer((Customer) customerService.getCustomerById(new CustomerRequest(customerId)).getData());
+            Customer customer = (Customer) customerService.getCustomerById(new CustomerRequest(customerId)).getData();
+            jobRequest.setCustomer(customer);
         }
 
         if(contactId != null) {
-            Help help = (Help) jobService.createHelp(new ContactRequest(contactId), jobRequest).getData();
+            jobService.createHelp(new ContactRequest(contactId), jobRequest).getData();
         }
 
         Result result = jobService.updateJob(jobRequest);
@@ -260,10 +278,10 @@ public class JobController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return ResponseEntity.ok("/update-appointment/" + id);
+        return ResponseEntity.ok("Successfully updated");
     }
 
-    @PostMapping("/delete-appointment/{id}")
+    @PostMapping("/delete/{id}")
     public ResponseEntity<String> deleteJob(
             @PathVariable(value = "id", required = true) long id
     )
