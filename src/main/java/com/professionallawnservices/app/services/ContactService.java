@@ -3,10 +3,13 @@ package com.professionallawnservices.app.services;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Help;
+import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.repos.ContactRepo;
 import com.professionallawnservices.app.repos.HelpRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.professionallawnservices.app.models.*;
 
@@ -29,6 +32,25 @@ public class ContactService {
 
             result.setData(contactRepo.findAll());
 
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue retrieving contacts.");
+        }
+
+        return result;
+    }
+
+    public Result getAllContactsPageable(Pageable pageable) {
+
+        Result result = new Result();
+
+        try{
+            Page<Contact> contactPage = contactRepo.findAll(pageable);
+            ArrayList<Contact> contactArrayList = new ArrayList<Contact>(contactPage.getContent());
+
+            result.setData(contactArrayList);
             result.setComplete(true);
         }
         catch (Exception e) {

@@ -13,6 +13,8 @@ import com.professionallawnservices.app.repos.CustomerRepo;
 import com.professionallawnservices.app.repos.HelpRepo;
 import com.professionallawnservices.app.repos.JobRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,14 +35,16 @@ public class JobService {
     @Autowired
     HelpRepo helpRepo;
 
-    public Result getAllJobs() {
+    public Result getAllJobsPageable(Pageable pageable) {
 
         Result result = new Result();
 
         try {
 
-            result.setData(jobRepo.findAll());
+            Page<Job> pageableJobs = jobRepo.findAll(pageable);
+            ArrayList<Job> jobArrayList = new ArrayList<Job>(pageableJobs.getContent());
 
+            result.setData(jobArrayList);
             result.setComplete(true);
         } catch (Exception e) {
             result.setComplete(false);

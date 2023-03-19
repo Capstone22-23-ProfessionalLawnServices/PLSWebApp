@@ -1,15 +1,14 @@
 package com.professionallawnservices.app.services;
 
 import com.professionallawnservices.app.models.Result;
-import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Customer;
-import com.professionallawnservices.app.models.data.Help;
 import com.professionallawnservices.app.models.data.Job;
-import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.repos.CustomerRepo;
 import com.professionallawnservices.app.repos.JobRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +22,26 @@ public class CustomerService {
     @Autowired
     JobRepo jobRepo;
 
+    public Result getAllCustomersPageable(Pageable pageable) {
+
+        Result result = new Result();
+
+        try{
+
+            Page<Customer> customerPage = customerRepo.findAll(pageable);
+            ArrayList<Customer> customerArrayList = new ArrayList<Customer>(customerPage.getContent());
+
+            result.setData(customerArrayList);
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue retrieving customers.");
+        }
+
+        return result;
+    }
+
     public Result getAllCustomers() {
 
         Result result = new Result();
@@ -30,7 +49,6 @@ public class CustomerService {
         try{
 
             result.setData(customerRepo.findAll());
-
             result.setComplete(true);
         }
         catch (Exception e) {

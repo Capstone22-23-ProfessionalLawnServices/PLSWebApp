@@ -15,6 +15,7 @@ import com.professionallawnservices.app.services.ContactService;
 import com.professionallawnservices.app.services.CustomerService;
 import com.professionallawnservices.app.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,9 +41,13 @@ public class JobController {
     private static final String managerRole = MANAGER.roleName;
 
     @GetMapping("")
-    public String jobsView(Model model) {
+    public String jobsView(
+            Pageable pageable,
+            Model model
+    )
+    {
 
-        Result result = jobService.getAllJobs();
+        Result result = jobService.getAllJobsPageable(pageable);
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
@@ -50,7 +55,13 @@ public class JobController {
 
         ArrayList<Job> jobs = (ArrayList<Job>) result.getData();
 
+        if (jobs.size() == 0) {
+            int previousPageIndex = pageable.getPageNumber() - 1;
+            return "redirect:/appointments?page=" + previousPageIndex;
+        }
+
         model.addAttribute("jobs", jobs);
+        model.addAttribute("pageNumber", pageable.getPageNumber());
         return "appointments";
     }
 

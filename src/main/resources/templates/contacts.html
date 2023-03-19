@@ -81,11 +81,16 @@
       <div class="column col-sm-6 text-center">
 
         <span style="margin: 0 5px 0 35px">Page: </span>
-        <input type="text" id="current-page" size="1" maxlength="2">
+        <input type="text" th:value="${pageNumber + 1}" id="current-page" size="1"
+               maxlength="2" onkeydown="pageInBox(event)">
         <span id="total-pages">/ </span>
 
-        <button id="next-page"> <img th:src="@{/images/arrow-left-square-fill.svg}" src="../static/images/arrow-left-square-fill.svg"></button>
-        <button id="prev-page"> <img th:src="@{/images/arrow-right-square-fill.svg}" src="../static/images/arrow-right-square-fill.svg"></button>
+        <button id="next-page" onclick="previousPage(event)">
+          <img th:src="@{/images/arrow-left-square-fill.svg}" src="../static/images/arrow-left-square-fill.svg">
+        </button>
+        <button id="prev-page" onclick="nextPage(event)">
+          <img th:src="@{/images/arrow-right-square-fill.svg}" src="../static/images/arrow-right-square-fill.svg">
+        </button>
 
       </div>
 
