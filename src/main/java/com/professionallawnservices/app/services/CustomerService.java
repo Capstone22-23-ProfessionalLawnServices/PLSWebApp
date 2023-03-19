@@ -101,11 +101,13 @@ public class CustomerService {
         return result;
     }
 
-    public Result deleteCustomer(Customer customer) {
+    public Result deleteCustomerById(CustomerRequest customerRequest) {
 
         Result result = new Result();
 
         try {
+
+            Customer customer = customerRepo.getReferenceById(customerRequest.getId());
 
             ArrayList<Job> jobArrayList = jobRepo.getAllJobByCustomerId(customer.getCustomerId());
 
@@ -116,7 +118,7 @@ public class CustomerService {
         }
         catch (Exception e) {
             result.setComplete(false);
-            result.setErrorMessage("There was an issue deleting the customer with id: " + customer.getCustomerId());
+            result.setErrorMessage("There was an issue deleting the customer with id: " + customerRequest.getId());
         }
 
         return result;

@@ -11,23 +11,21 @@ import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
+import com.professionallawnservices.app.services.ContactService;
 import com.professionallawnservices.app.services.CustomerService;
 import com.professionallawnservices.app.services.JobService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 
 @Controller
+@RequestMapping("/appointments")
 public class JobController {
 
     @Autowired
@@ -36,9 +34,12 @@ public class JobController {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    ContactService contactService;
+
     private static final String managerRole = MANAGER.roleName;
 
-    @GetMapping("/appointments")
+    @GetMapping("")
     public String jobsView(Model model) {
 
         Result result = jobService.getAllJobs();
@@ -53,29 +54,7 @@ public class JobController {
         return "appointments";
     }
 
-    /*
-    @GetMapping("/add-appointment")
-    public String addJobView(
-            @RequestParam(value="customer-id", required = false) Long customerId,
-            @RequestParam(value="contact-ids", required = false) ArrayList<Long> contactIds,
-            Model model
-    )
-    {
-        Customer customer = (Customer) jobService.getCustomerByIdList(customerId).getData();
-        ArrayList<Contact> contacts = (ArrayList<Contact>) jobService.getContactsByIdList(contactIds).getData();
-
-        model.addAttribute("job", new JobRequest());
-        model.addAttribute("customer", customer);
-        model.addAttribute("contacts", contacts);
-        model.addAttribute("addUpdate", "ADD");
-
-
-        return "alter-appointment";
-    }
-
-     */
-
-    @GetMapping("/add-appointment")
+    @GetMapping("/add")
     public String addJobView(Model model) {
         JobRequest jobRequest = new JobRequest();
 
@@ -85,30 +64,13 @@ public class JobController {
         return "alter-appointment";
     }
 
-    @PostMapping("/add-appointment")
-    public String createJob(@ModelAttribute("jobRequest") JobRequest jobRequest) {
-
-        if(ValidationHelpers.isNull(jobRequest)) {
-            throw new PlsRequestException("Request must contain customer id");
-        }
-
-        Result result = jobService.createJob(jobRequest);
-
-        if(!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        return "redirect:/add-appointment";
-    }
-
-    @PostMapping("/add-appointment/select-customer")
-    public ResponseEntity<String> addAppointmentSelectCustomer(
+    @PostMapping("/add")
+    public ResponseEntity<String> addJob(
             @RequestParam(value = "cost", required = false) double cost,
             @RequestParam(value = "location", required = false) String location,
             @RequestParam(value = "scheduledDate", required = false) String scheduledDate,
             @RequestParam(value = "startTime", required = false) String startTime,
             @RequestParam(value = "endTime", required = false) String endTime,
-            //RedirectAttributes redirectAttributes,
             Model model
     )
     {
@@ -132,93 +94,12 @@ public class JobController {
 
         Job job = (Job) result.getData();
 
-        //redirectAttributes.addFlashAttribute("job", job);
-
-        return ResponseEntity.ok("/update-appointment/" + job.getJobId() + "/select-customer");
-        //return ResponseEntity.ok("/update-appointment/" + job.getJobId());
+        return ResponseEntity.ok("" + job.getJobId());
     }
 
-    @PostMapping("/update-appointment/{id}/select-customer")
-    public ResponseEntity<String> addAppointmentSelectCustomerView(
-            @PathVariable(value = "id", required = true) long id,
-            @RequestParam(value = "cost", required = false) double cost,
-            @RequestParam(value = "location", required = false) String location,
-            @RequestParam(value = "scheduledDate", required = false) String scheduledDate,
-            @RequestParam(value = "startTime", required = false) String startTime,
-            @RequestParam(value = "endTime", required = false) String endTime,
-            @RequestParam(value = "customerId", required = false) Long customerId,
-            Model model
-    )
-    {
-
-        JobRequest jobRequest = new JobRequest();
-        jobRequest.setId(id);
-        jobRequest.setCost(cost);
-        jobRequest.setLocation(location);
-        jobRequest.setScheduledDate(scheduledDate);
-        jobRequest.setStartTime(startTime);
-        jobRequest.setEndTime(endTime);
-
-        Result result;
-
-        if (customerId != null) {
-            result = customerService.getCustomerById(new CustomerRequest(customerId));
-            Customer customer = (Customer) result.getData();
-            jobRequest.setCustomer(customer);
-        }
-
-        result = jobService.updateJob(jobRequest);
-
-        if(!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        return ResponseEntity.ok("/update-appointment/" + id + "/select-customer");
-    }
-
-    @PostMapping("/update-appointment/{id}/select-contact")
-    public ResponseEntity<String> addAppointmentSelectContactView(
-            @PathVariable(value = "id", required = true) long id,
-            @RequestParam(value = "cost", required = false) double cost,
-            @RequestParam(value = "location", required = false) String location,
-            @RequestParam(value = "scheduledDate", required = false) String scheduledDate,
-            @RequestParam(value = "startTime", required = false) String startTime,
-            @RequestParam(value = "endTime", required = false) String endTime,
-            @RequestParam(value = "customerId", required = false) Long customerId,
-            Model model
-    )
-    {
-
-        JobRequest jobRequest = new JobRequest();
-        jobRequest.setId(id);
-        jobRequest.setCost(cost);
-        jobRequest.setLocation(location);
-        jobRequest.setScheduledDate(scheduledDate);
-        jobRequest.setStartTime(startTime);
-        jobRequest.setEndTime(endTime);
-
-        Result result;
-
-        if (customerId != null) {
-            result = customerService.getCustomerById(new CustomerRequest(customerId));
-            Customer customer = (Customer) result.getData();
-            jobRequest.setCustomer(customer);
-        }
-
-        result = jobService.updateJob(jobRequest);
-
-        if(!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        return ResponseEntity.ok("/update-appointment/" + id + "/select-contact");
-    }
-
-    @GetMapping("/update-appointment/{id}")
+    @GetMapping("/update/{id}")
     public String updateJobView(
             @PathVariable(value = "id", required = true) long id,
-            //@RequestParam(value = "contactId", required = false) Long contactId,
-            //@RequestParam(value = "customerId", required = false) Long customerId,
             Model model
     )
     {
@@ -247,42 +128,129 @@ public class JobController {
         return "alter-appointment";
     }
 
-    @PostMapping("/update-appointment/{id}")
+    @PostMapping("/update/{id}")
     public ResponseEntity<String> updateJob(
-            @PathVariable(value = "id",required = true) long id,
-            @RequestParam(value = "contactId", required = false) Long contactId,
-            @RequestParam(value = "customerId", required = false) Long customerId,
-            @ModelAttribute JobRequest jobRequest,
+            @PathVariable(value = "id", required = true) long id,
+            @RequestParam(value = "cost", required = false) double cost,
+            @RequestParam(value = "location", required = false) String location,
+            @RequestParam(value = "scheduledDate", required = false) String scheduledDate,
+            @RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime,
             Model model
     )
     {
-        if(ValidationHelpers.isNull(jobRequest)) {
-            throw new PlsRequestException("Request must contain name");
-        }
 
+        JobRequest jobRequest = new JobRequest();
         jobRequest.setId(id);
-        Job job = (Job) jobService.getJobById(jobRequest).getData();
-        jobRequest = new JobRequest(job);
+        jobRequest.setCost(cost);
+        jobRequest.setLocation(location);
+        jobRequest.setScheduledDate(scheduledDate);
+        jobRequest.setStartTime(startTime);
+        jobRequest.setEndTime(endTime);
 
-        if (customerId != null) {
-            jobRequest.setCustomer((Customer) customerService.getCustomerById(new CustomerRequest(customerId)).getData());
-        }
-
-        if(contactId != null) {
-            Help help = (Help) jobService.createHelp(new ContactRequest(contactId), jobRequest).getData();
-        }
-
-        Result result = jobService.updateJob(jobRequest);
+        Result result = jobService.updateJobPrimitiveFields(jobRequest);
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return ResponseEntity.ok("/update-appointment/" + id);
+        return ResponseEntity.ok("Successfully updated");
     }
 
-    @PostMapping("/delete-appointment/{id}")
-    public String deleteJob(@PathVariable(value = "id", required = true) long id) {
+    @GetMapping("/update/{id}/select-contact")
+    public String updateAppointmentSelectContactView(
+            @PathVariable(value = "id",required = true) long id,
+            @ModelAttribute("job") Job job,
+            Model model
+    )
+    {
+
+        Result result = contactService.getAllContacts();
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
+
+        model.addAttribute("selectSearch", "SELECT");
+        model.addAttribute("contacts", contacts);
+        model.addAttribute("jobId", id);
+
+        return "contacts";
+    }
+
+    @PostMapping("/update/{id}/select-contact")
+    public ResponseEntity<String> updateAppointmentAddContact(
+            @PathVariable(value = "id",required = true) long id,
+            @RequestParam(value = "contactId", required = true) Long contactId,
+            Model model
+    )
+    {
+
+        Result result = new Result();
+        JobRequest jobRequest = new JobRequest(id);
+
+        if(contactId != null) {
+            result = jobService.createHelp(new ContactRequest(contactId), jobRequest);
+        }
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return ResponseEntity.ok("Successfully added contact");
+    }
+
+    @GetMapping("/update/{id}/select-customer")
+    public String addAppointmentSelectCustomerView(
+            @PathVariable(value = "id",required = true) long id,
+            @ModelAttribute("job") Job job,
+            Model model
+    )
+    {
+
+        Result result = customerService.getAllCustomers();
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        ArrayList<Customer> customers = (ArrayList<Customer>) result.getData();
+        job.setJobId(id);
+
+        model.addAttribute("customers", customers);
+        model.addAttribute("job", job);
+        model.addAttribute("searchSelect", "SELECT");
+
+        return "customers";
+    }
+
+    @PostMapping("/update/{id}/select-customer")
+    public ResponseEntity<String> updateAppointmentAddCustomer(
+            @PathVariable(value = "id",required = true) long id,
+            @RequestParam(value = "customerId", required = true) Long customerId,
+            Model model
+    )
+    {
+
+        CustomerRequest customerRequest = new CustomerRequest(customerId);
+        JobRequest jobRequest = new JobRequest(id);
+
+        Result result = jobService.addCustomerToJobWithIds(jobRequest, customerRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return ResponseEntity.ok("Successfully added customer");
+    }
+
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<String> deleteJob(
+            @PathVariable(value = "id", required = true) long id
+    )
+    {
 
         Result result = jobService.deleteJob(new JobRequest(id));
 
@@ -290,6 +258,24 @@ public class JobController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/appointments";
+        return ResponseEntity.ok("/appointments");
+    }
+
+    @PostMapping("/update/{id}/delete-help")
+    public ResponseEntity<String> deleteHelp(
+            @PathVariable(value = "id", required = true) long id,
+            @RequestParam(value = "contactId", required = true) Long contactId
+    )
+    {
+        ContactRequest contactRequest = new ContactRequest(contactId);
+        JobRequest jobRequest = new JobRequest(id);
+
+        Result result = jobService.deleteHelpWithJobAndContactIds(jobRequest, contactRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return ResponseEntity.ok("Successfully deleted help");
     }
 }

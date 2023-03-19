@@ -42,18 +42,6 @@
 
         </form>
 
-        <form th:action="@{/delete-appointment/{id}(id=${job.jobId})}" method="post"
-              th:if="${addUpdate == 'UPDATE'}">
-
-          <div class="container">
-                <div class="row">
-                  <div class="col text-center">
-                    <input type="submit" class="btn btn-danger form-submit-btn" value="Delete"/>
-                </div>
-              </div>
-          </div>
-
-        </form>
       </div>
     </div>
   </div>

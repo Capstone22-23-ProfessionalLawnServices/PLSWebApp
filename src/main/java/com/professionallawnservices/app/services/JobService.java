@@ -6,6 +6,7 @@ import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Help;
 import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.ContactRequest;
+import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.repos.ContactRepo;
 import com.professionallawnservices.app.repos.CustomerRepo;
@@ -36,13 +37,12 @@ public class JobService {
 
         Result result = new Result();
 
-        try{
+        try {
 
             result.setData(jobRepo.findAll());
 
             result.setComplete(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue retrieving jobs.");
         }
@@ -62,8 +62,7 @@ public class JobService {
 
             result.setData(job);
             result.setComplete(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue finding the job with id: " + jobRequest.getId());
         }
@@ -81,8 +80,7 @@ public class JobService {
 
             result.setData(helpArrayList);
             result.setComplete(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue finding the job with id: " + jobRequest.getId());
         }
@@ -99,7 +97,7 @@ public class JobService {
 
             Job job = new Job(jobRequest);
 
-            if(jobRequest.getCustomer() != null) {
+            if (jobRequest.getCustomer() != null) {
                 Customer customer = customerRepo.findById(jobRequest.getCustomer().getCustomerId())
                         .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" +
                                 jobRequest.getCustomer().getCustomerId()));
@@ -110,8 +108,7 @@ public class JobService {
 
             result.setData(job);
             result.setComplete(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue saving the job with customer id: " + jobRequest.getCustomer());
         }
@@ -119,15 +116,23 @@ public class JobService {
         return result;
     }
 
-    public Result updateJob(JobRequest jobRequest) {
+    public Result updateJobPrimitiveFields(JobRequest jobRequest) {
 
         Result result = new Result();
 
         try {
 
-            Job job = new Job(jobRequest);
+            Job jobFromRequest = new Job(jobRequest);
+            Job job = (Job) getJobById(jobRequest).getData();
 
-            if(jobRequest.getCustomer() != null) {
+            job.setCost(jobFromRequest.getCost());
+            job.setJobLocation(jobFromRequest.getJobLocation());
+            job.setScheduledDate(jobFromRequest.getScheduledDate());
+            job.setStartTime(jobFromRequest.getStartTime());
+            job.setEndTime(jobFromRequest.getEndTime());
+
+            /*
+            if (jobRequest.getCustomer() != null) {
                 Customer customer = customerRepo.findById(jobRequest.getCustomer().getCustomerId())
                         .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" +
                                 jobRequest.getCustomer().getCustomerId()));
@@ -152,13 +157,14 @@ public class JobService {
                 helpArrayList.add(new Help(contact, job));
             }
 
+             */
+
             jobRepo.save(job);
-            helpRepo.saveAll(helpArrayList);
+            //helpRepo.saveAll(helpArrayList);
 
             result.setData(job);
             result.setComplete(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue updating the job with id: " + jobRequest.getId());
         }
@@ -180,8 +186,7 @@ public class JobService {
             jobRepo.delete(job);
 
             result.setComplete(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue deleting the job with id: " + jobRequest.getId());
         }
@@ -200,8 +205,7 @@ public class JobService {
 
             result.setData(customer);
             result.setComplete(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue getting customer with id: " + customerId);
         }
@@ -226,8 +230,7 @@ public class JobService {
 
             result.setData(help);
             result.setComplete(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue creating help for job with id:" + jobRequest.getId());
         }
@@ -245,8 +248,7 @@ public class JobService {
 
             result.setData(contacts);
             result.setComplete(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue getting contacts with ids: " + contactIds);
         }
@@ -265,8 +267,7 @@ public class JobService {
 
             result.setData(customer);
             result.setComplete(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue getting customer with id: " + jobRequest.getCustomer());
         }
@@ -297,10 +298,62 @@ public class JobService {
 
             result.setData(contacts);
             result.setComplete(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue getting customers from job with id: " + jobRequest.getId());
+        }
+
+        return result;
+    }
+
+    public Result addCustomerToJobWithIds(JobRequest jobRequest, CustomerRequest customerRequest) {
+
+        Result result = new Result();
+
+        try {
+
+            Customer customer = customerRepo.findById(customerRequest.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + jobRequest.getCustomer()));
+
+            Job job = jobRepo.findById(jobRequest.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid job Id:" + jobRequest.getId()));
+
+            job.setCustomer(customer);
+            jobRepo.save(job);
+
+            result.setData(job);
+            result.setComplete(true);
+        } catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue adding customer with id: " +
+                    customerRequest.getId());
+        }
+
+        return result;
+    }
+
+    public Result deleteHelpWithJobAndContactIds(JobRequest jobRequest, ContactRequest contactRequest) {
+
+        Result result = new Result();
+
+        try {
+
+            ArrayList<Help> helpArrayList = helpRepo.getHelpByContactIdAndJobId(contactRequest.getId(), jobRequest.getId());
+
+            ArrayList<Long> helpIds = new ArrayList<Long>();
+
+            for (Help help :
+                    helpArrayList) {
+                helpIds.add(help.getId());
+            }
+
+            helpRepo.deleteAllById(helpIds);
+
+            result.setComplete(true);
+        } catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue deleteing help with job id: " + jobRequest.getId() +
+                    "and contact id: " + contactRequest.getId());
         }
 
         return result;

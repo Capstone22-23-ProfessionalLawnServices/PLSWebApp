@@ -49,6 +49,12 @@ body {
     width: 100%;
 }
 
+.form-button-divider {
+    width: 60px;
+    height:auto;
+    display:inline-block;
+}
+
 .nav-links li {
     list-style: none;
     float:left;
@@ -110,11 +116,16 @@ body {
 }
 
 .form-submit-btn {
-    margin-top: 10px;
+    margin-top: 40px;
+}
+
+.form-label {
+    margin-top: 8px;
 }
 
 .form-header {
     text-align: center;
+    padding-top: 30px;
 }
 
 #row1 {
@@ -197,7 +208,7 @@ body {
 
     #navbar-dropdown-content {
         display: none;
-        margin: 17px 0 0 -140px;
+        margin: 14px 0 0 -140px;
     }
 
     #nav-links-dropdown-button {

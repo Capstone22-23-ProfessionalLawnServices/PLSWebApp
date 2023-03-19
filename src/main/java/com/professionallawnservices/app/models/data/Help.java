@@ -5,7 +5,7 @@ import org.hibernate.annotations.Proxy;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "help")
+@Table(name = "help", uniqueConstraints = { @UniqueConstraint(columnNames = { "contact_id", "job_id" }) })
 @Proxy(lazy=false)
 public class Help {
 

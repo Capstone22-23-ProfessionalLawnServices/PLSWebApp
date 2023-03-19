@@ -17,6 +17,7 @@ import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,29 +44,6 @@ public class ContactController {
 
         model.addAttribute("contacts", contacts);
         model.addAttribute("selectSearch", "SEARCH");
-
-        return "contacts";
-    }
-
-    @GetMapping("/update-appointment/{id}/select-contact")
-    public String addAppointmentSelectCustomerView(
-            @PathVariable(value = "id",required = true) long id,
-            @ModelAttribute("job") Job job,
-            Model model
-    )
-    {
-
-        Result result = contactService.getAllContacts();
-
-        if(!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
-
-        model.addAttribute("selectSearch", "SELECT");
-        model.addAttribute("contacts", contacts);
-        model.addAttribute("jobId", id);
 
         return "contacts";
     }
@@ -149,20 +127,20 @@ public class ContactController {
         return "redirect:/update-contact/" + id;
     }
 
-    @PostMapping("/delete-contact")
-    public String deleteContact(
-            @ModelAttribute("contact") Contact contact,
+    @PostMapping("/delete-contact/{id}")
+    public ResponseEntity<String> deleteContact(
+            @PathVariable(value = "id",required = true) long id,
             Model model
     )
     {
 
-        Result result = contactService.deleteContact(contact);
+        Result result = contactService.deleteContactById(new ContactRequest(id));
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/contacts";
+        return ResponseEntity.ok("/contacts");
     }
 
     /*

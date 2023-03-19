@@ -22,7 +22,7 @@ public class DateHelper {
 
             time = new java.sql.Time(dateZone);
         } catch (Exception e) {
-            time = new Time(0, 0, 0);
+            return null;
         }
 
         return time;

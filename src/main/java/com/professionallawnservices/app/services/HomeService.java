@@ -1,8 +1,8 @@
 package com.professionallawnservices.app.services;
 
-import com.professionallawnservices.app.models.openweather.Interval;
-import com.professionallawnservices.app.models.openweather.OpenWeatherResponse;
-import com.professionallawnservices.app.models.openweather.PlsWeather;
+import com.professionallawnservices.app.models.json.openweather.Interval;
+import com.professionallawnservices.app.models.json.openweather.OpenWeatherResponse;
+import com.professionallawnservices.app.models.json.openweather.PlsWeather;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -37,11 +37,15 @@ public class HomeService {
         String description = "";
         ArrayList<PlsWeather> weatherList = new ArrayList<PlsWeather>();
 
+        if (date.getDay() != (new Date(openWeatherResponse.getDaysList().get(0).getDateTime() * 1000)).getDay()) {
+            weatherList.add(null);
+            date = new Date(openWeatherResponse.getDaysList().get(0).getDateTime() * 1000);
+        }
 
         for (Interval dayInterval:
              openWeatherResponse.getDaysList()) {
-            long test = dayInterval.getDateTime();
-            date = new Date(test * 1000);
+            long dateInteger = dayInterval.getDateTime();
+            date = new Date(dateInteger * 1000);
             int currentHigh = (int) Math.round(dayInterval.getWeatherDay().getTempMax());
             int currentLow = (int) Math.round(dayInterval.getWeatherDay().getTempMin());
 

@@ -25,7 +25,7 @@
         <label for="end-time" class="form-label">End Time:</label>
         <input type="datetime-local" id="end-time" th:field="*{endTime}" class="form-control form-input">
 
-        <label for="customers" class="form-label" style="margin-top: 40px">Client: </label>
+        <label for="customers" class="form-label" style="margin-top: 40px">Customers: </label>
         <table th:id="customers" class="table table-hover">
             <thead class="thead">
             <tr>
@@ -35,8 +35,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="customer : ${jobRequest.customer}" onclick="rowSelect(event)"
-                th:if="${jobRequest.customer != null}" th:value="${customer.customerId}">
+            <tr th:each="customer : ${jobRequest.customer}" th:if="${jobRequest.customer != null}"
+                th:value="${customer.customerId}">
                 <th th:text="${customer.customerId}" scope="row"></th>
                 <td th:text="${customer.customerName}"></td>
                 <td class="location-column" th:text="${customer.customerLocation}"></td>
@@ -47,9 +47,13 @@
         <div class="container">
             <div class="row">
                 <div class="col text-center">
-                    <button class="btn form-submit-btn default-btn" type="button" th:if="${addUpdate == 'ADD'}"
-                            onclick="addCustomerClick(event)">Add Customer</button>
-                    <button class="btn form-submit-btn default-btn" type="button" th:if="${addUpdate == 'UPDATE'}"
+                    <button class="btn form-submit-btn default-btn" type="button"
+                            th:if="${jobRequest.customer == null && addUpdate == 'ADD'}"
+                            onclick="updateCustomerAddJobClick(event)">Add Customer</button>
+                    <button class="btn form-submit-btn default-btn" type="button"
+                            th:if="${jobRequest.customer == null && addUpdate == 'UPDATE'}"
+                            onclick="updateCustomerClick(event)">Add Customer</button>
+                    <button class="btn form-submit-btn default-btn" type="button" th:if="${jobRequest.customer != null}"
                             onclick="updateCustomerClick(event)">Change Customer</button>
                 </div>
             </div>
@@ -57,7 +61,7 @@
 
         <div class="clear inner-add-elements"></div>
 
-        <label for="contacts" class="form-label" style="margin-top: 40px">Help: </label>
+        <label for="contacts" class="form-label" style="margin-top: 40px">Contacts: </label>
         <table id="contacts" class="table table-hover">
             <thead class="thead">
             <tr>
@@ -91,10 +95,16 @@
 
         <div class="clear inner-add-elements"></div>
 
-        <div class="container">
+        <div class="container" style="margin-bottom: 40px">
             <div class="row">
                 <div class="col text-center">
-                    <input type="submit" class="btn form-submit-btn default-btn" value="Submit" />
+                    <input type="button" class="btn btn-primary form-submit-btn default-btn" value="Add Appointment"
+                           th:if="${addUpdate == 'ADD'}" onclick="addAppointment(event)"/>
+                    <input type="button" class="btn btn-primary form-submit-btn default-btn" value="Update Appointment"
+                           th:if="${addUpdate == 'UPDATE'}" onclick="updateAppointment(event)"/>
+                    <div class="form-button-divider" th:if="${addUpdate == 'UPDATE'}"> </div>
+                    <input type="button" class="btn btn-danger form-submit-btn"
+                           value="Delete" th:if="${addUpdate == 'UPDATE'}" onclick="deleteJob(event)"/>
                 </div>
             </div>
         </div>

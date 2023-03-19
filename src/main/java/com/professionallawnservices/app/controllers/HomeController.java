@@ -2,12 +2,13 @@ package com.professionallawnservices.app.controllers;
 
 import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.enums.RolesEnum;
-import com.professionallawnservices.app.models.openweather.PlsWeather;
+import com.professionallawnservices.app.models.json.openweather.PlsWeather;
 import com.professionallawnservices.app.services.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 
@@ -15,12 +16,13 @@ import static com.professionallawnservices.app.enums.RolesEnum.*;
 
 
 @Controller
+@RequestMapping("/home")
 public class HomeController {
 
     @Autowired
     HomeService homeService;
 
-    @GetMapping(value = {"/home", "/"})
+    @RequestMapping(method = RequestMethod.GET)
     public String viewHome(Model model) {
         RolesEnum user = SecurityHelpers.getPrimaryUserRole();
         ArrayList<PlsWeather> plsWeatherArrayList = homeService.getCalendarWeather();

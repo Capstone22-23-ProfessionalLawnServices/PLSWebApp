@@ -17,6 +17,7 @@ import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,30 +50,6 @@ public class CustomerController {
 
         model.addAttribute("customers", customers);
         model.addAttribute("searchSelect", "SEARCH");
-
-        return "customers";
-    }
-
-    @GetMapping("/update-appointment/{id}/select-customer")
-    public String addAppointmentSelectCustomerView(
-            @PathVariable(value = "id",required = true) long id,
-            @ModelAttribute("job") Job job,
-            Model model
-    )
-    {
-
-        Result result = customerService.getAllCustomers();
-
-        if(!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        ArrayList<Customer> customers = (ArrayList<Customer>) result.getData();
-        job.setJobId(id);
-
-        model.addAttribute("customers", customers);
-        model.addAttribute("job", job);
-        model.addAttribute("searchSelect", "SELECT");
 
         return "customers";
     }
@@ -167,20 +144,20 @@ public class CustomerController {
         return "redirect:/update-customer/" + id;
     }
 
-    @PostMapping("/delete-customer")
-    public String deleteCustomer(
-            @ModelAttribute("customer") Customer customer,
+    @PostMapping("/delete-customer/{id}")
+    public ResponseEntity<String> deleteCustomer(
+            @PathVariable(value = "id",required = true) long id,
             Model model
     )
     {
 
-        Result result = customerService.deleteCustomer(customer);
+        Result result = customerService.deleteCustomerById(new CustomerRequest(id));
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/customers";
+        return ResponseEntity.ok("/customers");
     }
 
     /*
