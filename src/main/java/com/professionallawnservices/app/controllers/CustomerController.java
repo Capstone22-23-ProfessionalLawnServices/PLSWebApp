@@ -11,12 +11,12 @@ import com.professionallawnservices.app.exceptions.PlsRequestException;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
-import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,9 +38,13 @@ public class CustomerController {
     private static final String managerRole = MANAGER.roleName;
 
     @GetMapping("/customers")
-    public String customersView(Model model) {
+    public String customersView(
+            Pageable pageable,
+            Model model
+    )
+    {
 
-        Result result = customerService.getAllCustomers();
+        Result result = customerService.getAllCustomersPageable(pageable);
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
@@ -48,8 +52,14 @@ public class CustomerController {
 
         ArrayList<Customer> customers = (ArrayList<Customer>) result.getData();
 
+        if (customers.size() == 0) {
+            int previousPageIndex = pageable.getPageNumber() - 1;
+            return "redirect:/customers?page=" + previousPageIndex;
+        }
+
         model.addAttribute("customers", customers);
         model.addAttribute("searchSelect", "SEARCH");
+        model.addAttribute("pageNumber", pageable.getPageNumber());
 
         return "customers";
     }
@@ -60,7 +70,6 @@ public class CustomerController {
         CustomerRequest customerRequest = new CustomerRequest();
         model.addAttribute("customerRequest", customerRequest);
         model.addAttribute("addUpdate", "ADD");
-
 
         return "alter-customer";
     }

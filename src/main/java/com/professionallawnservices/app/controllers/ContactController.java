@@ -17,6 +17,7 @@ import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,9 +33,13 @@ public class ContactController {
     ContactService contactService;
 
     @GetMapping("/contacts")
-    public String contactsView(Model model) {
+    public String contactsView(
+            Pageable pageable,
+            Model model
+    )
+    {
 
-        Result result = contactService.getAllContacts();
+        Result result = contactService.getAllContactsPageable(pageable);
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
@@ -42,8 +47,14 @@ public class ContactController {
 
         ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
 
+        if (contacts.size() == 0) {
+            int previousPageIndex = pageable.getPageNumber() - 1;
+            return "redirect:/contacts?page=" + previousPageIndex;
+        }
+
         model.addAttribute("contacts", contacts);
         model.addAttribute("selectSearch", "SEARCH");
+        model.addAttribute("pageNumber", pageable.getPageNumber());
 
         return "contacts";
     }
