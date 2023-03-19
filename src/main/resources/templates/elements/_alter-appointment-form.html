@@ -35,8 +35,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="customer : ${jobRequest.customer}" onclick="rowSelect(event)"
-                th:if="${jobRequest.customer != null}" th:value="${customer.customerId}">
+            <tr th:each="customer : ${jobRequest.customer}" th:if="${jobRequest.customer != null}"
+                th:value="${customer.customerId}">
                 <th th:text="${customer.customerId}" scope="row"></th>
                 <td th:text="${customer.customerName}"></td>
                 <td class="location-column" th:text="${customer.customerLocation}"></td>
@@ -47,9 +47,13 @@
         <div class="container">
             <div class="row">
                 <div class="col text-center">
-                    <button class="btn form-submit-btn default-btn" type="button" th:if="${addUpdate == 'ADD'}"
+                    <button class="btn form-submit-btn default-btn" type="button"
+                            th:if="${jobRequest.customer == null && addUpdate == 'ADD'}"
+                            onclick="updateCustomerAddJobClick(event)">Add Customer</button>
+                    <button class="btn form-submit-btn default-btn" type="button"
+                            th:if="${jobRequest.customer == null && addUpdate == 'UPDATE'}"
                             onclick="updateCustomerClick(event)">Add Customer</button>
-                    <button class="btn form-submit-btn default-btn" type="button" th:if="${addUpdate == 'UPDATE'}"
+                    <button class="btn form-submit-btn default-btn" type="button" th:if="${jobRequest.customer != null}"
                             onclick="updateCustomerClick(event)">Change Customer</button>
                 </div>
             </div>

@@ -31,13 +31,12 @@ function addAppointment(e) {
 
     let url = "/appointments/add" + getUrlParams();
 
-    console.log(url);
-
     fetch(url, {
         method: 'POST'
     })
-        .then(response => {
-            window.location.href = "/appointments";
+        .then(response => response.text())
+        .then(data => {
+            window.location.href = "/appointments/update/" + data;
         })
         .catch(error => {
             alert("There was an issue with the fetch request.")
@@ -54,13 +53,37 @@ function updateAppointment(e) {
 
     let jobId = document.getElementById("jobId") == null ? "":document.getElementById("jobId").value;
 
-    let url = "appointments/update/" + jobId + getUrlParams();
+    let url = "/appointments/update/" + jobId + getUrlParams();
 
     fetch(url, {
         method: 'POST'
     })
         .then(response => {
             window.location.href = "/appointments/update/" + jobId;
+        })
+        .catch(error => {
+            alert("There was an issue with the fetch request.")
+        });
+}
+
+function updateCustomerAddJobClick(e) {
+
+    let params = getUrlParams();
+
+    if (params === null) {
+        return;
+    }
+
+    let jobId = document.getElementById("jobId") == null ? "":document.getElementById("jobId").value;
+
+    let url = "/appointments/add" + getUrlParams();
+
+    fetch(url, {
+        method: 'POST'
+    })
+        .then(response => response.text())
+        .then(data => {
+            window.location.href = "/appointments/update/" + data + "/select-customer";
         })
         .catch(error => {
             alert("There was an issue with the fetch request.")
@@ -77,7 +100,7 @@ function updateCustomerClick(e) {
 
     let jobId = document.getElementById("jobId") == null ? "":document.getElementById("jobId").value;
 
-    let url = "appointments/update/" + jobId + getUrlParams();
+    let url = "/appointments/update/" + jobId + getUrlParams();
 
     fetch(url, {
         method: 'POST'
@@ -100,13 +123,13 @@ function updateContactClick(e) {
 
     let jobId = document.getElementById("jobId") == null ? "":document.getElementById("jobId").value;
 
-    let url = "appointments/update/" + jobId + getUrlParams();
+    let url = "/appointments/update/" + jobId + getUrlParams();
 
     fetch(url, {
         method: 'POST'
     })
         .then(response => {
-            window.location.href = "/appointments/update/" + jobId + "/select-customer";
+            window.location.href = "/appointments/update/" + jobId + "/select-contact";
         })
         .catch(error => {
             alert("There was an issue with the fetch request.")
@@ -117,9 +140,17 @@ function removeContactClick(e) {
     let contactId = e.target.parentNode.getAttribute("value");
     let jobId = document.getElementById("jobId").getAttribute("value");
 
-    let url = "/update-appointment/" + jobId + "/delete-help?contactId=" + contactId;
+    let url = "/appointments/update/" + jobId + "/delete-help?contactId=" + contactId;
 
-    window.location.href = $.ajax({type: "POST", url: url, async: false}).responseText;
+    fetch(url, {
+        method: 'POST'
+    })
+        .then(response => {
+            window.location.href = "/appointments/update/" + jobId;
+        })
+        .catch(error => {
+            alert("There was an issue with the fetch request.")
+        });
 }
 
 function deleteJob(e) {
@@ -134,19 +165,14 @@ function deleteJob(e) {
 
 function getUrlParams() {
     let cost = document.getElementById("cost") == null ? "0.0":document.getElementById("cost").value;
-    console.log(cost);
     let location = document.getElementById("location") == null ? "":document.getElementById("location").value;
-    console.log(location);
     let scheduledDate = document.getElementById("date") == null ? "":document.getElementById("date").value;
-    console.log(scheduledDate);
     let startTime = document.getElementById("start-time") == null ? "":document.getElementById("start-time").value;
-    console.log(startTime);
     let endTime = document.getElementById("end-time") == null ? "":document.getElementById("end-time").value;
-    console.log(endTime);
 
     if (scheduledDate === "" || scheduledDate === null) {
         alert("An appointment must have a scheduled date.")
-        return;
+        return null;
     }
 
     let params = "?";

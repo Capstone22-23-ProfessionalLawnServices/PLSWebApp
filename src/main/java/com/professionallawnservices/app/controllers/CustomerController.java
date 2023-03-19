@@ -54,30 +54,6 @@ public class CustomerController {
         return "customers";
     }
 
-    @GetMapping("/update-appointment/{id}/select-customer")
-    public String addAppointmentSelectCustomerView(
-            @PathVariable(value = "id",required = true) long id,
-            @ModelAttribute("job") Job job,
-            Model model
-    )
-    {
-
-        Result result = customerService.getAllCustomers();
-
-        if(!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        ArrayList<Customer> customers = (ArrayList<Customer>) result.getData();
-        job.setJobId(id);
-
-        model.addAttribute("customers", customers);
-        model.addAttribute("job", job);
-        model.addAttribute("searchSelect", "SELECT");
-
-        return "customers";
-    }
-
     @GetMapping("/add-customer")
     public String addCustomerView(Model model) {
 
