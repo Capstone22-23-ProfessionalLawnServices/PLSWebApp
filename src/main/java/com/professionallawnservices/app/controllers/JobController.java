@@ -55,7 +55,7 @@ public class JobController {
 
         ArrayList<Job> jobs = (ArrayList<Job>) result.getData();
 
-        if (jobs.size() == 0) {
+        if (jobs.size() == 0 && pageable.getPageNumber() != 0) {
             int previousPageIndex = pageable.getPageNumber() - 1;
             return "redirect:/appointments?page=" + previousPageIndex;
         }

@@ -52,7 +52,7 @@ public class CustomerController {
 
         ArrayList<Customer> customers = (ArrayList<Customer>) result.getData();
 
-        if (customers.size() == 0) {
+        if (customers.size() == 0 && pageable.getPageNumber() != 0) {
             int previousPageIndex = pageable.getPageNumber() - 1;
             return "redirect:/customers?page=" + previousPageIndex;
         }
@@ -168,21 +168,5 @@ public class CustomerController {
 
         return ResponseEntity.ok("/customers");
     }
-
-    /*
-    @GetMapping("/update-appointment/{id}/select-customer")
-    public String updateAppointmentSelectCustomer(
-            @PathVariable(value = "id",required = true) long id,
-            @ModelAttribute("job") Job job,
-            Model model
-    )
-    {
-
-        model.addAttribute("searchSelect", "SELECT");
-
-        return "customers";
-    }
-
-     */
 
 }

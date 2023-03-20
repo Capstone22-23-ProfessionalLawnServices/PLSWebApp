@@ -47,7 +47,7 @@ public class ContactController {
 
         ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
 
-        if (contacts.size() == 0) {
+        if (contacts.size() == 0 && pageable.getPageNumber() != 0) {
             int previousPageIndex = pageable.getPageNumber() - 1;
             return "redirect:/contacts?page=" + previousPageIndex;
         }
@@ -154,22 +154,6 @@ public class ContactController {
         return ResponseEntity.ok("/contacts");
     }
 
-    /*
-    @GetMapping("/delete-contact/{id}")
-    public String deleteContact(@PathVariable(value = "id", required = true) long id) {
-
-        Result result = contactService.deleteContact(new ContactRequest(id));
-
-        if(!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        return "redirect:/contacts";
-    }
-
-     */
-
-
     @GetMapping("/search-contacts")
     public String getEmployeeByName(
             @RequestParam(value = "name", required = true) String name,
@@ -194,19 +178,8 @@ public class ContactController {
     }
 
     /*
-
-    @PostMapping("/search-contacts-post")
-    public ResponseEntity<List<Contact>> getEmployeeByNamePost(@RequestBody Contact contact) {
-        String contactName = contact.getContactName();
-        List<Contact> contacts = contactRepo.findByContactName(contactName);
-        return ResponseEntity.ok(contacts);
-    }
-
-     */
-
-    /*
     The rest methods are intended for use with a api application like Postman and not with webpages.
-     */
+
 
     @PostMapping("/rest/create-contact")
     public String createContactRest(@RequestBody ContactRequest contactRequest) {
@@ -226,5 +199,6 @@ public class ContactController {
 
         return "redirect:/add-contact";
     }
+         */
 
 }
