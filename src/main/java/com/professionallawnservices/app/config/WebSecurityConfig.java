@@ -58,7 +58,7 @@ public class WebSecurityConfig {
 
         http.cors().and().csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/**").permitAll() //Allows access to pages without logging in
+                        //.antMatchers("/**").permitAll() //Allows access to pages without logging in
                         .antMatchers(staticResources).permitAll()
                         .antMatchers(managerPages).hasRole("MANAGER")
                         .anyRequest().authenticated()
