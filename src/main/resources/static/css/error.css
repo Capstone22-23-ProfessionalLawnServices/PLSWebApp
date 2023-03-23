@@ -1,0 +1,22 @@
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    background-color: #6D98AB;
+    display: flex;
+    justify-content: center;
+}
+
+.main-container {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+}
+
+.flex-div {
+    text-align: center;
+}
