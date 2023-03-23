@@ -1,3 +1,7 @@
+html {
+    height: 90% !important;
+}
+
 .primary-column-header {
     font-size: 25px;
     background-color: black;
