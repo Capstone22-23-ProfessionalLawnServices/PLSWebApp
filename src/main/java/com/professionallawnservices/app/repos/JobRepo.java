@@ -27,4 +27,7 @@ public interface JobRepo extends JpaRepository<Job, Long> {
     ArrayList<Job> findByScheduledDateBetweenAndEndTimeNull(
             @NonNull @Param("scheduledDateStart") Date scheduledDateStart
     );
+
+    @Query("select j from Job j where j.startTime is not null and j.endTime is null")
+    ArrayList<Job> findActiveJobs();
 }

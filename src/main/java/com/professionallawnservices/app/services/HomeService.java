@@ -186,6 +186,27 @@ public class HomeService {
         return result;
     }
 
+    public Result getActiveJob() {
+
+        Result result = new Result();
+
+        try {
+
+            ArrayList<Job> activeJobs = jobRepo.findActiveJobs();
+
+            Job activeJob = activeJobs.size() == 0 ? null : activeJobs.get(0);
+
+            result.setData(activeJob);
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue rescheduling the job.");
+        }
+
+        return result;
+    }
+
 
 
 }

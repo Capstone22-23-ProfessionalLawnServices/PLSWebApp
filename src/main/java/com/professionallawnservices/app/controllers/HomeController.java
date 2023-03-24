@@ -34,27 +34,47 @@ public class HomeController {
         ArrayList<PlsWeather> plsWeatherArrayList = homeService.getCalendarWeather();
         ArrayList<ArrayList<Job>> calendarJobs = (ArrayList<ArrayList<Job>>) homeService.getCalendarJobs().getData();
         ArrayList<Job> missedJobs = (ArrayList<Job>) homeService.getMissedJobs().getData();
+        Job activeJob = (Job) homeService.getActiveJob().getData();
 
         model.addAttribute("userAccessLevel", user.accessLevel);
         model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
         model.addAttribute("weatherArrayList", plsWeatherArrayList);
         model.addAttribute("calendarJobs", calendarJobs);
         model.addAttribute("missedJobs", missedJobs);
+        model.addAttribute("activeJob", activeJob);
 
         return "home";
     }
 
     @PostMapping("/reschedule")
-    public ResponseEntity<String> updateAppointmentAddContact(
+    public ResponseEntity<String> rescheduleJob(
             @RequestParam(value = "jobId",required = true) long jobId,
-            @RequestParam(value = "scheduleDate", required = true) String scheduleDate,
-            Model model
+            @RequestParam(value = "scheduleDate", required = true) String scheduleDate
     )
     {
 
         Result result = new Result();
         JobRequest jobRequest = new JobRequest(jobId);
         jobRequest.setScheduledDate(scheduleDate);
+        result = homeService.rescheduleJob(jobRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return ResponseEntity.ok("Successfully rescheduled job");
+    }
+
+    @PostMapping("/start-session")
+    public ResponseEntity<String> startJobSession(
+            @RequestParam(value = "jobId",required = true) long jobId,
+            Model model
+    )
+    {
+
+        Result result = new Result();
+        JobRequest jobRequest = new JobRequest(jobId);
+
         result = homeService.rescheduleJob(jobRequest);
 
         if(!result.getComplete()) {
