@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +22,9 @@ public interface JobRepo extends JpaRepository<Job, Long> {
     @Query("select j from Job j where j.scheduledDate is not null and j.scheduledDate = :scheduleDate")
     ArrayList<Job> getAllByScheduledDateIsNotNullAndScheduledDate(@Param("scheduleDate") Date scheduleDate);
 
-    @Transactional
-    @Modifying
-    @Query("update Job j set j.scheduledDate = :scheduleDate where j.jobId = :jobId")
-    int updateScheduledDateByJobId(@Param("scheduleDate")Date scheduledDate, @Param("jobId")long jobId);
+    @Query("select j from Job j where j.scheduledDate between :scheduledDateStart and " +
+            "CURRENT_DATE-1 and j.endTime is null")
+    ArrayList<Job> findByScheduledDateBetweenAndEndTimeNull(
+            @NonNull @Param("scheduledDateStart") Date scheduledDateStart
+    );
 }

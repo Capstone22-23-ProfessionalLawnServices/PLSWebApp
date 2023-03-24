@@ -9,6 +9,7 @@ import com.professionallawnservices.app.models.json.openweather.PlsWeather;
 import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.repos.JobRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,12 @@ public class HomeService {
 
     @Value("${apikey.openweatherapi}")
     private String apikey;
-    private final JobRepo jobRepo;
 
-    public HomeService(JobRepo jobRepo) {
-        this.jobRepo = jobRepo;
-    }
+    @Value("${app.home.missed-job-days}")
+    private int missedDays;
+
+    @Autowired
+    JobRepo jobRepo;
 
     public ArrayList<PlsWeather> getCalendarWeather() {
 
@@ -126,6 +128,31 @@ public class HomeService {
             }
 
             result.setData(calendarList);
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue finding calendar jobs.");
+        }
+
+        return result;
+    }
+
+    public Result getMissedJobs() {
+
+        Result result = new Result();
+
+        try {
+
+            ArrayList<Job> missedJobs = new ArrayList<Job>();
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, (missedDays * (-1)));
+            java.sql.Date offsetDate = new java.sql.Date(calendar.getTimeInMillis());
+
+            missedJobs = jobRepo.findByScheduledDateBetweenAndEndTimeNull(offsetDate);
+
+            result.setData(missedJobs);
             result.setComplete(true);
         }
         catch (Exception e) {

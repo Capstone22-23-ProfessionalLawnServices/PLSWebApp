@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static com.professionallawnservices.app.enums.RolesEnum.*;
@@ -32,11 +33,13 @@ public class HomeController {
         RolesEnum user = SecurityHelpers.getPrimaryUserRole();
         ArrayList<PlsWeather> plsWeatherArrayList = homeService.getCalendarWeather();
         ArrayList<ArrayList<Job>> calendarJobs = (ArrayList<ArrayList<Job>>) homeService.getCalendarJobs().getData();
+        ArrayList<Job> missedJobs = (ArrayList<Job>) homeService.getMissedJobs().getData();
 
         model.addAttribute("userAccessLevel", user.accessLevel);
         model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
         model.addAttribute("weatherArrayList", plsWeatherArrayList);
         model.addAttribute("calendarJobs", calendarJobs);
+        model.addAttribute("missedJobs", missedJobs);
 
         return "home";
     }

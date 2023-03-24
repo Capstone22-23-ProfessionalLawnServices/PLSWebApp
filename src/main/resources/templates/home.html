@@ -31,8 +31,6 @@
             <label id="client-list-label" for="client-list">Choose a client:</label>
             <div class="clear"></div>
             <select name="people" id="client-list">
-              <!-- Tom is a hardcoded example -->
-              <option value="volvo">Tom</option>
               <option th:each="job : ${calendarJobs.get(0)}" th:value="${job.jobId}"
                       th:text="${job.customer?.customerName}"></option>
             </select>
@@ -60,16 +58,19 @@
                 <li><span th:text="${'Description: ' +  weatherArrayList.get(0).getDescription()}">Description: </span></li>
               </ul>
             </div>
-            <!-- Tom is a hardcoded example -->
-              <button id="861561-11" class="content-module" draggable="true" ondragstart="drag(event)">
-                <div>
-                  <span>Tom</span>
-                </div>
-              </button>
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(0)}" class="content-module" draggable="true" ondragstart="drag(event)">
+
+            <!--
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(0)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)">
               <input th:value="${job.jobId}" hidden="hidden"/>
               <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
               <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            </button>
+            -->
+
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(0)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -89,10 +90,9 @@
                 <li><span th:text="${'Description: ' +  weatherArrayList.get(1).getDescription()}">Description: </span></li>
               </ul>
             </div>
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(1)}" class="content-module" draggable="true" ondragstart="drag(event)">
-              <input th:value="${job.jobId}" hidden="hidden"/>
-              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
-              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(1)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -112,10 +112,9 @@
                 <li><span th:text="${'Description: ' +  weatherArrayList.get(2).getDescription()}">Description: </span></li>
               </ul>
             </div>
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(2)}" class="content-module" draggable="true" ondragstart="drag(event)">
-              <input th:value="${job.jobId}" hidden="hidden"/>
-              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
-              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(2)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -135,10 +134,9 @@
                 <li><span th:text="${'Description: ' +  weatherArrayList.get(3).getDescription()}">Description: </span></li>
               </ul>
             </div>
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(3)}" class="content-module" draggable="true" ondragstart="drag(event)">
-              <input th:value="${job.jobId}" hidden="hidden"/>
-              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
-              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(3)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -173,12 +171,10 @@
                 <li><span th:text="${'Description: ' +  weatherArrayList.get(4).getDescription()}">Description: </span></li>
               </ul>
             </div>
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(4)}" class="content-module" draggable="true" ondragstart="drag(event)">
-              <input th:value="${job.jobId}" hidden="hidden"/>
-              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
-              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
-            </button>
-          </div>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(4)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
+            </button>          </div>
         </div>
       </div>
 
@@ -196,10 +192,9 @@
                 <li><span th:text="${'Description: ' +  weatherArrayList.get(5).getDescription()}">Description: </span></li>
               </ul>
             </div>
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(5)}" class="content-module" draggable="true" ondragstart="drag(event)">
-              <input th:value="${job.jobId}" hidden="hidden"/>
-              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
-              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(5)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -209,10 +204,9 @@
         <div class="inner-date-column">
           <div id="day-6" class="date-header"> Date 6 </div>
           <div id="day-6-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(6)}" class="content-module" draggable="true" ondragstart="drag(event)">
-              <input th:value="${job.jobId}" hidden="hidden"/>
-              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
-              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(6)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -222,10 +216,9 @@
         <div class="inner-date-column">
           <div id="day-7" class="date-header"> Date 7 </div>
           <div id="day-7-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(7)}" class="content-module" draggable="true" ondragstart="drag(event)">
-              <input th:value="${job.jobId}" hidden="hidden"/>
-              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
-              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(7)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -239,11 +232,8 @@
         <div class="inner-add">
           <div id="missed-header" class="primary-column-header">Missed Appointments</div>
           <div id="missed-content">
-            <!-- Tom is a hardcoded example -->
-            <button id="86151-11" class="content-module" draggable="true" ondragstart="drag(event)">
-              <div>
-                <span>Tom</span>
-              </div>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${missedJobs}" class="content-module"
+                    draggable="true" ondragstart="drag(event)" th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -253,10 +243,9 @@
         <div class="inner-date-column">
           <div id="day-8" class="date-header"> Date 8 </div>
           <div id="day-8-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(8)}" class="content-module" draggable="true" ondragstart="drag(event)">
-              <input th:value="${job.jobId}" hidden="hidden"/>
-              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
-              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(8)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -266,10 +255,9 @@
         <div class="inner-date-column">
           <div id="day-9" class="date-header"> Date 9 </div>
           <div id="day-9-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(9)}" class="content-module" draggable="true" ondragstart="drag(event)">
-              <input th:value="${job.jobId}" hidden="hidden"/>
-              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
-              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(9)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -279,10 +267,9 @@
         <div class="inner-date-column">
           <div id="day-10" class="date-header"> Date 10 </div>
           <div id="day-10-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(10)}" class="content-module" draggable="true" ondragstart="drag(event)">
-              <input th:value="${job.jobId}" hidden="hidden"/>
-              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
-              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(10)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -292,10 +279,9 @@
         <div class="inner-date-column">
           <div id="day-11" class="date-header"> Date 11 </div>
           <div id="day-11-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(11)}" class="content-module" draggable="true" ondragstart="drag(event)">
-              <input th:value="${job.jobId}" hidden="hidden"/>
-              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
-              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(11)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
