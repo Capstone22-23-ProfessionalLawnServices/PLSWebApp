@@ -1,14 +1,21 @@
 package com.professionallawnservices.app.services;
 
+import com.professionallawnservices.app.helpers.ValidationHelpers;
+import com.professionallawnservices.app.models.Result;
+import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.json.openweather.Interval;
 import com.professionallawnservices.app.models.json.openweather.OpenWeatherResponse;
 import com.professionallawnservices.app.models.json.openweather.PlsWeather;
+import com.professionallawnservices.app.models.request.ContactRequest;
+import com.professionallawnservices.app.models.request.JobRequest;
+import com.professionallawnservices.app.repos.JobRepo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 @Service
@@ -17,6 +24,11 @@ public class HomeService {
 
     @Value("${apikey.openweatherapi}")
     private String apikey;
+    private final JobRepo jobRepo;
+
+    public HomeService(JobRepo jobRepo) {
+        this.jobRepo = jobRepo;
+    }
 
     public ArrayList<PlsWeather> getCalendarWeather() {
 
@@ -98,11 +110,55 @@ public class HomeService {
         return weatherList;
     }
 
-    /*
-    public ArrayList<Job> getCalendarAppointments() {
+    public Result getCalendarJobs() {
 
+        Result result = new Result();
+
+        try {
+
+            ArrayList<ArrayList<Job>> calendarList = new ArrayList<ArrayList<Job>>();
+
+            for (int i = 0; i < 12; i++) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DATE, i);
+                java.sql.Date scheduldeDate = new java.sql.Date(calendar.getTimeInMillis());
+                calendarList.add(jobRepo.getAllByScheduledDateIsNotNullAndScheduledDate(scheduldeDate));
+            }
+
+            result.setData(calendarList);
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue finding calendar jobs.");
+        }
+
+        return result;
     }
-    
-     */
+
+    public Result rescheduleJob(JobRequest jobRequest) {
+
+        Result result = new Result();
+
+        try {
+
+            Job job = jobRepo.findById(jobRequest.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid job Id:" + jobRequest.getId()));
+            job.setScheduledDateFromString(jobRequest.getScheduledDate());
+
+            jobRepo.save(job);
+
+            result.setData(job);
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue rescheduling the job.");
+        }
+
+        return result;
+    }
+
+
 
 }

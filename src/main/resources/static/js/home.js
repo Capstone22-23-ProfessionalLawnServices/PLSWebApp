@@ -129,6 +129,57 @@ function allowDrop(e) {
 
 function drop(e) {
     e.preventDefault();
+
+    let dateHeaderText = e.target.parentElement.firstElementChild.textContent;
+    let date = new Date(dateHeaderText.substring(4, dateHeaderText.length));
+    let dateFormatted = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    let jobButtonId = e.dataTransfer.getData("text");
+    let jobId = jobButtonId.substring((jobButtonId.indexOf('_') + 1), jobButtonId.length);
+
+    let url = "/home/reschedule?jobId=" + jobId + "&scheduleDate=" + dateFormatted;
+    console.log(url);
+
+
+    fetch(url, {
+        method: 'POST'
+    })
+        .then(response => {
+            //window.location.href = "/appointments/update/" + jobId;
+            let data = e.dataTransfer.getData("text");
+            let target = e.target;
+            let targetId = "#" + target.id;
+
+            try {
+                if (!($(targetId).attr("class").split(/\s+/).includes("date-content"))) {
+                    target = $(targetId).parent()[0];
+                    target.appendChild(document.getElementById(data));
+                } else {
+                    target.appendChild(document.getElementById(data));
+                }
+
+                if($("#" + target.id).parent().parent().css("background-color") === "rgb(235, 170, 61)") {
+                    $("#" + document.getElementById(data).id).css("background-color",
+                        "#FFE5B8");
+                }
+                else if($("#" + target.id).parent().parent().css("background-color") === "rgb(42, 151, 147)") {
+                    $("#" + document.getElementById(data).id).css("background-color",
+                        "#B1E1DF");
+                }
+                else {
+                    $("#" + document.getElementById(data).id).css("background-color",
+                        "#6D98AB");
+                }
+
+                console.log($(targetId).parent().parent().css("background-color"));
+            }
+            catch (Exception) {
+
+            }
+        })
+        .catch(error => {
+            alert("There was an issue with the fetch request.")
+        });
+/*
     let data = e.dataTransfer.getData("text");
     let target = e.target;
     let targetId = "#" + target.id;
@@ -159,6 +210,7 @@ function drop(e) {
     catch (Exception) {
 
     }
+    */
 }
 
 function startSession() {

@@ -60,7 +60,7 @@ html {
 }
 
 .inner-clock-client {
-    padding-top: 15px;
+    padding-top: 5px;
 }
 
 .module-info {
@@ -79,6 +79,7 @@ html {
 .inner-clock-buttons {
     background-color: white;
     height: 30%;
+    padding-top: 15px;
 }
 
 

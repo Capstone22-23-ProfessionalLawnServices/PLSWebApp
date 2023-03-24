@@ -48,7 +48,6 @@ public class JobRequest {
         scheduledDate = DateHelper.sqlDateToString(job.getScheduledDate());
         totalTime = (int) Math.round(job.getTotalTime());
         customer = job.getCustomer();
-        //contacts = job.getContacts();
     }
 
     /*
