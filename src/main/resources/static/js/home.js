@@ -257,7 +257,6 @@ function addAppointmentToClientList(data) {
     let optionHtml = "<option value='" + value + "'>" + name + "</option>";
 
     clientList.append(optionHtml);
-    console.log("after append");
 }
 
 function removeAppointmentToClientList(data) {
@@ -301,8 +300,6 @@ function searchCustomerOnType() {
                     };
                 });
 
-                console.log(customerList.length);
-
                 if (customerList.length === 0) {
                     return;
                 }
@@ -312,8 +309,6 @@ function searchCustomerOnType() {
                         customerList[i].customerName + "</option>";
 
                     customerSearchList.append(html);
-                    console.log(html);
-                    console.log(customerSearchList);
                 }
 
             })
