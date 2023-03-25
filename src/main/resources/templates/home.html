@@ -31,8 +31,10 @@
             <label id="client-list-label" for="client-list">Choose a client:</label>
             <div class="clear"></div>
             <select name="people" id="client-list">
-              <option th:each="job : ${calendarJobs.get(0)}" th:value="${job.jobId}"
+              <option th:each="job : ${calendarJobs.get(0)}" th:value="${job.jobId}" th:if="${job.customer != null}"
                       th:text="${job.customer?.customerName}"></option>
+              <option th:each="job : ${calendarJobs.get(0)}" th:value="${job.jobId}" th:if="${job.customer == null}"
+                      th:text="${'Appointment: ' + job.jobId}"></option>
             </select>
             <label id="active-client-label" for="active-client">Active client:</label>
             <span id="active-client">Tom</span>
