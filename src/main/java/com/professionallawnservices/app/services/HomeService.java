@@ -1,11 +1,16 @@
 package com.professionallawnservices.app.services;
 
 import com.professionallawnservices.app.models.Result;
+import com.professionallawnservices.app.models.data.Contact;
+import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.json.openweather.Interval;
 import com.professionallawnservices.app.models.json.openweather.OpenWeatherResponse;
 import com.professionallawnservices.app.models.json.openweather.PlsWeather;
+import com.professionallawnservices.app.models.request.ContactRequest;
+import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
+import com.professionallawnservices.app.repos.CustomerRepo;
 import com.professionallawnservices.app.repos.JobRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +34,8 @@ public class HomeService {
 
     @Autowired
     JobRepo jobRepo;
+    @Autowired
+    private CustomerRepo customerRepo;
 
     public ArrayList<PlsWeather> getCalendarWeather() {
 
@@ -231,6 +238,25 @@ public class HomeService {
 
             jobRepo.endSession(jobRequest.getId());
 
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue ending the session.");
+        }
+
+        return result;
+    }
+
+    public Result searchCustomers(CustomerRequest customerRequest) {
+
+        Result result = new Result();
+
+        try {
+
+            ArrayList<Customer> customerArrayList = customerRepo.findByCustomerNameLike(customerRequest.getName());
+
+            result.setData(customerArrayList);
             result.setComplete(true);
         }
         catch (Exception e) {

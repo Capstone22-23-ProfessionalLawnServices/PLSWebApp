@@ -164,7 +164,10 @@
       <div class="column col-lg-3 text-center">
         <div class="inner-add">
           <div id="add-header" class="primary-column-header">Quick Add</div>
-          <input type="text" class="inner-add-elements" placeholder="Search Contacts">
+          <input type="text" class="inner-add-elements" placeholder="Search Contacts" id="customer-search-field"
+                 list="customer-search-results" onkeyup="searchCustomerOnType()">
+          <datalist id="customer-search-results">
+          </datalist>
           <div class="clear inner-add-elements"></div>
           <input type="date" id="add-schedule-date">
           <div class="clear inner-add-elements"></div>

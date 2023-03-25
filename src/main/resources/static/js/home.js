@@ -1,3 +1,5 @@
+let debounceTimer;
+
 function timeClock() {
     setTimeout("timeClock()", 1000);
     let now = new Date();
@@ -269,4 +271,56 @@ function removeAppointmentToClientList(data) {
             clients[i].remove();
         }
     }
+}
+
+function searchCustomerOnType() {
+    let customerSearchList = $('#customer-search-results');
+    let searchField = $('#customer-search-field');
+    let searchQuery = searchField.val();
+
+    clearTimeout(debounceTimer);
+
+    debounceTimer = setTimeout(function() {
+
+        if (searchQuery === "") {
+            return;
+        }
+
+        customerSearchList.empty();
+        let url = "/home/search-customers?customerName=" + searchQuery;
+
+        fetch(url, {
+            method: 'POST'
+        })
+            .then(response => response.json())
+            .then(customerArrayList => {
+                let customerList = customerArrayList.map(function(array) {
+                    return {
+                        customerName: array.customerName,
+                        customerId: array.customerId,
+                    };
+                });
+
+                console.log(customerList.length);
+
+                if (customerList.length === 0) {
+                    return;
+                }
+
+                for (let i = 0; i < customerList.length; i++) {
+                    let html = "<option value='" + customerList[i].customerId + "'> " +
+                        customerList[i].customerName + "</option>";
+
+                    customerSearchList.append(html);
+                    console.log(html);
+                    console.log(customerSearchList);
+                }
+
+            })
+            .catch(error => {
+                alert("There was an issue with the fetch request.")
+            });
+
+        console.log("Searching...");
+    }, 1000);
 }

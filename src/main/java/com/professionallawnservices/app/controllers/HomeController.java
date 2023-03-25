@@ -4,9 +4,11 @@ import com.professionallawnservices.app.exceptions.PlsServiceException;
 import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.enums.RolesEnum;
 import com.professionallawnservices.app.models.Result;
+import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.json.openweather.PlsWeather;
 import com.professionallawnservices.app.models.request.ContactRequest;
+import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.services.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,5 +102,27 @@ public class HomeController {
 
         return ResponseEntity.ok("Successfully ended job");
     }
+
+    @PostMapping("/search-customers")
+    public ResponseEntity<ArrayList<Customer>> endJobSession(
+            @RequestParam(value = "customerName",required = true) String customerName
+    )
+    {
+
+        Result result = new Result();
+        CustomerRequest customerRequest = new CustomerRequest();
+        customerRequest.setName(customerName);
+
+        result = homeService.searchCustomers(customerRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        ArrayList<Customer> customerArrayList = (ArrayList<Customer>) result.getData();
+
+        return ResponseEntity.ok(customerArrayList);
+    }
+
 
 }
