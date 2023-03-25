@@ -13,7 +13,7 @@ import java.util.List;
 public interface CustomerRepo extends JpaRepository<Customer, Long> {
 
 
-    @Query("select c from Customer c where c.customerName like :customerName")
+    @Query("select c from Customer c where c.customerName like %:customerName%")
     ArrayList<Customer> findByCustomerNameLike(@Param("customerName") String customerName);
 
 }

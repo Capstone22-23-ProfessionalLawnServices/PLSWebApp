@@ -277,6 +277,7 @@ function searchCustomerOnType() {
     let searchField = $('#customer-search-field');
     let searchQuery = searchField.val();
 
+    customerSearchList.empty();
     clearTimeout(debounceTimer);
 
     debounceTimer = setTimeout(function() {
@@ -285,7 +286,6 @@ function searchCustomerOnType() {
             return;
         }
 
-        customerSearchList.empty();
         let url = "/home/search-customers?customerName=" + searchQuery;
 
         fetch(url, {
