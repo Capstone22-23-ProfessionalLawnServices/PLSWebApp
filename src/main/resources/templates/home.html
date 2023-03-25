@@ -28,21 +28,34 @@
           <div class="primary-column-header">Clock</div>
           <time id="clock-numbers"> Time</time>
           <div class="inner-clock-client">
-            <label id="client-list-label" for="client-list">Choose a client:</label>
+            <label id="client-list-label" for="client-list" th:hidden="${activeJob != null}">Choose a client:</label>
             <div class="clear"></div>
-            <select name="people" id="client-list">
+            <select name="people" id="client-list" th:hidden="${activeJob != null}">
               <option th:each="job : ${calendarJobs.get(0)}" th:value="${job.jobId}" th:if="${job.customer != null}"
                       th:text="${job.customer?.customerName}"></option>
               <option th:each="job : ${calendarJobs.get(0)}" th:value="${job.jobId}" th:if="${job.customer == null}"
                       th:text="${'Appointment: ' + job.jobId}"></option>
             </select>
-            <label id="active-client-label" for="active-client">Active client:</label>
-            <span id="active-client">Tom</span>
+            <label id="active-client-label" for="active-client" th:hidden="${activeJob == null}">Active client:</label>
+            <span th:id="active-client" th:if="${activeJob != null && activeJob.customer != null}"
+                  th:hidden="${activeJob == null}"
+                  th:text="${activeJob == null} ? '' : ${activeJob.customer.customerName}">
+            </span>
+            <span th:id="active-client" th:hidden="${activeJob == null}"
+                  th:if="${activeJob != null && activeJob.customer == null}"
+                  th:text="${activeJob == null} ? '' : ${'Appointment ' + activeJob.jobId}">
+            </span>
+            <span th:id="active-client" th:hidden="${activeJob == null}" th:if="${activeJob == null}" th:text="''">
+            </span>
+            <input id="active-client-id" hidden="true"
+                   th:value="${activeJob == null} ? '' : ${activeJob.jobId}"/>
           </div>
         </div>
         <div class="inner-clock-buttons">
-          <button id="start-session-button" class="btn btn-primary default-btn" onclick="startSession()" type="submit">Start Session</button>
-          <button id="end-session-button" class="btn btn-primary" onclick="endSession()" type="submit">End Current Session</button>
+          <button id="start-session-button" class="btn btn-primary default-btn" onclick="startSession()"
+                  th:hidden="${activeJob != null}" type="submit">Start Session</button>
+          <button id="end-session-button" class="btn btn-primary default-btn" onclick="endSession()"
+                  th:hidden="${activeJob == null}" type="submit">End Current Session</button>
         </div>
       </div>
 

@@ -1,12 +1,10 @@
 package com.professionallawnservices.app.services;
 
-import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.json.openweather.Interval;
 import com.professionallawnservices.app.models.json.openweather.OpenWeatherResponse;
 import com.professionallawnservices.app.models.json.openweather.PlsWeather;
-import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.repos.JobRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,7 +122,7 @@ public class HomeService {
                 Calendar calendar = Calendar.getInstance();
                 calendar.add(Calendar.DATE, i);
                 java.sql.Date scheduldeDate = new java.sql.Date(calendar.getTimeInMillis());
-                calendarList.add(jobRepo.getAllByScheduledDateIsNotNullAndScheduledDate(scheduldeDate));
+                calendarList.add(jobRepo.getCalendarJobsByDate(scheduldeDate));
             }
 
             result.setData(calendarList);
@@ -202,6 +200,42 @@ public class HomeService {
         catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue rescheduling the job.");
+        }
+
+        return result;
+    }
+
+    public Result startSession(JobRequest jobRequest) {
+
+        Result result = new Result();
+
+        try {
+
+            jobRepo.startSession(jobRequest.getId());
+
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue starting the session.");
+        }
+
+        return result;
+    }
+
+    public Result endSession(JobRequest jobRequest) {
+
+        Result result = new Result();
+
+        try {
+
+            jobRepo.endSession(jobRequest.getId());
+
+            result.setComplete(true);
+        }
+        catch (Exception e) {
+            result.setComplete(false);
+            result.setErrorMessage("There was an issue ending the session.");
         }
 
         return result;

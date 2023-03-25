@@ -172,9 +172,6 @@ function drop(e) {
                         "#6D98AB");
                 }
 
-                //console.log($(targetId).parent().parent().css("background-color"));
-                //setClientList();
-
                 if (originalContainer.id === "day-0-content") {
                     removeAppointmentToClientList(data);
                 }
@@ -195,21 +192,55 @@ function drop(e) {
 }
 
 function startSession() {
-    $("#start-session-button").hide();
-    $("#client-list").hide();
-    $("#client-list-label").hide();
-    $("#end-session-button").show();
-    $("#active-client").show();
-    $("#active-client-label").show();
+
+    let clientList = $('#client-list');
+    let jobId = clientList.val();
+    let selectedOption = $('#client-list :selected');
+    let name = selectedOption.text();
+    let url = "/home/start-session?jobId=" + jobId;
+    let calendarButton = $('#job_' + jobId);
+
+    fetch(url, {
+        method: 'POST'
+    })
+        .then(response => {
+            $("#start-session-button").attr("hidden",true);
+            $("#client-list").attr("hidden",true);
+            $("#client-list-label").attr("hidden",true);
+            selectedOption.remove();
+            calendarButton.remove();
+            $("#end-session-button").removeAttr('hidden');
+            $("#active-client").removeAttr('hidden');
+            $("#active-client").text(name);
+            $("#active-client-label").removeAttr('hidden');
+            $('#active-client-id').val(jobId);
+        })
+        .catch(error => {
+            alert("There was an issue with the fetch request.")
+        });
+
 }
 
 function endSession() {
-    $("#end-session-button").hide();
-    $("#active-client").hide();
-    $("#active-client-label").hide();
-    $("#start-session-button").show();
-    $("#client-list").show();
-    $("#client-list-label").show();
+    let clientList = $('#client-list');
+    let jobId = $('#active-client-id').val();
+    let url = "/home/end-session?jobId=" + jobId;
+
+    fetch(url, {
+        method: 'POST'
+    })
+        .then(response => {
+            $("#end-session-button").attr("hidden",true);
+            $("#active-client").attr("hidden",true);
+            $("#active-client-label").attr("hidden",true);
+            $("#start-session-button").removeAttr('hidden');
+            $("#client-list").removeAttr('hidden');
+            $("#client-list-label").removeAttr('hidden');
+            $('#active-client-id').val('');
+        })
+        .catch(error => {
+            alert("There was an issue with the fetch request.")
+        });
 }
 
 function addAppointmentToClientList(data) {

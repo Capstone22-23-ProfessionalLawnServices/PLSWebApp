@@ -67,21 +67,38 @@ public class HomeController {
 
     @PostMapping("/start-session")
     public ResponseEntity<String> startJobSession(
-            @RequestParam(value = "jobId",required = true) long jobId,
-            Model model
+            @RequestParam(value = "jobId",required = true) long jobId
     )
     {
 
         Result result = new Result();
         JobRequest jobRequest = new JobRequest(jobId);
 
-        result = homeService.rescheduleJob(jobRequest);
+        result = homeService.startSession(jobRequest);
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return ResponseEntity.ok("Successfully rescheduled job");
+        return ResponseEntity.ok("Successfully started job");
+    }
+
+    @PostMapping("/end-session")
+    public ResponseEntity<String> endJobSession(
+            @RequestParam(value = "jobId",required = true) long jobId
+    )
+    {
+
+        Result result = new Result();
+        JobRequest jobRequest = new JobRequest(jobId);
+
+        result = homeService.endSession(jobRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return ResponseEntity.ok("Successfully ended job");
     }
 
 }

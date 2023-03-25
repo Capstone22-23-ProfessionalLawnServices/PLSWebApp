@@ -115,17 +115,6 @@ h2 {
     display: none;
 }
 
-#end-session-button {
-    display: none;
-}
-
-#active-client {
-    display: none;
-}
-#active-client-label {
-    display: none;
-}
-
 @media (max-width: 1199px){
 
     .container {

@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.List;
 
 @Repository
 public interface JobRepo extends JpaRepository<Job, Long> {
@@ -19,8 +18,9 @@ public interface JobRepo extends JpaRepository<Job, Long> {
     @Query(value = "SELECT j FROM Job j WHERE j.customer.customerId = :customerId")
     ArrayList<Job> getAllJobByCustomerId(@Param("customerId") Long customerId);
 
-    @Query("select j from Job j where j.scheduledDate is not null and j.scheduledDate = :scheduleDate")
-    ArrayList<Job> getAllByScheduledDateIsNotNullAndScheduledDate(@Param("scheduleDate") Date scheduleDate);
+    @Query("select j from Job j where j.scheduledDate is not null and j.scheduledDate = :scheduleDate and " +
+            "j.startTime is null and j.endTime is null")
+    ArrayList<Job> getCalendarJobsByDate(@Param("scheduleDate") Date scheduleDate);
 
     @Query("select j from Job j where j.scheduledDate between :scheduledDateStart and " +
             "CURRENT_DATE-1 and j.endTime is null")
@@ -30,4 +30,16 @@ public interface JobRepo extends JpaRepository<Job, Long> {
 
     @Query("select j from Job j where j.startTime is not null and j.endTime is null")
     ArrayList<Job> findActiveJobs();
+
+    @Transactional
+    @Modifying
+    @Query("update Job j set j.startTime = CURRENT_TIME where j.jobId = :jobId")
+    int startSession(@Param("jobId") long jobId);
+
+    @Transactional
+    @Modifying
+    @Query("update Job j set j.endTime = CURRENT_TIME where j.jobId = :jobId")
+    int endSession(@Param("jobId") long jobId);
+
+
 }
