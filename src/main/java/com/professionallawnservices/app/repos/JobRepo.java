@@ -22,10 +22,10 @@ public interface JobRepo extends JpaRepository<Job, Long> {
             "j.startTime is null and j.endTime is null")
     ArrayList<Job> getCalendarJobsByDate(@Param("scheduleDate") Date scheduleDate);
 
-    @Query("select j from Job j where j.scheduledDate between :scheduledDateStart and " +
-            "CURRENT_DATE-1 and j.endTime is null")
-    ArrayList<Job> findByScheduledDateBetweenAndEndTimeNull(
-            @NonNull @Param("scheduledDateStart") Date scheduledDateStart
+    @Query("select j from Job j where j.scheduledDate between :scheduleDate and :yesterdayDate and j.endTime is null")
+    ArrayList<Job> findMissedJobs(
+            @Param("scheduleDate") Date scheduleDate,
+            @Param("yesterdayDate") Date yesterdayDate
     );
 
     @Query("select j from Job j where j.startTime is not null and j.endTime is null")
@@ -34,12 +34,12 @@ public interface JobRepo extends JpaRepository<Job, Long> {
     @Transactional
     @Modifying
     @Query("update Job j set j.startTime = CURRENT_TIME where j.jobId = :jobId")
-    int startSession(@Param("jobId") long jobId);
+    void startSession(@Param("jobId") long jobId);
 
     @Transactional
     @Modifying
     @Query("update Job j set j.endTime = CURRENT_TIME where j.jobId = :jobId")
-    int endSession(@Param("jobId") long jobId);
+    void endSession(@Param("jobId") long jobId);
 
 
 }

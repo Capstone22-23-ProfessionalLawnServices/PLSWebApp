@@ -1,13 +1,11 @@
 package com.professionallawnservices.app.services;
 
 import com.professionallawnservices.app.models.Result;
-import com.professionallawnservices.app.models.data.Contact;
 import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.json.openweather.Interval;
 import com.professionallawnservices.app.models.json.openweather.OpenWeatherResponse;
 import com.professionallawnservices.app.models.json.openweather.PlsWeather;
-import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.repos.CustomerRepo;
@@ -151,11 +149,14 @@ public class HomeService {
 
             ArrayList<Job> missedJobs = new ArrayList<Job>();
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DATE, (missedDays * (-1)));
-            java.sql.Date offsetDate = new java.sql.Date(calendar.getTimeInMillis());
+            Calendar calendarOffset = Calendar.getInstance();
+            calendarOffset.add(Calendar.DATE, (missedDays * (-1)));
+            java.sql.Date offsetDate = new java.sql.Date(calendarOffset.getTimeInMillis());
+            Calendar calendarYesterday = Calendar.getInstance();
+            calendarYesterday.add(Calendar.DATE, -1);
+            java.sql.Date yesterdayDate = new java.sql.Date(calendarYesterday.getTimeInMillis());
 
-            missedJobs = jobRepo.findByScheduledDateBetweenAndEndTimeNull(offsetDate);
+            missedJobs = jobRepo.findMissedJobs(offsetDate, yesterdayDate);
 
             result.setData(missedJobs);
             result.setComplete(true);
