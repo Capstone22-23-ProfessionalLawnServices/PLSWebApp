@@ -317,5 +317,5 @@ function searchCustomerOnType() {
             });
 
         console.log("Searching...");
-    }, 1000);
+    }, 1500);
 }
