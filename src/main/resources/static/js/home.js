@@ -139,7 +139,6 @@ function drop(e) {
     let jobId = jobButtonId.substring((jobButtonId.indexOf('_') + 1), jobButtonId.length);
 
     let url = "/home/reschedule?jobId=" + jobId + "&scheduleDate=" + dateFormatted;
-    //console.log(new Date().getDate() === date.getDate());
 
 
 
@@ -326,4 +325,131 @@ function appointmentClick(e) {
     let appointmentId = appointmentInput.val();
 
     window.location.href = "/appointments/update/" + appointmentId;
+}
+
+function datalistClick(e) {
+    let value = e.target.value;
+    let dateSelector = $('#add-schedule-date');
+    let inputField = $('#customer-search-field');
+    let selectedCustomer = $('#selected-customer');
+    let customerId = $('#selected-customer-id');
+    let selectedOption = document.querySelector('#customer-search-results option[value="' + value + '"]');
+    let changeCustomerButton = $('#change-customer-button');
+
+    if (selectedOption) {
+        let selectedOptionText = selectedOption.textContent;
+        inputField.attr("hidden",true);
+        selectedCustomer.text('Selected: ' + selectedOptionText);
+        selectedCustomer.removeAttr('hidden');
+        changeCustomerButton.removeAttr('hidden');
+        customerId.attr('value', value);
+        dateSelector.css('margin', '5px 0 5px 0');
+    }
+}
+
+function changeCustomerClick(e) {
+    let inputField = $('#customer-search-field');
+    let selectedCustomer = $('#selected-customer');
+    let customerId = $('#selected-customer-id');
+    let changeCustomerButton = $('#change-customer-button');
+    let dateSelector = $('#add-schedule-date');
+
+
+    inputField.removeAttr('hidden');
+    selectedCustomer.attr('hidden', true);
+    changeCustomerButton.attr('hidden', true);
+    customerId.attr('value', '');
+    inputField.text('');
+    inputField.val('');
+    dateSelector.css('margin', '15px 0 19px 0');
+}
+
+function quickScheduleClick(e) {
+    let scheduledDate = document.getElementById("add-schedule-date") == null ? "":
+        document.getElementById("add-schedule-date").value;
+    let customerId = $('#selected-customer-id').val();
+    let appointmentId;
+
+    if (scheduledDate !== '' && customerId !== '') {
+        let url = "/appointments/add?scheduledDate=" + scheduledDate + "&cost=0";
+        let customerUrl;
+        let currentDate = new Date();
+        currentDate.setHours(0);
+        currentDate.setMinutes(0);
+        currentDate.setSeconds(0);
+        let plannedDate = new Date(scheduledDate);
+        plannedDate.setHours(0);
+        plannedDate.setMinutes(0);
+        plannedDate.setSeconds(0);
+        plannedDate.setDate(plannedDate.getDate() + 1);
+        let value;
+
+
+        fetch(url, {
+            method: 'POST'
+        })
+            .then(response => response.text())
+            .then(data => {
+                appointmentId = data;
+                customerUrl = '/appointments/update/' + data + '/select-customer?customerId=' + customerId;
+                value = data;
+            })
+            .then(something => {
+                fetch(customerUrl, {
+                    method: 'POST'
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                            let timeDifference = Math.abs(plannedDate - currentDate);
+                            let daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+                            if (plannedDate.getUTCDate() === currentDate.getUTCDate()) {
+                                daysDifference = 0;
+                            }
+
+                            if (daysDifference < 12) {
+                                let appointmentDiv = "<button id='job_" + appointmentId +
+                                    "' class='content-module' draggable='true' ondragstart='drag(event)'" +
+                                    " onclick='appointmentClick(event)'>" +
+                                    "<input value='"+ value + "' hidden/>" +
+                                    "<span>" + data + "</span>" +
+                                    "</button>";
+
+                                let appointmentDivId = 'job_' + appointmentId;
+                                let containerId = "day-" + daysDifference + "-content";
+                                let container = $('#' + containerId);
+                                container.append(appointmentDiv);
+
+                                if(container.parent().parent().css("background-color") === "rgb(235, 170, 61)") {
+                                    $("#" + appointmentDivId).css("background-color",
+                                        "#FFE5B8");
+                                }
+                                else if(container.parent().parent().css("background-color") === "rgb(42, 151, 147)") {
+                                    $("#" + appointmentDivId).css("background-color",
+                                        "#B1E1DF");
+                                }
+                                else {
+                                    $("#" + appointmentDivId).css("background-color",
+                                        "#6D98AB");
+                                }
+
+                                changeCustomerClick(e);
+
+                                if (daysDifference === 0) {
+                                    addAppointmentToClientList('job_' + appointmentId);
+                                }
+
+                            }
+                    })
+                    .catch(error => {
+                        alert("There was an issue with the fetch request.")
+                    });
+            })
+            .catch(error => {
+                alert("There was an issue with the fetch request.")
+            });
+    }
+    else{
+        alert("A customer must be selected from the dropdown and a date must be entered.");
+    }
 }

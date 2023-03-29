@@ -164,14 +164,19 @@
       <div class="column col-lg-3 text-center">
         <div class="inner-add">
           <div id="add-header" class="primary-column-header">Quick Add</div>
+          <span id="selected-customer" hidden="true"></span>
+          <button  class="btn btn-primary default-btn" onclick="changeCustomerClick(event)"
+                   type="button" hidden="true" id="change-customer-button">Change Customer</button>
+          <input id="selected-customer-id" value="" hidden="true"/>
           <input type="text" class="inner-add-elements" placeholder="Search Contacts" id="customer-search-field"
-                 list="customer-search-results" onkeyup="searchCustomerOnType()">
+                 list="customer-search-results" onkeyup="searchCustomerOnType()" oninput="datalistClick(event)">
           <datalist id="customer-search-results">
           </datalist>
           <div class="clear inner-add-elements"></div>
           <input type="date" id="add-schedule-date">
           <div class="clear inner-add-elements"></div>
-          <button  class="btn btn-primary inner-add-elements default-btn" onclick="" type="submit">Schedule</button>
+          <button  class="btn btn-primary inner-add-elements default-btn" onclick="quickScheduleClick(event)"
+                   type="button">Schedule</button>
         </div>
       </div>
 
