@@ -327,3 +327,77 @@ function appointmentClick(e) {
 
     window.location.href = "/appointments/update/" + appointmentId;
 }
+
+function datalistClick(e) {
+    let value = e.target.value;
+    let dateSelector = $('#add-schedule-date');
+    let inputField = $('#customer-search-field');
+    let selectedCustomer = $('#selected-customer');
+    let customerId = $('#selected-customer-id');
+    let selectedOption = document.querySelector('#customer-search-results option[value="' + value + '"]');
+    let changeCustomerButton = $('#change-customer-button');
+
+    if (selectedOption) {
+        let selectedOptionText = selectedOption.textContent;
+        inputField.attr("hidden",true);
+        selectedCustomer.text('Selected: ' + selectedOptionText);
+        selectedCustomer.removeAttr('hidden');
+        changeCustomerButton.removeAttr('hidden');
+        customerId.attr('value', value);
+        dateSelector.css('margin', '5px 0 5px 0');
+    }
+}
+
+function changeCustomerClick(e) {
+    let inputField = $('#customer-search-field');
+    let selectedCustomer = $('#selected-customer');
+    let customerId = $('#selected-customer-id');
+    let changeCustomerButton = $('#change-customer-button');
+    let dateSelector = $('#add-schedule-date');
+
+
+    inputField.removeAttr('hidden');
+    selectedCustomer.attr('hidden', true);
+    changeCustomerButton.attr('hidden', true);
+    customerId.attr('value', '');
+    inputField.text('');
+    inputField.val('');
+    dateSelector.css('margin', '15px 0 19px 0');
+}
+
+function quickScheduleClick(e) {
+    let scheduledDate = document.getElementById("add-schedule-date") == null ? "":
+        document.getElementById("add-schedule-date").value;
+    let customerId = $('#selected-customer-id').val();
+    let appointmentId;
+
+    if (scheduledDate !== '' && customerId !== '') {
+        let url = "/appointments/add?scheduledDate=" + scheduledDate + "&cost=0";
+        let customerUrl;
+        console.log("url: " + url);
+
+
+        fetch(url, {
+            method: 'POST'
+        })
+            .then(response => response.text())
+            .then(data => {
+                appointmentId = data;
+                console.log(appointmentId);
+                customerUrl = '/appointments/update/' + data + '/select-customer?customerId=' + customerId;
+            })
+            .then(something => {
+                fetch(customerUrl, {
+                    method: 'POST'
+                })
+                    .then(response => {
+                    })
+                    .catch(error => {
+                        alert("There was an issue with the fetch request.")
+                    });
+            })
+            .catch(error => {
+                alert("There was an issue with the fetch request.")
+            });
+    }
+}

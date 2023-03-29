@@ -77,7 +77,7 @@ public class JobController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addJob(
-            @RequestParam(value = "cost", required = false) double cost,
+            @RequestParam(value = "cost", required = true) double cost,
             @RequestParam(value = "location", required = false) String location,
             @RequestParam(value = "scheduledDate", required = false) String scheduledDate,
             @RequestParam(value = "startTime", required = false) String startTime,
@@ -92,10 +92,6 @@ public class JobController {
         jobRequest.setScheduledDate(scheduledDate);
         jobRequest.setStartTime(startTime);
         jobRequest.setEndTime(endTime);
-
-        if(ValidationHelpers.isNull(jobRequest)) {
-            throw new PlsRequestException("Request must contain customer id");
-        }
 
         Result result = jobService.createJob(jobRequest);
 
