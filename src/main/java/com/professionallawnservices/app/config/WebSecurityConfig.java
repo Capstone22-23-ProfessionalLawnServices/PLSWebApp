@@ -46,12 +46,13 @@ public class WebSecurityConfig {
          */
 
         String[] highPages = {
-                "/add-appointment**",
-                "/add-contact**",
-                "/appointments**",
-                "/contacts**",
-                "/statistics**",
-                "/manager**"
+                "/add-appointment/**",
+                "/add-contact/**",
+                "/appointments/**",
+                "/contacts/**",
+                "/customers/**",
+                "/statistics/**",
+                "/manager/**"
         };
 
         //Added .cors().and().csrf().disable() to allow for post requests
