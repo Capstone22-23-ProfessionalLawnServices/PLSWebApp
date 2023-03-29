@@ -139,7 +139,6 @@ function drop(e) {
     let jobId = jobButtonId.substring((jobButtonId.indexOf('_') + 1), jobButtonId.length);
 
     let url = "/home/reschedule?jobId=" + jobId + "&scheduleDate=" + dateFormatted;
-    //console.log(new Date().getDate() === date.getDate());
 
 
 
@@ -374,7 +373,16 @@ function quickScheduleClick(e) {
     if (scheduledDate !== '' && customerId !== '') {
         let url = "/appointments/add?scheduledDate=" + scheduledDate + "&cost=0";
         let customerUrl;
-        console.log("url: " + url);
+        let currentDate = new Date();
+        currentDate.setHours(0);
+        currentDate.setMinutes(0);
+        currentDate.setSeconds(0);
+        let plannedDate = new Date(scheduledDate);
+        plannedDate.setHours(0);
+        plannedDate.setMinutes(0);
+        plannedDate.setSeconds(0);
+        plannedDate.setDate(plannedDate.getDate() + 1);
+        let value;
 
 
         fetch(url, {
@@ -383,14 +391,55 @@ function quickScheduleClick(e) {
             .then(response => response.text())
             .then(data => {
                 appointmentId = data;
-                console.log(appointmentId);
                 customerUrl = '/appointments/update/' + data + '/select-customer?customerId=' + customerId;
+                value = data;
             })
             .then(something => {
                 fetch(customerUrl, {
                     method: 'POST'
                 })
-                    .then(response => {
+                    .then(response => response.text())
+                    .then(data => {
+                            let timeDifference = Math.abs(plannedDate - currentDate);
+                            let daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+                            if (plannedDate.getUTCDate() === currentDate.getUTCDate()) {
+                                daysDifference = 0;
+                            }
+
+                            if (daysDifference < 12) {
+                                let appointmentDiv = "<button id='job_" + appointmentId +
+                                    "' class='content-module' draggable='true' ondragstart='drag(event)'" +
+                                    " onclick='appointmentClick(event)'>" +
+                                    "<input value='"+ value + "' hidden/>" +
+                                    "<span>" + data + "</span>" +
+                                    "</button>";
+
+                                let appointmentDivId = 'job_' + appointmentId;
+                                let containerId = "day-" + daysDifference + "-content";
+                                let container = $('#' + containerId);
+                                container.append(appointmentDiv);
+
+                                if(container.parent().parent().css("background-color") === "rgb(235, 170, 61)") {
+                                    $("#" + appointmentDivId).css("background-color",
+                                        "#FFE5B8");
+                                }
+                                else if(container.parent().parent().css("background-color") === "rgb(42, 151, 147)") {
+                                    $("#" + appointmentDivId).css("background-color",
+                                        "#B1E1DF");
+                                }
+                                else {
+                                    $("#" + appointmentDivId).css("background-color",
+                                        "#6D98AB");
+                                }
+
+                                changeCustomerClick(e);
+
+                                if (daysDifference === 0) {
+                                    addAppointmentToClientList('job_' + appointmentId);
+                                }
+
+                            }
                     })
                     .catch(error => {
                         alert("There was an issue with the fetch request.")
@@ -399,5 +448,8 @@ function quickScheduleClick(e) {
             .catch(error => {
                 alert("There was an issue with the fetch request.")
             });
+    }
+    else{
+        alert("A customer must be selected from the dropdown and a date must be entered.");
     }
 }

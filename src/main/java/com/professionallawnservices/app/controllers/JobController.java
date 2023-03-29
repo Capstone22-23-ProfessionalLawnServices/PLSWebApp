@@ -252,7 +252,9 @@ public class JobController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return ResponseEntity.ok("Successfully added customer");
+        Job job = (Job) result.getData();
+
+        return ResponseEntity.ok(job.getCustomer().getCustomerName());
     }
 
     @PostMapping("/delete/{id}")
