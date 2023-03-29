@@ -13,7 +13,7 @@
   <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
   <script th:src="@{/js/home.js}" src="../static/js/home.js"></script>
 </head>
-<body onload="timeClock(); setDates(); loadNavbar()">
+<body onload="timeClock(); setDates()">
 <div class="overlay">
 
   <div id="navbar-insert" th:insert="elements/_navbar.html::#navbar-container">
@@ -28,18 +28,34 @@
           <div class="primary-column-header">Clock</div>
           <time id="clock-numbers"> Time</time>
           <div class="inner-clock-client">
-            <label id="client-list-label" for="client-list">Choose a client:</label>
-            <select name="people" id="client-list">
-              <!-- Tom is a hardcoded example -->
-              <option value="volvo">Tom</option>
+            <label id="client-list-label" for="client-list" th:hidden="${activeJob != null}">Choose a client:</label>
+            <div class="clear"></div>
+            <select name="people" id="client-list" th:hidden="${activeJob != null}">
+              <option th:each="job : ${calendarJobs.get(0)}" th:value="${job.jobId}" th:if="${job.customer != null}"
+                      th:text="${job.customer?.customerName}"></option>
+              <option th:each="job : ${calendarJobs.get(0)}" th:value="${job.jobId}" th:if="${job.customer == null}"
+                      th:text="${'Appointment: ' + job.jobId}"></option>
             </select>
-            <label id="active-client-label" for="active-client">Active client:</label>
-            <span id="active-client">Tom</span>
+            <label id="active-client-label" for="active-client" th:hidden="${activeJob == null}">Active client:</label>
+            <span th:id="active-client" th:if="${activeJob != null && activeJob.customer != null}"
+                  th:hidden="${activeJob == null}"
+                  th:text="${activeJob == null} ? '' : ${activeJob.customer.customerName}">
+            </span>
+            <span th:id="active-client" th:hidden="${activeJob == null}"
+                  th:if="${activeJob != null && activeJob.customer == null}"
+                  th:text="${activeJob == null} ? '' : ${'Appointment ' + activeJob.jobId}">
+            </span>
+            <span th:id="active-client" th:hidden="${activeJob == null}" th:if="${activeJob == null}" th:text="''">
+            </span>
+            <input id="active-client-id" hidden="true"
+                   th:value="${activeJob == null} ? '' : ${activeJob.jobId}"/>
           </div>
         </div>
         <div class="inner-clock-buttons">
-          <button id="start-session-button" class="btn btn-primary default-btn" onclick="startSession()" type="submit">Start Session</button>
-          <button id="end-session-button" class="btn btn-primary" onclick="endSession()" type="submit">End Current Session</button>
+          <button id="start-session-button" class="btn btn-primary default-btn" onclick="startSession()"
+                  th:hidden="${activeJob != null}" type="submit">Start Session</button>
+          <button id="end-session-button" class="btn btn-primary default-btn" onclick="endSession()"
+                  th:hidden="${activeJob == null}" type="submit">End Current Session</button>
         </div>
       </div>
 
@@ -47,22 +63,30 @@
         <div class="inner-date-column">
           <div id="day-0" class="date-header"> Date 0 </div>
           <div id="day-0-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button id="weather-module-day-0" class="content-module" th:if="${weatherZero != null}"
+            <button id="weather-module-day-0" class="content-module" th:if="${weatherArrayList.get(0) != null}"
                     onclick="moduleInfo(event)" type="button">Weather</button>
-            <div id="weather-module-day-0-info" class="module-info" th:if="${weatherZero != null}">
+            <div id="weather-module-day-0-info" class="module-info" th:if="${weatherArrayList.get(0) != null}">
               <ul>
-                <li><span th:text="${'High: ' + weatherZero.getHigh()}">High: </span></li>
-                <li><span th:text="${'Low: ' + weatherZero.getLow()}">Low: </span></li>
-                <li><span th:text="${'Humidity: ' + weatherZero.getHumidity()}">Humidity: </span></li>
-                <li><span th:text="${'Description: ' + weatherZero.getDescription()}">Description: </span></li>
+                <li><span th:text="${'High: ' +  weatherArrayList.get(0).getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' +  weatherArrayList.get(0).getLow()}">Low: </span></li>
+                <li><span th:text="${'Humidity: ' +  weatherArrayList.get(0).getHumidity()}">Humidity: </span></li>
+                <li><span th:text="${'Description: ' +  weatherArrayList.get(0).getDescription()}">Description: </span></li>
               </ul>
             </div>
-            <!-- Tom is a hardcoded example -->
-              <button id="861561-11" class="content-module" draggable="true" ondragstart="drag(event)">
-                <div>
-                  <span>Tom</span>
-                </div>
-              </button>
+
+            <!--
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(0)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)">
+              <input th:value="${job.jobId}" hidden="hidden"/>
+              <span th:text="${job.customer?.customerName}" th:if="${job.customer !=null}"></span>
+              <span th:text="${'Appointment' + job.jobId}" th:if="${job.customer ==null}"></span>
+            </button>
+            -->
+
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(0)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>
           </div>
         </div>
       </div>
@@ -75,12 +99,16 @@
                     class="content-module" onclick="moduleInfo(event)">Weather</button>
             <div id="weather-module-day-1-info" class="module-info">
               <ul>
-                <li><span th:text="${'High: ' + weatherOne.getHigh()}">High: </span></li>
-                <li><span th:text="${'Low: ' + weatherOne.getLow()}">Low: </span></li>
-                <li><span th:text="${'Humidity: ' + weatherOne.getHumidity()}">Humidity: </span></li>
-                <li><span th:text="${'Description: ' + weatherOne.getDescription()}">Description: </span></li>
+                <li><span th:text="${'High: ' + weatherArrayList.get(1).getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' +  weatherArrayList.get(1).getLow()}">Low: </span></li>
+                <li><span th:text="${'Humidity: ' +  weatherArrayList.get(1).getHumidity()}">Humidity: </span></li>
+                <li><span th:text="${'Description: ' +  weatherArrayList.get(1).getDescription()}">Description: </span></li>
               </ul>
             </div>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(1)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>
           </div>
         </div>
       </div>
@@ -93,12 +121,16 @@
                     class="content-module" onclick="moduleInfo(event)">Weather</button>
             <div id="weather-module-day-2-info" class="module-info">
               <ul>
-                <li><span th:text="${'High: ' + weatherTwo.getHigh()}">High: </span></li>
-                <li><span th:text="${'Low: ' + weatherTwo.getLow()}">Low: </span></li>
-                <li><span th:text="${'Humidity: ' + weatherTwo.getHumidity()}">Humidity: </span></li>
-                <li><span th:text="${'Description: ' + weatherTwo.getDescription()}">Description: </span></li>
+                <li><span th:text="${'High: ' +  weatherArrayList.get(2).getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' +  weatherArrayList.get(2).getLow()}">Low: </span></li>
+                <li><span th:text="${'Humidity: ' +  weatherArrayList.get(2).getHumidity()}">Humidity: </span></li>
+                <li><span th:text="${'Description: ' +  weatherArrayList.get(2).getDescription()}">Description: </span></li>
               </ul>
             </div>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(2)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>
           </div>
         </div>
       </div>
@@ -111,12 +143,16 @@
                     class="content-module" onclick="moduleInfo(event)">Weather</button>
             <div id="weather-module-day-3-info" class="module-info">
               <ul>
-                <li><span th:text="${'High: ' + weatherThree.getHigh()}">High: </span></li>
-                <li><span th:text="${'Low: ' + weatherThree.getLow()}">Low: </span></li>
-                <li><span th:text="${'Humidity: ' + weatherThree.getHumidity()}">Humidity: </span></li>
-                <li><span th:text="${'Description: ' + weatherThree.getDescription()}">Description: </span></li>
+                <li><span th:text="${'High: ' +  weatherArrayList.get(3).getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' +  weatherArrayList.get(3).getLow()}">Low: </span></li>
+                <li><span th:text="${'Humidity: ' +  weatherArrayList.get(3).getHumidity()}">Humidity: </span></li>
+                <li><span th:text="${'Description: ' +  weatherArrayList.get(3).getDescription()}">Description: </span></li>
               </ul>
             </div>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(3)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>
           </div>
         </div>
       </div>
@@ -128,7 +164,10 @@
       <div class="column col-lg-3 text-center">
         <div class="inner-add">
           <div id="add-header" class="primary-column-header">Quick Add</div>
-          <input type="text" class="inner-add-elements" placeholder="Search Contacts">
+          <input type="text" class="inner-add-elements" placeholder="Search Contacts" id="customer-search-field"
+                 list="customer-search-results" onkeyup="searchCustomerOnType()">
+          <datalist id="customer-search-results">
+          </datalist>
           <div class="clear inner-add-elements"></div>
           <input type="date" id="add-schedule-date">
           <div class="clear inner-add-elements"></div>
@@ -144,13 +183,16 @@
                     class="content-module" onclick="moduleInfo(event)">Weather</button>
             <div id="weather-module-day-4-info" class="module-info">
               <ul>
-                <li><span th:text="${'High: ' + weatherFour.getHigh()}">High: </span></li>
-                <li><span th:text="${'Low: ' + weatherFour.getLow()}">Low: </span></li>
-                <li><span th:text="${'Humidity: ' + weatherFour.getHumidity()}">Humidity: </span></li>
-                <li><span th:text="${'Description: ' + weatherFour.getDescription()}">Description: </span></li>
+                <li><span th:text="${'High: ' +  weatherArrayList.get(4).getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' +  weatherArrayList.get(4).getLow()}">Low: </span></li>
+                <li><span th:text="${'Humidity: ' +  weatherArrayList.get(4).getHumidity()}">Humidity: </span></li>
+                <li><span th:text="${'Description: ' +  weatherArrayList.get(4).getDescription()}">Description: </span></li>
               </ul>
             </div>
-          </div>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(4)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>          </div>
         </div>
       </div>
 
@@ -162,12 +204,16 @@
                     class="content-module" onclick="moduleInfo(event)">Weather</button>
             <div id="weather-module-day-5-info" class="module-info">
               <ul>
-                <li><span th:text="${'High: ' + weatherFive.getHigh()}">High: </span></li>
-                <li><span th:text="${'Low: ' + weatherFive.getLow()}">Low: </span></li>
-                <li><span th:text="${'Humidity: ' + weatherFive.getHumidity()}">Humidity: </span></li>
-                <li><span th:text="${'Description: ' + weatherFive.getDescription()}">Description: </span></li>
+                <li><span th:text="${'High: ' +  weatherArrayList.get(5).getHigh()}">High: </span></li>
+                <li><span th:text="${'Low: ' +  weatherArrayList.get(5).getLow()}">Low: </span></li>
+                <li><span th:text="${'Humidity: ' +  weatherArrayList.get(5).getHumidity()}">Humidity: </span></li>
+                <li><span th:text="${'Description: ' +  weatherArrayList.get(5).getDescription()}">Description: </span></li>
               </ul>
             </div>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(5)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>
           </div>
         </div>
       </div>
@@ -176,7 +222,10 @@
         <div class="inner-date-column">
           <div id="day-6" class="date-header"> Date 6 </div>
           <div id="day-6-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(6)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>
           </div>
         </div>
       </div>
@@ -185,7 +234,10 @@
         <div class="inner-date-column">
           <div id="day-7" class="date-header"> Date 7 </div>
           <div id="day-7-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(7)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>
           </div>
         </div>
       </div>
@@ -198,11 +250,8 @@
         <div class="inner-add">
           <div id="missed-header" class="primary-column-header">Missed Appointments</div>
           <div id="missed-content">
-            <!-- Tom is a hardcoded example -->
-            <button id="86151-11" class="content-module" draggable="true" ondragstart="drag(event)">
-              <div>
-                <span>Tom</span>
-              </div>
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${missedJobs}" class="content-module"
+                    draggable="true" ondragstart="drag(event)" th:insert="elements/_calendar-jobs.html">
             </button>
           </div>
         </div>
@@ -212,7 +261,10 @@
         <div class="inner-date-column">
           <div id="day-8" class="date-header"> Date 8 </div>
           <div id="day-8-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(8)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>
           </div>
         </div>
       </div>
@@ -221,7 +273,10 @@
         <div class="inner-date-column">
           <div id="day-9" class="date-header"> Date 9 </div>
           <div id="day-9-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(9)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>
           </div>
         </div>
       </div>
@@ -230,7 +285,10 @@
         <div class="inner-date-column">
           <div id="day-10" class="date-header"> Date 10 </div>
           <div id="day-10-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(10)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>
           </div>
         </div>
       </div>
@@ -239,7 +297,10 @@
         <div class="inner-date-column">
           <div id="day-11" class="date-header"> Date 11 </div>
           <div id="day-11-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-
+            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(11)}"
+                    class="content-module" draggable="true" ondragstart="drag(event)"
+                    th:insert="elements/_calendar-jobs.html" onclick="appointmentClick(event)">
+            </button>
           </div>
         </div>
       </div>

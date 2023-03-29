@@ -187,6 +187,7 @@ public class JobController {
         model.addAttribute("selectSearch", "SELECT");
         model.addAttribute("contacts", contacts);
         model.addAttribute("jobId", id);
+        model.addAttribute("pageNumber", 0);
 
         return "contacts";
     }
@@ -233,6 +234,7 @@ public class JobController {
         model.addAttribute("customers", customers);
         model.addAttribute("job", job);
         model.addAttribute("searchSelect", "SELECT");
+        model.addAttribute("pageNumber", 0);
 
         return "customers";
     }

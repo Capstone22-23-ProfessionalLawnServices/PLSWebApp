@@ -65,7 +65,6 @@ public class ContactController {
         model.addAttribute("contactRequest", new ContactRequest());
         model.addAttribute("addUpdate", "ADD");
 
-
         return "alter-contact";
     }
 
@@ -172,6 +171,8 @@ public class ContactController {
         ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
 
         model.addAttribute("contacts", contacts);
+        model.addAttribute("selectSearch", "SEARCH");
+        model.addAttribute("pageNumber", "0");
         model.addAttribute("contact", new ContactRequest());
 
         return "contacts";

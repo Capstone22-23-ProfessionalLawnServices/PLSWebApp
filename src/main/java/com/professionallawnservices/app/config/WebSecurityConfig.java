@@ -45,7 +45,7 @@ public class WebSecurityConfig {
         Contains the pages that only users with the manager role can access.
          */
 
-        String[] managerPages = {
+        String[] highPages = {
                 "/add-appointment**",
                 "/add-contact**",
                 "/appointments**",
@@ -60,7 +60,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         //.antMatchers("/**").permitAll() //Allows access to pages without logging in
                         .antMatchers(staticResources).permitAll()
-                        .antMatchers(managerPages).hasRole("MANAGER")
+                        .antMatchers(highPages).hasAnyRole("MANAGER", "ADMIN", "OWNER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

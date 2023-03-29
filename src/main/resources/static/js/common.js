@@ -13,10 +13,6 @@ function navbarDropdown(e) {
     }
 }
 
-function loadNavbar() {
-    $('#navbar-insert').load("html-elements.html");
-}
-
 function formClear() {
     $(':input','#add-form').not(':button, :submit, :reset, :hidden').val('');
 }
@@ -56,3 +52,9 @@ function removeParameters(url) {
     console.log(url);
     return url.substring(0, url.indexOf('?'));
 }
+
+/*
+function loadNavbar() {
+    $('#navbar-insert').load("html-elements.html");
+}
+ */

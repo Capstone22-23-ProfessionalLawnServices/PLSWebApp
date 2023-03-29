@@ -1,3 +1,7 @@
+html {
+    height: 90% !important;
+}
+
 .primary-column-header {
     font-size: 25px;
     background-color: black;
@@ -56,7 +60,7 @@
 }
 
 .inner-clock-client {
-    padding-top: 15px;
+    padding-top: 5px;
 }
 
 .module-info {
@@ -75,6 +79,7 @@
 .inner-clock-buttons {
     background-color: white;
     height: 30%;
+    padding-top: 15px;
 }
 
 
@@ -107,17 +112,6 @@ h2 {
 }
 
 #resume-session-button {
-    display: none;
-}
-
-#end-session-button {
-    display: none;
-}
-
-#active-client {
-    display: none;
-}
-#active-client-label {
     display: none;
 }
 

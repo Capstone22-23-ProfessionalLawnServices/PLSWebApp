@@ -140,6 +140,10 @@ public class Job {
         this.customer = customer;
     }
 
+    public void setScheduledDateFromString(String scheduledDateString) {
+        scheduledDate = DateHelper.stringToSqlDate(scheduledDateString);
+    }
+
     /*
     public ArrayList<Contact> getContacts() {
         return contacts;
