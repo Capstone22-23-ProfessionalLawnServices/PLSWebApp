@@ -13,6 +13,7 @@ import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.services.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,7 @@ public class HomeController {
     }
 
     @PostMapping("/reschedule")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER', 'ROLE_ADMIN')")
     public ResponseEntity<String> rescheduleJob(
             @RequestParam(value = "jobId",required = true) long jobId,
             @RequestParam(value = "scheduleDate", required = true) String scheduleDate
@@ -68,6 +70,7 @@ public class HomeController {
     }
 
     @PostMapping("/start-session")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_MANAGER', 'ROLE_OWNER', 'ROLE_ADMIN')")
     public ResponseEntity<String> startJobSession(
             @RequestParam(value = "jobId",required = true) long jobId
     )
@@ -86,6 +89,7 @@ public class HomeController {
     }
 
     @PostMapping("/end-session")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_MANAGER', 'ROLE_OWNER', 'ROLE_ADMIN')")
     public ResponseEntity<String> endJobSession(
             @RequestParam(value = "jobId",required = true) long jobId
     )
@@ -104,6 +108,7 @@ public class HomeController {
     }
 
     @PostMapping("/search-customers")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER', 'ROLE_ADMIN')")
     public ResponseEntity<ArrayList<Customer>> endJobSession(
             @RequestParam(value = "customerName",required = true) String customerName
     )
@@ -123,6 +128,5 @@ public class HomeController {
 
         return ResponseEntity.ok(customerArrayList);
     }
-
 
 }

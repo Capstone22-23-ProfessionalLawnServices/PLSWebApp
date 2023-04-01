@@ -7,16 +7,13 @@ should be of the request type (i.e. UserRequest) and not of data models, unless 
 endpoints should be of the data model type and not the request type, unless request form data is being sent.
  */
 
-import com.professionallawnservices.app.enums.RolesEnum;
 import com.professionallawnservices.app.exceptions.PlsRequestException;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
-import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.request.UserRequest;
 import com.professionallawnservices.app.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,13 +25,13 @@ import javax.validation.Valid;
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 
 @Controller
+@RequestMapping("/account")
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/account")
-    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
+    @GetMapping("")
     public String accountView(Model model) {
 
         Result result = accountService.accountView();
@@ -53,7 +50,8 @@ public class AccountController {
         return "alter-account";
     }
 
-    @PostMapping("/update-account")
+    @PostMapping("/update")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
     public String updateAccount(
             @ModelAttribute("userRequest") @Valid UserRequest userRequest,
             BindingResult bindingResult
@@ -83,7 +81,8 @@ public class AccountController {
         return "redirect:/account";
     }
 
-    @GetMapping("/add-account")
+    @GetMapping("/add")
+    @PreAuthorize("hasAnyRole('ROLE_OWNER','ROLE_ADMIN')")
     public String addAccountView(Model model) {
 
         UserRequest userRequest = new UserRequest();
@@ -94,7 +93,8 @@ public class AccountController {
         return "alter-account";
     }
 
-    @PostMapping("/add-account")
+    @PostMapping("/add")
+    @PreAuthorize("hasAnyRole('ROLE_OWNER','ROLE_ADMIN')")
     public String addAccount(@ModelAttribute("userRequest") UserRequest userRequest) {
         if(
                 ValidationHelpers.isNull(userRequest)
@@ -112,13 +112,14 @@ public class AccountController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/add-contact";
+        return "redirect:/account/update";
     }
 
     /*
     The rest methods are intended for use with a api application like Postman and not with webpages.
      */
 
+    /*
     @PostMapping("/rest/create-account")
     public ResponseEntity<String> createAccountRest(
             @RequestBody @Valid UserRequest userRequest,
@@ -187,4 +188,6 @@ public class AccountController {
 
         return ResponseEntity.ok("Account successfully deleted");
     }
+
+     */
 }

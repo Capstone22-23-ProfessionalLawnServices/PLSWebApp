@@ -146,6 +146,7 @@ function drop(e) {
         method: 'POST'
     })
         .then(response => {
+            console.log(response);
             //Moves div from one container to another
             let data = e.dataTransfer.getData("text");
             let targetContainer = e.target;
@@ -354,7 +355,6 @@ function changeCustomerClick(e) {
     let changeCustomerButton = $('#change-customer-button');
     let dateSelector = $('#add-schedule-date');
 
-
     inputField.removeAttr('hidden');
     selectedCustomer.attr('hidden', true);
     changeCustomerButton.attr('hidden', true);
@@ -452,4 +452,23 @@ function quickScheduleClick(e) {
     else{
         alert("A customer must be selected from the dropdown and a date must be entered.");
     }
+}
+
+//Adds appropriate space if the employee calendar is loaded
+
+function setDateSpacing() {
+    let quickAddHeader = $('#add-header');
+
+    if (quickAddHeader.length === 0) {
+
+        let dayDiv = $('#day-4').parent().parent();
+        dayDiv.css({"margin": "10px 19px 5px 10px"});
+
+        for (let i = 5; i < 9; i++) {
+            dayDiv = $('#day-' + i).parent().parent();
+            dayDiv.css({"margin": "10px 19px 5px 19px"});
+        }
+
+    }
+
 }

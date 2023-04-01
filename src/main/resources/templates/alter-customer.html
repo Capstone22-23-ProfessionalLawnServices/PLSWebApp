@@ -24,7 +24,7 @@
     <div class="row justify-content-center">
       <div class="col-lg-6">
 
-        <form th:id="add-form" action="#" th:action="@{/add-customer}" th:if="${addUpdate == 'ADD'}"
+        <form th:id="add-form" action="#" th:action="@{/customers/add}" th:if="${addUpdate == 'ADD'}"
               th:object="${customerRequest}" method="post">
 
           <div th:insert="elements/_alter-customer-form.html::#customer-form-contents">
@@ -32,7 +32,7 @@
 
         </form>
 
-        <form th:id="add-form" action="#" th:action="@{/update-customer/{id}(id=${id})}"
+        <form th:id="add-form" action="#" th:action="@{/customers/update/{id}(id=${id})}"
               th:if="${addUpdate == 'UPDATE'}" th:object="${customerRequest}" method="post">
 
           <div th:insert="elements/_alter-customer-form.html::#customer-form-contents">

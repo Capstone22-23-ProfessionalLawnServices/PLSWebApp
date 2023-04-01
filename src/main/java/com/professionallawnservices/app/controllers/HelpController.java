@@ -26,14 +26,15 @@ import java.util.ArrayList;
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 
 @Controller
+@RequestMapping("/help")
 public class HelpController {
 
     @Autowired
     HelpService helpService;
 
-    @PostMapping("/update-appointment/{id}/delete-help")
+    @PostMapping("/delete")
     public ResponseEntity<String> deleteHelp(
-            @PathVariable(value = "id",required = true) long jobId,
+            @RequestParam(value = "jobId",required = true) long jobId,
             @RequestParam(value = "contactId", required = true) Long contactId,
             Model model
     )

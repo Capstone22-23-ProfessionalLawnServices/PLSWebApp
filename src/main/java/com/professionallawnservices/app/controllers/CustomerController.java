@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import static com.professionallawnservices.app.enums.RolesEnum.*;
 
 @Controller
+@RequestMapping("/customers")
 public class CustomerController {
 
     @Autowired
@@ -37,7 +38,7 @@ public class CustomerController {
 
     private static final String managerRole = MANAGER.roleName;
 
-    @GetMapping("/customers")
+    @GetMapping("")
     public String customersView(
             Pageable pageable,
             Model model
@@ -64,7 +65,7 @@ public class CustomerController {
         return "customers";
     }
 
-    @GetMapping("/add-customer")
+    @GetMapping("/add")
     public String addCustomerView(Model model) {
 
         CustomerRequest customerRequest = new CustomerRequest();
@@ -74,8 +75,8 @@ public class CustomerController {
         return "alter-customer";
     }
 
-    @PostMapping("/add-customer")
-    public RedirectView addCustomer(
+    @PostMapping("/add")
+    public String addCustomer(
             @Valid @ModelAttribute("customerRequest") CustomerRequest customerRequest,
             BindingResult bindingResult
     )
@@ -99,10 +100,10 @@ public class CustomerController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return new RedirectView("/add-customer");
+        return "redirect:/customers/add";
     }
 
-    @GetMapping("/update-customer/{id}")
+    @GetMapping("/update/{id}")
     public String updateCustomerView(
             @PathVariable("id") long id,
             Model model
@@ -127,7 +128,7 @@ public class CustomerController {
         return "alter-customer";
     }
 
-    @PostMapping("/update-customer/{id}")
+    @PostMapping("/update/{id}")
     public String updateCustomer(
             @PathVariable(value = "id",required = true) long id,
             @ModelAttribute("customerRequest") CustomerRequest customerRequest,
@@ -150,10 +151,10 @@ public class CustomerController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/update-customer/" + id;
+        return "redirect:/customers/update/" + id;
     }
 
-    @PostMapping("/delete-customer/{id}")
+    @PostMapping("/delete/{id}")
     public ResponseEntity<String> deleteCustomer(
             @PathVariable(value = "id",required = true) long id,
             Model model
@@ -166,7 +167,7 @@ public class CustomerController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return ResponseEntity.ok("/customers");
+        return ResponseEntity.ok("");
     }
 
 }
