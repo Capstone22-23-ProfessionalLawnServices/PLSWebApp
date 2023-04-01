@@ -27,12 +27,13 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 
 @Controller
+@RequestMapping("/contacts")
 public class ContactController {
 
     @Autowired
     ContactService contactService;
 
-    @GetMapping("/contacts")
+    @GetMapping("")
     public String contactsView(
             Pageable pageable,
             Model model
@@ -59,7 +60,7 @@ public class ContactController {
         return "contacts";
     }
 
-    @GetMapping("/add-contact")
+    @GetMapping("/add")
     public String addContactView(Model model) {
 
         model.addAttribute("contactRequest", new ContactRequest());
@@ -68,7 +69,7 @@ public class ContactController {
         return "alter-contact";
     }
 
-    @PostMapping("/add-contact")
+    @PostMapping("/add")
     public String addContact(@ModelAttribute("contactRequest") ContactRequest contactRequest) {
         if(
                 ValidationHelpers.isNull(contactRequest)
@@ -84,10 +85,10 @@ public class ContactController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/add-contact";
+        return "redirect:/contacts/add";
     }
 
-    @GetMapping("/update-contact/{id}")
+    @GetMapping("/update/{id}")
     public String updateContactView(
             @PathVariable(value = "id", required = true) long id,
             Model model
@@ -111,7 +112,7 @@ public class ContactController {
         return "alter-contact";
     }
 
-    @PostMapping("/update-contact/{id}")
+    @PostMapping("/update/{id}")
     public String updateContact(
             @PathVariable(value = "id",required = true) long id,
             @ModelAttribute("contactRequest") ContactRequest contactRequest,
@@ -137,7 +138,7 @@ public class ContactController {
         return "redirect:/update-contact/" + id;
     }
 
-    @PostMapping("/delete-contact/{id}")
+    @PostMapping("/delete/{id}")
     public ResponseEntity<String> deleteContact(
             @PathVariable(value = "id",required = true) long id,
             Model model
@@ -150,10 +151,11 @@ public class ContactController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return ResponseEntity.ok("/contacts");
+        return ResponseEntity.ok("");
     }
 
-    @GetMapping("/search-contacts")
+    /*
+    @GetMapping("/search")
     public String getEmployeeByName(
             @RequestParam(value = "name", required = true) String name,
             Model model
@@ -177,6 +179,7 @@ public class ContactController {
 
         return "contacts";
     }
+    */
 
     /*
     The rest methods are intended for use with a api application like Postman and not with webpages.
@@ -198,7 +201,7 @@ public class ContactController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/add-contact";
+        return "redirect:/contacts/add";
     }
          */
 

@@ -140,7 +140,7 @@ function removeContactClick(e) {
     let contactId = e.target.parentNode.getAttribute("value");
     let jobId = document.getElementById("jobId").getAttribute("value");
 
-    let url = "/appointments/update/" + jobId + "/delete-help?contactId=" + contactId;
+    let url = "/help/delete?jobId=" + jobId + "&contactId=" + contactId;
 
     fetch(url, {
         method: 'POST'

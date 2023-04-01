@@ -45,14 +45,12 @@ public class WebSecurityConfig {
         Contains the pages that only users with the manager role can access.
          */
 
-        String[] highPages = {
-                "/add-appointment/**",
-                "/add-contact/**",
+        String[] managerPages = {
                 "/appointments/**",
                 "/contacts/**",
                 "/customers/**",
-                "/statistics/**",
-                "/manager/**"
+                "/help/**",
+                "/statistics/**"
         };
 
         //Added .cors().and().csrf().disable() to allow for post requests
@@ -61,7 +59,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         //.antMatchers("/**").permitAll() //Allows access to pages without logging in
                         .antMatchers(staticResources).permitAll()
-                        .antMatchers(highPages).hasAnyRole("MANAGER", "ADMIN", "OWNER")
+                        .antMatchers(managerPages).hasAnyRole("MANAGER", "ADMIN", "OWNER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -79,17 +77,10 @@ public class WebSecurityConfig {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
         jdbcUserDetailsManager.setDataSource(dataSource);
 
-
 /*
-        jdbcUserDetailsManager.createUser(User.withUsername("3").password(passwordEncoder().encode("3"))
+        jdbcUserDetailsManager.createUser(User.withUsername("admin").password(passwordEncoder().encode("password"))
                .authorities("ROLE_OWNER").build());
-
-        userDetails.createUser(User.withUsername("2").password(SecurityHelpers.passwordEncoder().encode("2"))
-               .authorities("ROLE_EMPLOYEE", "ROLE_USER").build());
-
-         */
-
-
+*/
 
         return jdbcUserDetailsManager;
     }

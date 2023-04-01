@@ -1,7 +1,15 @@
 function deleteContact(e) {
     let contactId = document.getElementById("contactId").getAttribute("value");
 
-    let url = ("/delete-contact/" + contactId);
+    let url = ("/contacts/delete/" + contactId);
 
-    window.location.href = $.ajax({type: "POST", url: url, async: false}).responseText;
+    fetch(url, {
+        method: 'POST'
+    })
+        .then(response => {
+            window.location.href = "/contacts";
+        })
+        .catch(error => {
+            alert("There was an issue with the fetch request.")
+        });
 }

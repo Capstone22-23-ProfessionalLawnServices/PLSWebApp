@@ -36,14 +36,16 @@
             <input type="password" id="old-password" th:field="*{password}" class="form-control form-input"
                    required="required">
   -->
-  <label for="new-password" class="form-label">New Password:</label>
-  <input type="password" id="new-password" th:field="*{newPassword}" class="form-control form-input"
-         pattern="(?=(.*[0-9]))((?=.*[A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z]))^.{8,}$" required="required">
-  <label for="role" class="form-label">Role:</label>
+  <label th:if="${userAccessLevel >= managerAccessLevel}" for="new-password" class="form-label">New Password:</label>
+  <input th:if="${userAccessLevel >= managerAccessLevel}" type="password" id="new-password" th:field="*{newPassword}"
+         class="form-control form-input" pattern="(?=(.*[0-9]))((?=.*[A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z]))^.{8,}$"
+         required="required">
+  <label th:if="${userAccessLevel >= managerAccessLevel}" for="role" class="form-label">Role:</label>
   <div class="clear inner-add-elements"></div>
-  <p id="role" th:text="*{role}"> </p>
+  <p th:if="${userAccessLevel >= managerAccessLevel}" id="role" th:text="*{role}"> </p>
   <div class="clear inner-add-elements"></div>
-  <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Update Password"/>
+  <input th:if="${userAccessLevel >= managerAccessLevel}" type="submit"
+         class="btn btn-primary form-submit-btn default-btn" value="Update Password"/>
 
 </div>
 
