@@ -278,7 +278,8 @@
           <div id="missed-content">
             <button th:id="${'job_' + job.jobId}" th:each="job : ${missedJobs}" class="content-module"
                     th:draggable="${userAccessLevel >= managerAccessLevel}"
-                    ondragstart="drag(event)" th:insert="elements/_calendar-jobs.html">
+                    ondragstart="drag(event)" th:insert="elements/_calendar-jobs.html"
+                    onclick="appointmentClick(event)">
             </button>
           </div>
         </div>

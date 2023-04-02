@@ -321,11 +321,16 @@ function searchCustomerOnType() {
 }
 
 function appointmentClick(e) {
-    let appointmentDiv = $('#' + e.currentTarget.id);
-    let appointmentInput = appointmentDiv.children().eq(0);
-    let appointmentId = appointmentInput.val();
+    let quickAddHeader = $('#add-header');
 
-    window.location.href = "/appointments/update/" + appointmentId;
+    //This checks whether it is the employee view
+    if (quickAddHeader.length !== 0) {
+        let appointmentDiv = $('#' + e.currentTarget.id);
+        let appointmentInput = appointmentDiv.children().eq(0);
+        let appointmentId = appointmentInput.val();
+
+        window.location.href = "/appointments/update/" + appointmentId;
+    }
 }
 
 function datalistClick(e) {

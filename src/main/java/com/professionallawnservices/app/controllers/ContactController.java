@@ -135,7 +135,7 @@ public class ContactController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/update-contact/" + id;
+        return "redirect:/contacts/update/" + id;
     }
 
     @PostMapping("/delete/{id}")

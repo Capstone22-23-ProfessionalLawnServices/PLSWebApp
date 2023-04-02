@@ -82,6 +82,13 @@ html {
     padding-top: 15px;
 }
 
+.job-div-name {
+    display: inline-block;
+    width: 7em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 
 h2 {
     margin-top: 0;
