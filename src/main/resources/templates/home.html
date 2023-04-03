@@ -183,6 +183,10 @@
         </div>
       </div>
 
+      <div class="column col-lg-3 text-center col-transparent" th:if="${!(userAccessLevel >= managerAccessLevel)}">
+
+      </div>
+
       <div class="column col-lg-2 text-center">
         <div class="inner-date-column">
           <div id="day-4" class="date-header"> Date 4 </div>
@@ -247,19 +251,6 @@
           <div id="day-7" class="date-header"> Date 7 </div>
           <div id="day-7-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
             <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(7)}"
-                    class="content-module" th:draggable="${userAccessLevel >= managerAccessLevel}"
-                    ondragstart="drag(event)" th:insert="elements/_calendar-jobs.html"
-                    onclick="appointmentClick(event)">
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="column col-lg-2 text-center" th:if="${!(userAccessLevel >= managerAccessLevel)}">
-        <div class="inner-date-column">
-          <div th:id="day-8" class="date-header"> Date 8 </div>
-          <div th:id="day-8-content" class="date-content" ondragover="allowDrop(event)" ondrop="drop(event)">
-            <button th:id="${'job_' + job.jobId}" th:each="job : ${calendarJobs.get(8)}"
                     class="content-module" th:draggable="${userAccessLevel >= managerAccessLevel}"
                     ondragstart="drag(event)" th:insert="elements/_calendar-jobs.html"
                     onclick="appointmentClick(event)">

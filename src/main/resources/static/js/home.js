@@ -460,7 +460,7 @@ function quickScheduleClick(e) {
 }
 
 //Adds appropriate space if the employee calendar is loaded
-
+/*
 function setDateSpacing() {
     let quickAddHeader = $('#add-header');
 
@@ -477,3 +477,5 @@ function setDateSpacing() {
     }
 
 }
+
+ */

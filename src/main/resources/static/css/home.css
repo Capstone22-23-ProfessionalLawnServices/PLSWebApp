@@ -63,6 +63,10 @@ html {
     padding-top: 5px;
 }
 
+.col-transparent {
+    background-color: transparent;
+}
+
 .module-info {
     background: rgba(109, 152, 171, 45%);
     border-radius: 0 0 8px 8px;
