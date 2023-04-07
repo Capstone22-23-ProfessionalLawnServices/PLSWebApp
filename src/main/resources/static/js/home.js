@@ -412,7 +412,7 @@ function quickScheduleClick(e) {
                             if (plannedDate.getUTCDate() === currentDate.getUTCDate()) {
                                 daysDifference = 0;
                             }
-                            
+
                             if (daysDifference < 12) {
                                 let appointmentDiv = "<button id='job_" + appointmentId +
                                     "' class='content-module' draggable='true' ondragstart='drag(event)'" +
