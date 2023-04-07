@@ -367,6 +367,7 @@ function changeCustomerClick(e) {
     inputField.text('');
     inputField.val('');
     dateSelector.css('margin', '15px 0 19px 0');
+    dateSelector.val('');
 }
 
 function quickScheduleClick(e) {
@@ -411,7 +412,7 @@ function quickScheduleClick(e) {
                             if (plannedDate.getUTCDate() === currentDate.getUTCDate()) {
                                 daysDifference = 0;
                             }
-
+                            
                             if (daysDifference < 12) {
                                 let appointmentDiv = "<button id='job_" + appointmentId +
                                     "' class='content-module' draggable='true' ondragstart='drag(event)'" +
@@ -423,19 +424,22 @@ function quickScheduleClick(e) {
                                 let appointmentDivId = 'job_' + appointmentId;
                                 let containerId = "day-" + daysDifference + "-content";
                                 let container = $('#' + containerId);
-                                container.append(appointmentDiv);
 
-                                if(container.parent().parent().css("background-color") === "rgb(235, 170, 61)") {
-                                    $("#" + appointmentDivId).css("background-color",
-                                        "#FFE5B8");
-                                }
-                                else if(container.parent().parent().css("background-color") === "rgb(42, 151, 147)") {
-                                    $("#" + appointmentDivId).css("background-color",
-                                        "#B1E1DF");
-                                }
-                                else {
-                                    $("#" + appointmentDivId).css("background-color",
-                                        "#6D98AB");
+                                if (plannedDate.getUTCDate() >= currentDate.getUTCDate()) {
+                                    container.append(appointmentDiv);
+
+                                    if(container.parent().parent().css("background-color") === "rgb(235, 170, 61)") {
+                                        $("#" + appointmentDivId).css("background-color",
+                                            "#FFE5B8");
+                                    }
+                                    else if(container.parent().parent().css("background-color") === "rgb(42, 151, 147)") {
+                                        $("#" + appointmentDivId).css("background-color",
+                                            "#B1E1DF");
+                                    }
+                                    else {
+                                        $("#" + appointmentDivId).css("background-color",
+                                            "#6D98AB");
+                                    }
                                 }
 
                                 changeCustomerClick(e);
