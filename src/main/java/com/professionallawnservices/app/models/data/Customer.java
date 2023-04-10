@@ -26,9 +26,6 @@ public class Customer {
     @Column(name = "customer_phone")
     private String customerPhone;
 
-    @Column(name = "customer_email")
-    private String customerEmail;
-
     @Column(name = "frequency")
     private int frequency;
 
@@ -44,7 +41,6 @@ public class Customer {
         customerName = customerRequest.getName();
         customerLocation = customerRequest.getLocation();
         customerPhone = customerRequest.getPhone();
-        customerEmail = customerRequest.getEmail();
         frequency = customerRequest.getFrequency();
     }
 
@@ -78,14 +74,6 @@ public class Customer {
 
     public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
-    }
-
-    public String getCustomerEmail() {
-        return customerEmail;
-    }
-
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
     }
 
     public int getFrequency() {

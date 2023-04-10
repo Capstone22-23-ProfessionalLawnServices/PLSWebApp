@@ -34,7 +34,6 @@ public class CustomerRequest {
         name = customer.getCustomerName();
         location = customer.getCustomerLocation();
         phone = customer.getCustomerPhone();
-        email = customer.getCustomerEmail();
         frequency = customer.getFrequency();
     }
 
