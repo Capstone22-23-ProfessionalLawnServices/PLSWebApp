@@ -137,40 +137,38 @@ function drop(e) {
     let dateFormatted = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
     let jobButtonId = e.dataTransfer.getData("text");
     let jobId = jobButtonId.substring((jobButtonId.indexOf('_') + 1), jobButtonId.length);
+    let buttonId = e.dataTransfer.getData("text");
 
     let url = "/home/reschedule?jobId=" + jobId + "&scheduleDate=" + dateFormatted;
-
-
 
     fetch(url, {
         method: 'POST'
     })
         .then(response => {
-            console.log(response);
             //Moves div from one container to another
             let data = e.dataTransfer.getData("text");
             let targetContainer = e.target;
-            let originalContainer = document.getElementById(e.dataTransfer.getData("text")).parentElement;
+            let originalContainer = document.getElementById(buttonId).parentElement;
             let targetId = "#" + targetContainer.id;
 
             try {
                 if (!($(targetId).attr("class").split(/\s+/).includes("date-content"))) {
                     targetContainer = $(targetId).parent()[0];
-                    targetContainer.appendChild(document.getElementById(data));
+                    targetContainer.appendChild($('#' + buttonId)[0]);
                 } else {
-                    targetContainer.appendChild(document.getElementById(data));
+                    targetContainer.appendChild($('#' + buttonId)[0]);
                 }
 
                 if($("#" + targetContainer.id).parent().parent().css("background-color") === "rgb(235, 170, 61)") {
-                    $("#" + document.getElementById(data).id).css("background-color",
+                    $("#" + buttonId).css("background-color",
                         "#FFE5B8");
                 }
                 else if($("#" + targetContainer.id).parent().parent().css("background-color") === "rgb(42, 151, 147)") {
-                    $("#" + document.getElementById(data).id).css("background-color",
+                    $("#" + buttonId).css("background-color",
                         "#B1E1DF");
                 }
                 else {
-                    $("#" + document.getElementById(data).id).css("background-color",
+                    $("#" + buttonId).css("background-color",
                         "#6D98AB");
                 }
 
