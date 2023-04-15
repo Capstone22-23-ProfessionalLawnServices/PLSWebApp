@@ -14,7 +14,7 @@
   <script th:src="@{/js/common.js}" src="../static/js/common.js"></script>
   <script th:src="@{/js/alter-appointment.js}" src="../static/js/alter-appointment.js"></script>
 </head>
-<body onload="">
+<body onload="addTotalTime();">
 <div class="overlay">
 
   <div id="navbar-insert" th:insert="elements/_navbar.html::#navbar-container">
@@ -45,19 +45,6 @@
       </div>
     </div>
   </div>
-
-  <!--
-  <div id="jobRequest" th:if="${addUpdate == 'ADD'}" th:object="${jobRequest}" th:value="${jobRequest}">
-    <input th:id="jobId" type="hidden" th:value="${jobRequest.id}">
-    <input th:id="jobCost" type="hidden" th:value="${jobRequest.cost}">
-    <input th:id="jobEndTime" type="hidden" th:value="${jobRequest.endTime}">
-    <input th:id="jobStartTime" type="hidden" th:value="${jobRequest.startTime}">
-    <input th:id="jobLocation" type="hidden" th:value="${jobRequest.endTime}">
-    <input th:id="jobScheduledDate" type="hidden" th:value="${jobRequest.scheduledDate}">
-    <input th:id="jobTotalTime" type="hidden" th:value="${jobRequest.totalTime}">
-  </div>
-
--->
 
   <div id="job" th:if="${addUpdate == 'UPDATE'}">
     <input th:id="jobId" type="hidden" th:value="${job.jobId}">
