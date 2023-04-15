@@ -146,7 +146,6 @@ function drop(e) {
     })
         .then(response => {
             //Moves div from one container to another
-            let data = e.dataTransfer.getData("text");
             let targetContainer = e.target;
             let originalContainer = document.getElementById(buttonId).parentElement;
             let targetId = "#" + targetContainer.id;
@@ -173,13 +172,12 @@ function drop(e) {
                 }
 
                 if (originalContainer.id === "day-0-content") {
-                    removeAppointmentToClientList(data);
+                    removeAppointmentFromClientList(buttonId);
                 }
 
                 if (targetContainer.id === "day-0-content") {
-                    addAppointmentToClientList(data);
+                    addAppointmentToClientList(buttonId);
                 }
-
 
             }
             catch (Exception) {
@@ -243,24 +241,23 @@ function endSession() {
         });
 }
 
-function addAppointmentToClientList(data) {
+function addAppointmentToClientList(buttonId) {
 
     let clientList = $('#client-list');
-    let clientButton = $('#' + data);
+    let clientButton = $('#' + buttonId);
     let value = clientButton[0].firstChild.value;
     let name = clientButton.children().eq(1)[0].textContent;
-
-
 
     let optionHtml = "<option value='" + value + "'>" + name + "</option>";
 
     clientList.append(optionHtml);
 }
 
-function removeAppointmentToClientList(data) {
+function removeAppointmentFromClientList(buttonId) {
+
     let clientList = $('#client-list');
     let clients = clientList.children();
-    let clientButton = $('#' + data);
+    let clientButton = $('#' + buttonId);
     let removeId = clientButton[0].firstChild.value;
 
     for (let i = 0; i < clients.length; i++) {
