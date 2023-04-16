@@ -90,7 +90,7 @@ function updateCustomerClick(e) {
         });
 }
 
-function updateContactClick(e) {
+function updateWorkerClick(e) {
 
     let params = getUrlParams();
 
@@ -106,18 +106,18 @@ function updateContactClick(e) {
         method: 'POST'
     })
         .then(response => {
-            window.location.href = "/appointments/update/" + jobId + "/select-contact";
+            window.location.href = "/appointments/update/" + jobId + "/select-worker";
         })
         .catch(error => {
             alert("There was an issue with the fetch request.")
         });
 }
 
-function removeContactClick(e) {
-    let contactId = e.target.parentNode.getAttribute("value");
+function removeWorkerClick(e) {
+    let workerId = e.target.parentNode.getAttribute("value");
     let jobId = document.getElementById("jobId").getAttribute("value");
 
-    let url = "/help/delete?jobId=" + jobId + "&contactId=" + contactId;
+    let url = "/help/delete?jobId=" + jobId + "&workerId=" + workerId;
 
     fetch(url, {
         method: 'POST'

@@ -47,7 +47,7 @@ public class WebSecurityConfig {
 
         String[] managerPages = {
                 "/appointments/**",
-                "/contacts/**",
+                "/workers/**",
                 "/customers/**",
                 "/help/**",
                 "/statistics/**"

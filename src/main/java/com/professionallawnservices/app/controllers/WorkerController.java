@@ -11,11 +11,9 @@ import com.professionallawnservices.app.exceptions.PlsRequestException;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
-import com.professionallawnservices.app.models.data.Contact;
-import com.professionallawnservices.app.models.data.Customer;
-import com.professionallawnservices.app.models.data.Job;
-import com.professionallawnservices.app.models.request.ContactRequest;
-import com.professionallawnservices.app.services.ContactService;
+import com.professionallawnservices.app.models.data.Worker;
+import com.professionallawnservices.app.models.request.WorkerRequest;
+import com.professionallawnservices.app.services.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -23,129 +21,128 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 
 @Controller
-@RequestMapping("/contacts")
-public class ContactController {
+@RequestMapping("/workers")
+public class WorkerController {
 
     @Autowired
-    ContactService contactService;
+    WorkerService workerService;
 
     @GetMapping("")
-    public String contactsView(
+    public String workersView(
             Pageable pageable,
             Model model
     )
     {
 
-        Result result = contactService.getAllContactsPageable(pageable);
+        Result result = workerService.getAllWorkersPageable(pageable);
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
+        ArrayList<Worker> workers = (ArrayList<Worker>) result.getData();
 
-        if (contacts.size() == 0 && pageable.getPageNumber() != 0) {
+        if (workers.size() == 0 && pageable.getPageNumber() != 0) {
             int previousPageIndex = pageable.getPageNumber() - 1;
-            return "redirect:/contacts?page=" + previousPageIndex;
+            return "redirect:/workers?page=" + previousPageIndex;
         }
 
-        model.addAttribute("contacts", contacts);
+        model.addAttribute("workers", workers);
         model.addAttribute("selectSearch", "SEARCH");
         model.addAttribute("pageNumber", pageable.getPageNumber());
 
-        return "contacts";
+        return "workers";
     }
 
     @GetMapping("/add")
-    public String addContactView(Model model) {
+    public String addWorkerView(Model model) {
 
-        model.addAttribute("contactRequest", new ContactRequest());
+        model.addAttribute("workerRequest", new WorkerRequest());
         model.addAttribute("addUpdate", "ADD");
 
-        return "alter-contact";
+        return "alter-worker";
     }
 
     @PostMapping("/add")
-    public String addContact(@ModelAttribute("contactRequest") ContactRequest contactRequest) {
+    public String addWorker(@ModelAttribute("workerRequest") WorkerRequest workerRequest) {
         if(
-                ValidationHelpers.isNull(contactRequest)
-                        || ValidationHelpers.isNullOrBlank(contactRequest.getName())
+                ValidationHelpers.isNull(workerRequest)
+                        || ValidationHelpers.isNullOrBlank(workerRequest.getName())
         )
         {
             throw new PlsRequestException("Request must contain name");
         }
 
-        Result result = contactService.createContact(contactRequest);
+        Result result = workerService.createWorker(workerRequest);
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/contacts/add";
+        return "redirect:/workers/add";
     }
 
     @GetMapping("/update/{id}")
-    public String updateContactView(
+    public String updateWorkerView(
             @PathVariable(value = "id", required = true) long id,
             Model model
     )
     {
 
-        Result result = contactService.getContactById(new ContactRequest(id));
+        Result result = workerService.getWorkerById(new WorkerRequest(id));
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        Contact contact = (Contact) result.getData();
-        ContactRequest contactRequest = new ContactRequest(contact);
+        Worker worker = (Worker) result.getData();
+        WorkerRequest workerRequest = new WorkerRequest(worker);
 
-        model.addAttribute("contact", contact);
-        model.addAttribute("contactRequest", contactRequest);
-        model.addAttribute("id", contactRequest.getId());
+        model.addAttribute("worker", worker);
+        model.addAttribute("workerRequest", workerRequest);
+        model.addAttribute("id", workerRequest.getId());
         model.addAttribute("addUpdate", "UPDATE");
 
-        return "alter-contact";
+        return "alter-worker";
     }
 
     @PostMapping("/update/{id}")
-    public String updateContact(
+    public String updateWorker(
             @PathVariable(value = "id",required = true) long id,
-            @ModelAttribute("contactRequest") ContactRequest contactRequest,
+            @ModelAttribute("workerRequest") WorkerRequest workerRequest,
             Model model
     )
     {
         if(
-                ValidationHelpers.isNull(contactRequest)
-                        || ValidationHelpers.isNullOrBlank(contactRequest.getName())
+                ValidationHelpers.isNull(workerRequest)
+                        || ValidationHelpers.isNullOrBlank(workerRequest.getName())
         )
         {
             throw new PlsRequestException("Request must contain name");
         }
 
-        contactRequest.setId(id);
+        workerRequest.setId(id);
 
-        Result result = contactService.updateContact(contactRequest);
+        Result result = workerService.updateWorker(workerRequest);
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/contacts/update/" + id;
+        return "redirect:/workers/update/" + id;
     }
 
     @PostMapping("/delete/{id}")
-    public ResponseEntity<String> deleteContact(
+    public ResponseEntity<String> deleteWorker(
             @PathVariable(value = "id",required = true) long id,
             Model model
     )
     {
 
-        Result result = contactService.deleteContactById(new ContactRequest(id));
+        Result result = workerService.deleteWorkerById(new WorkerRequest(id));
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());

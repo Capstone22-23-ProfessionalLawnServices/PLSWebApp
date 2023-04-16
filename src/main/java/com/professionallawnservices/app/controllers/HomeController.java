@@ -7,7 +7,6 @@ import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.json.openweather.PlsWeather;
-import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.services.HomeService;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static com.professionallawnservices.app.enums.RolesEnum.*;

@@ -1,14 +1,10 @@
 package com.professionallawnservices.app.models.request;
 
 import com.professionallawnservices.app.helpers.DateHelper;
-import com.professionallawnservices.app.models.data.Contact;
+import com.professionallawnservices.app.models.data.Worker;
 import com.professionallawnservices.app.models.data.Customer;
-import com.professionallawnservices.app.models.data.Help;
 import com.professionallawnservices.app.models.data.Job;
 
-import javax.validation.constraints.NotNull;
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 
 public class JobRequest {
@@ -29,7 +25,7 @@ public class JobRequest {
 
     private Customer customer;
 
-    private ArrayList<Contact> contacts;
+    private ArrayList<Worker> workers;
 
     public JobRequest() {
 
@@ -49,21 +45,6 @@ public class JobRequest {
         totalTime = (int) Math.round(job.getTotalTime());
         customer = job.getCustomer();
     }
-
-    /*
-    public JobRequest(Job job, Help help) {
-        id = job.getJobId();
-        cost = job.getCost();
-        endTime = DateHelper.sqlDateToString(job.getScheduledDate(), job.getEndTime());
-        startTime = DateHelper.sqlDateToString(job.getScheduledDate(), job.getStartTime());
-        location = job.getJobLocation();
-        scheduledDate = job.getScheduledDate();
-        totalTime = (int) Math.round(job.getTotalTime());
-        customer = job.getCustomer();
-        contacts.add(help.getContact().getContactId());
-    }
-
-     */
 
     public long getId() {
         return id;
@@ -130,11 +111,11 @@ public class JobRequest {
         this.customer = customer;
     }
 
-    public ArrayList<Contact> getContacts() {
-        return contacts;
+    public ArrayList<Worker> getWorkers() {
+        return workers;
     }
 
-    public void setContacts(ArrayList<Contact> contactIds) {
-        this.contacts = contactIds;
+    public void setWorkers(ArrayList<Worker> workerIds) {
+        this.workers = workerIds;
     }
 }

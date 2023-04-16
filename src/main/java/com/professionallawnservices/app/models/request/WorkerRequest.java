@@ -1,8 +1,8 @@
 package com.professionallawnservices.app.models.request;
 
-import com.professionallawnservices.app.models.data.Contact;
+import com.professionallawnservices.app.models.data.Worker;
 
-public class ContactRequest {
+public class WorkerRequest {
 
     private long id = -1;
 
@@ -12,19 +12,19 @@ public class ContactRequest {
 
     private String phone;
 
-    public ContactRequest() {
+    public WorkerRequest() {
 
     }
 
-    public ContactRequest(long id) {
+    public WorkerRequest(long id) {
         this.id = id;
     }
 
-    public ContactRequest(Contact contact) {
-        id = contact.getContactId();
-        email = contact.getContactEmail();
-        name = contact.getContactName();
-        phone = contact.getContactPhone();
+    public WorkerRequest(Worker worker) {
+        id = worker.getWorkerId();
+        email = worker.getWorkerEmail();
+        name = worker.getWorkerName();
+        phone = worker.getWorkerPhone();
     }
 
     public long getId() {

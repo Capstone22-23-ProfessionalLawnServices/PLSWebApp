@@ -5,7 +5,7 @@ import org.hibernate.annotations.Proxy;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "help", uniqueConstraints = { @UniqueConstraint(columnNames = { "contact_id", "job_id" }) })
+@Table(name = "help", uniqueConstraints = { @UniqueConstraint(columnNames = { "worker_id", "job_id" }) })
 @Proxy(lazy=false)
 public class Help {
 
@@ -15,8 +15,8 @@ public class Help {
     private long helpId;
 
     @ManyToOne
-    @JoinColumn(name = "contact_id")
-    private Contact contact;
+    @JoinColumn(name = "worker_id")
+    private Worker worker;
 
     @ManyToOne
     @JoinColumn(name = "job_id")
@@ -26,8 +26,8 @@ public class Help {
 
     }
 
-    public Help(Contact contact, Job job) {
-        this.contact = contact;
+    public Help(Worker worker, Job job) {
+        this.worker = worker;
         this.job = job;
     }
 
@@ -39,12 +39,12 @@ public class Help {
         this.helpId = helpId;
     }
 
-    public Contact getContact() {
-        return contact;
+    public Worker getWorker() {
+        return worker;
     }
 
-    public void setContact(Contact contact) {
-        this.contact = contact;
+    public void setWorker(Worker worker) {
+        this.worker = worker;
     }
 
     public Job getJob() {

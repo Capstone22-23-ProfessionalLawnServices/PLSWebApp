@@ -1,17 +1,15 @@
 package com.professionallawnservices.app.controllers;
 
-import com.professionallawnservices.app.exceptions.PlsRequestException;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
-import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
-import com.professionallawnservices.app.models.data.Contact;
+import com.professionallawnservices.app.models.data.Worker;
 import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Help;
 import com.professionallawnservices.app.models.data.Job;
-import com.professionallawnservices.app.models.request.ContactRequest;
+import com.professionallawnservices.app.models.request.WorkerRequest;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
-import com.professionallawnservices.app.services.ContactService;
+import com.professionallawnservices.app.services.WorkerService;
 import com.professionallawnservices.app.services.CustomerService;
 import com.professionallawnservices.app.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +34,7 @@ public class JobController {
     CustomerService customerService;
 
     @Autowired
-    ContactService contactService;
+    WorkerService workerService;
 
     private static final String managerRole = MANAGER.roleName;
 
@@ -120,16 +118,16 @@ public class JobController {
         Job job = (Job) result.getData();
         JobRequest jobRequest = new JobRequest(job);
         ArrayList<Help> helpArrayList = (ArrayList<Help>) jobService.getHelpByJobId(new JobRequest(id)).getData();
-        ArrayList<Contact> contacts = new ArrayList<Contact>();
+        ArrayList<Worker> workers = new ArrayList<Worker>();
 
         for (Help help:
                 helpArrayList) {
-            contacts.add(help.getContact());
+            workers.add(help.getWorker());
         }
 
         model.addAttribute("job", job);
         model.addAttribute("jobRequest", jobRequest);
-        model.addAttribute("contacts", contacts);
+        model.addAttribute("workers", workers);
         model.addAttribute("addUpdate", "UPDATE");
 
         return "alter-appointment";
@@ -164,34 +162,34 @@ public class JobController {
         return ResponseEntity.ok("Successfully updated");
     }
 
-    @GetMapping("/update/{id}/select-contact")
-    public String updateAppointmentSelectContactView(
+    @GetMapping("/update/{id}/select-worker")
+    public String updateAppointmentSelectWorkerView(
             @PathVariable(value = "id",required = true) long id,
             @ModelAttribute("job") Job job,
             Model model
     )
     {
 
-        Result result = contactService.getAllContacts();
+        Result result = workerService.getAllWorkers();
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
+        ArrayList<Worker> workers = (ArrayList<Worker>) result.getData();
 
         model.addAttribute("selectSearch", "SELECT");
-        model.addAttribute("contacts", contacts);
+        model.addAttribute("workers", workers);
         model.addAttribute("jobId", id);
         model.addAttribute("pageNumber", 0);
 
-        return "contacts";
+        return "workers";
     }
 
-    @PostMapping("/update/{id}/select-contact")
-    public ResponseEntity<String> updateAppointmentAddContact(
+    @PostMapping("/update/{id}/select-worker")
+    public ResponseEntity<String> updateAppointmentAddWorker(
             @PathVariable(value = "id",required = true) long id,
-            @RequestParam(value = "contactId", required = true) Long contactId,
+            @RequestParam(value = "workerId", required = true) Long workerId,
             Model model
     )
     {
@@ -199,15 +197,15 @@ public class JobController {
         Result result = new Result();
         JobRequest jobRequest = new JobRequest(id);
 
-        if(contactId != null) {
-            result = jobService.createHelp(new ContactRequest(contactId), jobRequest);
+        if(workerId != null) {
+            result = jobService.createHelp(new WorkerRequest(workerId), jobRequest);
         }
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return ResponseEntity.ok("Successfully added contact");
+        return ResponseEntity.ok("Successfully added worker");
     }
 
     @GetMapping("/update/{id}/select-customer")
@@ -275,13 +273,13 @@ public class JobController {
     @PostMapping("/update/{id}/delete-help")
     public ResponseEntity<String> deleteHelp(
             @PathVariable(value = "id", required = true) long id,
-            @RequestParam(value = "contactId", required = true) Long contactId
+            @RequestParam(value = "workerId", required = true) Long workerId
     )
     {
-        ContactRequest contactRequest = new ContactRequest(contactId);
+        WorkerRequest workerRequest = new WorkerRequest(workerId);
         JobRequest jobRequest = new JobRequest(id);
 
-        Result result = jobService.deleteHelpWithJobAndContactIds(jobRequest, contactRequest);
+        Result result = jobService.deleteHelpWithJobAndWorkerIds(jobRequest, workerRequest);
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());

@@ -63,8 +63,8 @@
 
         <div class="clear inner-add-elements"></div>
 
-        <label for="contacts" class="form-label" style="margin-top: 40px">Assigned To: </label>
-        <table id="contacts" class="table table-hover">
+        <label for="workers" class="form-label" style="margin-top: 40px">Assigned To: </label>
+        <table id="workers" class="table table-hover">
             <thead class="thead">
             <tr>
                 <th scope="col">#</th>
@@ -74,13 +74,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr  class="table-row" th:each="contact : ${contacts}" onclick="removeContactClick(event)"
-                 th:value="${contact.contactId}">
-                <td th:text="${contact.contactId}"></td>
-                <td th:text="${contact.contactName}"></td>
-                <td th:text="${contact.contactEmail}"></td>
-                <td th:text="${contact.contactPhone}"></td>
-            </tr>
+            <tr  class="table-row" th:each="worker : ${workers}" onclick="removeWorkerClick(event)"
+                 th:value="${worker.workerId}">
+                <td th:text="${worker.workerId}"></td>
+                <td th:text="${worker.workerName}"></td>
+                <td th:text="${worker.workerEmail}"></td>
+                <td th:text="${worker.workerPhone}"></td>            </tr>
             </tbody>
         </table>
 
@@ -88,9 +87,9 @@
             <div class="row">
                 <div class="col text-center">
                     <button class="btn form-submit-btn default-btn" th:if="${addUpdate == 'ADD'}" type="button"
-                            disabled>Add Contact</button>
+                            disabled>Add Worker</button>
                     <button class="btn form-submit-btn default-btn" th:if="${addUpdate == 'UPDATE'}" type="button"
-                            onclick="updateContactClick(event)">Add Contact</button>
+                            onclick="updateWorkerClick(event)">Add Worker</button>
                 </div>
             </div>
         </div>
