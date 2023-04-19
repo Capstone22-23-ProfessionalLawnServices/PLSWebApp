@@ -4,19 +4,19 @@
 
 @media (max-width: 780px) {
 
+    .location-column {
+        display: none;
+    }
+
+    .frequency-column {
+        display: none;
+    }
+
     #search-worker-button-text {
         display: none;
     }
 
     #add-worker-button-text {
-        display: none;
-    }
-
-    .location-column {
-        display: none;
-    }
-
-    .email-column {
         display: none;
     }
 

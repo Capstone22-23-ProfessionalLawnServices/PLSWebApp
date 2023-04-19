@@ -4,6 +4,10 @@
 
 @media (max-width: 780px) {
 
+    .email-column {
+        display: none;
+    }
+
     #search-worker-button-text {
         display: none;
     }

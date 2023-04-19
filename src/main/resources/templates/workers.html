@@ -49,26 +49,26 @@
       <table class="table table-hover">
         <thead class="thead">
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Email</th>
-          <th scope="col">Phone</th>
+          <th scope="col" class="id-column">#</th>
+          <th scope="col" class="name-column">Name</th>
+          <th scope="col" class="email-column">Email</th>
+          <th scope="col" class="phone-column">Phone</th>
         </tr>
         </thead>
         <tbody>
           <tr  class="table-row" th:each="worker : ${workers}" onclick="rowSearch(event)"
                th:if="${selectSearch == 'SEARCH'}" th:value="${worker.workerId}">
-            <td th:text="${worker.workerId}"></td>
-            <td th:text="${worker.workerName}"></td>
-            <td th:text="${worker.workerEmail}"></td>
-            <td th:text="${worker.workerPhone}"></td>
+            <td th:text="${worker.workerId}" class="id-column"></td>
+            <td th:text="${worker.workerName}" class="name-column"></td>
+            <td th:text="${worker.workerEmail}" class="email-column"></td>
+            <td th:text="${worker.workerPhone}" class="phone-column"></td>
           </tr>
           <tr  class="table-row" th:each="worker : ${workers}" onclick="workerSelect(event)"
                th:if="${selectSearch == 'SELECT'}" th:value="${worker.workerId}">
-            <td th:text="${worker.workerId}"></td>
-            <td th:text="${worker.workerName}"></td>
-            <td th:text="${worker.workerEmail}"></td>
-            <td th:text="${worker.workerPhone}"></td>
+            <td th:text="${worker.workerId}" class="id-column"></td>
+            <td th:text="${worker.workerName}" class="name-column"></td>
+            <td th:text="${worker.workerEmail}" class="email-column"></td>
+            <td th:text="${worker.workerPhone}" class="phone-column"></td>
           </tr>
         </tbody>
       </table>

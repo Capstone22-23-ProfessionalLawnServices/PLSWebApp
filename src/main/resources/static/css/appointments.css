@@ -20,6 +20,10 @@
 
 @media (max-width: 1200px) {
 
+    .time-column {
+        display: none;
+    }
+
     #filter-button-text {
         display: none;
     }
@@ -52,6 +56,10 @@
 
     .center-stacking-column {
         width: 50%;
+    }
+
+    .price-column {
+        display: none;
     }
 
     #stacking-column {

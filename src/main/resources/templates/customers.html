@@ -48,31 +48,31 @@
       <table class="table table-hover">
         <thead class="thead">
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
+          <th scope="col" class="id-column">#</th>
+          <th scope="col" class="name-column">Name</th>
           <th class="location-column" scope="col">Location</th>
-          <th scope="col">Phone</th>
-          <th scope="col">Frequency</th>
+          <th scope="col" class="phone-column">Phone</th>
+          <th scope="col" class="frequency-column">Frequency</th>
         </tr>
         </thead>
         <tbody>
 
           <tr th:each="customers : ${customers}" onclick="rowClick(event)" th:if="${searchSelect == 'SEARCH'}"
               th:value="${customers.customerId}">
-            <th th:text="${customers.customerId}" scope="row"></th>
-            <td th:text="${customers.customerName}"></td>
-            <td class="location-column" th:text="${customers.customerLocation}"></td>
-            <td th:text="${customers.customerPhone}"></td>
-            <td th:text="${customers.frequency}"></td>
+            <th th:text="${customers.customerId}" scope="row" class="id-column"></th>
+            <td th:text="${customers.customerName}" class="name-column"></td>
+            <td th:text="${customers.customerLocation}" class="location-column"></td>
+            <td th:text="${customers.customerPhone}" class="phone-column"></td>
+            <td th:text="${customers.frequency}" class="frequency-column"></td>
           </tr>
 
-          <tr th:each="customers : ${customers}" onclick="customerSelect(event)" th:if="${searchSelect == 'SELECT'}"
-              th:value="${customers.customerId}">
-            <th th:text="${customers.customerId}" scope="row"></th>
-            <td th:text="${customers.customerName}"></td>
-            <td class="location-column" th:text="${customers.customerLocation}"></td>
-            <td th:text="${customers.customerPhone}"></td>
-            <td th:text="${customers.frequency}"></td>
+          <tr th:each="customer : ${customers}" onclick="customerSelect(event)" th:if="${searchSelect == 'SELECT'}"
+              th:value="${customer.customerId}">
+            <th th:text="${customer.customerId}" scope="row" class="id-column"></th>
+            <td th:text="${customer.customerName}" class="name-column"></td>
+            <td th:text="${customer.customerLocation}" class="location-column" ></td>
+            <td th:text="${customer.customerPhone}" class="phone-column"></td>
+            <td th:text="${customer.frequency}" class="frequency-column"></td>
           </tr>
 
         </tbody>

@@ -79,21 +79,21 @@
       <table class="table table-hover">
         <thead class="thead">
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Price</th>
-          <th scope="col">Date</th>
-          <th scope="col">Total Time</th>
-          <th scope="col">Customer Name</th>
+          <th scope="col" class="id-column">#</th>
+          <th scope="col" class="price-column">Price</th>
+          <th scope="col" class="date-column">Date</th>
+          <th scope="col" class="time-column">Total Time</th>
+          <th scope="col" class="name-column">Customer Name</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="job : ${jobs}" onclick="rowClick(event)"
             th:value="${job.jobId}">
-          <th th:text="${job.jobId}" scope="row"></th>
-          <td th:text="${job.cost}"></td>
-          <td th:text="${job.scheduledDate}"></td>
-          <td th:text="${job.totalTime}"></td>
-          <td th:text="${job.customer?.customerName}"></td>
+          <th th:text="${job.jobId}" scope="row" class="id-column"></th>
+          <td th:text="${job.cost}" class="price-column"></td>
+          <td th:text="${job.scheduledDate}" class="date-column"></td>
+          <td th:text="${job.totalTime}" class="time-column"></td>
+          <td th:text="${job.customer?.customerName}" class="name-column"></td>
         </tr>
         </tbody>
       </table>
