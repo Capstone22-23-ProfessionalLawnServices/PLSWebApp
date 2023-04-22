@@ -80,6 +80,7 @@ public class JobController {
             @RequestParam(value = "scheduledDate", required = false) String scheduledDate,
             @RequestParam(value = "startTime", required = false) String startTime,
             @RequestParam(value = "endTime", required = false) String endTime,
+            @RequestParam(value = "notes", required = false) String notes,
             Model model
     )
     {
@@ -90,6 +91,7 @@ public class JobController {
         jobRequest.setScheduledDate(scheduledDate);
         jobRequest.setStartTime(startTime);
         jobRequest.setEndTime(endTime);
+        jobRequest.setNotes(notes);
 
         Result result = jobService.createJob(jobRequest);
 
@@ -141,6 +143,7 @@ public class JobController {
             @RequestParam(value = "scheduledDate", required = false) String scheduledDate,
             @RequestParam(value = "startTime", required = false) String startTime,
             @RequestParam(value = "endTime", required = false) String endTime,
+            @RequestParam(value = "notes", required = false) String notes,
             Model model
     )
     {
@@ -152,6 +155,7 @@ public class JobController {
         jobRequest.setScheduledDate(scheduledDate);
         jobRequest.setStartTime(startTime);
         jobRequest.setEndTime(endTime);
+        jobRequest.setNotes(notes);
 
         Result result = jobService.updateJobPrimitiveFields(jobRequest);
 

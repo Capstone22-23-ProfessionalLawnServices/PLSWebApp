@@ -151,6 +151,8 @@ function getUrlParams() {
         ? "":document.getElementById("start-time").value;
     let endTime = document.getElementById("end-time") == null
         ? "":document.getElementById("end-time").value;
+    let notes = document.getElementById("notes") == null
+        ? "":document.getElementById("notes").value;
 
     if (scheduledDate === "" || scheduledDate === null) {
         alert("An appointment must have a scheduled date.")
@@ -177,6 +179,10 @@ function getUrlParams() {
 
     if (endTime !== "") {
         params += "endTime=" + paramSpaceReplace(endTime) + "&";
+    }
+
+    if (notes !== "") {
+        params += "notes=" + paramSpaceReplace(notes) + "&";
     }
 
     if (params.charAt(params.length - 1) === '$') {

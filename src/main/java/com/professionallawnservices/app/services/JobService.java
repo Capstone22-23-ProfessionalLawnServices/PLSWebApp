@@ -134,37 +134,9 @@ public class JobService {
             job.setScheduledDate(jobFromRequest.getScheduledDate());
             job.setStartTime(jobFromRequest.getStartTime());
             job.setEndTime(jobFromRequest.getEndTime());
-
-            /*
-            if (jobRequest.getCustomer() != null) {
-                Customer customer = customerRepo.findById(jobRequest.getCustomer().getCustomerId())
-                        .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" +
-                                jobRequest.getCustomer().getCustomerId()));
-                job.setCustomer(customer);
-            }
-
-            ArrayList<Long> contactIds = new ArrayList<Long>();
-
-            if (jobRequest.getContacts() != null) {
-
-                for (Contact contact :
-                        jobRequest.getContacts()) {
-                    contactIds.add(contact.getContactId());
-                }
-            }
-
-            List<Contact> contacts = contactRepo.findAllById(contactIds);
-            ArrayList<Help> helpArrayList = new ArrayList<Help>();
-
-            for (Contact contact :
-                    contacts) {
-                helpArrayList.add(new Help(contact, job));
-            }
-
-             */
+            job.setNotes(jobFromRequest.getNotes());
 
             jobRepo.save(job);
-            //helpRepo.saveAll(helpArrayList);
 
             result.setData(job);
             result.setComplete(true);

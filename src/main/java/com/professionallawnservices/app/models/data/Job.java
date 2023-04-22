@@ -44,23 +44,15 @@ public class Job {
     @NotNull
     private Date scheduledDate;
 
+    @Column(name = "notes")
+    private String notes;
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToMany(mappedBy = "job")
     private Set<Help> help = new HashSet<>();
-
-    /*
-    The contacts array is not part of the job schema. The attribute is part of the class because of the
-    structure of the alter-appointment form.
-     */
-
-    /*
-    @Transient
-    private ArrayList<Contact> contacts;
-
-     */
 
     public Job() {
 
@@ -72,6 +64,7 @@ public class Job {
         endTime = DateHelper.stringToSqlTime(jobRequest.getEndTime());
         totalTime = (double) jobRequest.getTotalTime();
         cost = jobRequest.getCost();
+        notes = jobRequest.getNotes();
         jobLocation = jobRequest.getLocation();
         scheduledDate = DateHelper.stringToSqlDate(jobRequest.getScheduledDate());
     }
@@ -144,14 +137,11 @@ public class Job {
         scheduledDate = DateHelper.stringToSqlDate(scheduledDateString);
     }
 
-    /*
-    public ArrayList<Contact> getContacts() {
-        return contacts;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setContacts(ArrayList<Contact> contacts) {
-        this.contacts = contacts;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
-
-     */
 }

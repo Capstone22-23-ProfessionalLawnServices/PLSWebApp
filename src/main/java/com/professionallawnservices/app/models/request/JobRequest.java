@@ -23,6 +23,8 @@ public class JobRequest {
 
     private int totalTime;
 
+    private String notes;
+
     private Customer customer;
 
     private ArrayList<Worker> workers;
@@ -41,6 +43,7 @@ public class JobRequest {
         endTime = DateHelper.sqlTimeToString(job.getScheduledDate(), job.getEndTime());
         startTime = DateHelper.sqlTimeToString(job.getScheduledDate(), job.getStartTime());
         location = job.getJobLocation();
+        notes = job.getNotes();
         scheduledDate = DateHelper.sqlDateToString(job.getScheduledDate());
         totalTime = (int) Math.round(job.getTotalTime());
         customer = job.getCustomer();
@@ -117,5 +120,13 @@ public class JobRequest {
 
     public void setWorkers(ArrayList<Worker> workerIds) {
         this.workers = workerIds;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }
