@@ -49,7 +49,7 @@ public class SecurityHelpers {
         ArrayList<String> userRoles = getUserRolesList();
         Set<RolesEnum> allRoles = EnumSet.allOf(RolesEnum.class);
 
-        RolesEnum primaryRole = RolesEnum.USER;
+        RolesEnum primaryRole = RolesEnum.READONLY;
 
 
         for (String userRole:

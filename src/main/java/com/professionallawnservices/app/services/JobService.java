@@ -295,6 +295,11 @@ public class JobService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid job Id:" + jobRequest.getId()));
 
             job.setCustomer(customer);
+
+            if (customer.getRegularCost() != 0) {
+                job.setCost(customer.getRegularCost());
+            }
+
             jobRepo.save(job);
 
             result.setData(job);

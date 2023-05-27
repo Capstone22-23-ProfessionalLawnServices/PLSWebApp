@@ -10,7 +10,7 @@ public enum RolesEnum {
     OWNER("OWNER", "ROLE_OWNER", 3),
     MANAGER("MANAGER","ROLE_MANAGER", 2),
     EMPLOYEE("EMPLOYEE","ROLE_EMPLOYEE", 1),
-    USER("USER","ROLE_USER", 0);
+    READONLY("READONLY","ROLE_READONLY", 0);
 
     final public String roleName;
     final public String authorityName;

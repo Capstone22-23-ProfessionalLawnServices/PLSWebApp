@@ -20,6 +20,10 @@
     <label for="frequency" class="form-label">Frequency:</label>
     <input type="number" id="frequency" th:field="*{frequency}" th:value="*{frequency}"
            class="form-control form-input" placeholder="5" required="required">
+    <label for="regular-cost" class="form-label">Regular Cost:</label>
+    <input type="text" id="regular-cost" th:field="*{regularCost}" class="form-control form-input"
+           placeholder="30.00" pattern="^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$">
+
     <div class="clear inner-add-elements"></div>
 
     <div class="container" style="margin-bottom: 40px">

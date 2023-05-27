@@ -21,6 +21,8 @@ public class CustomerRequest {
     @Min(0)
     private int frequency = 0;
 
+    private double regularCost;
+
     public CustomerRequest() {
 
     }
@@ -35,6 +37,7 @@ public class CustomerRequest {
         location = customer.getCustomerLocation();
         phone = customer.getCustomerPhone();
         frequency = customer.getFrequency();
+        regularCost = customer.getRegularCost();
     }
 
     public long getId() {
@@ -83,5 +86,13 @@ public class CustomerRequest {
 
     public void setFrequency(int frequency) {
         this.frequency = frequency;
+    }
+
+    public double getRegularCost() {
+        return regularCost;
+    }
+
+    public void setRegularCost(double regularCost) {
+        this.regularCost = regularCost;
     }
 }

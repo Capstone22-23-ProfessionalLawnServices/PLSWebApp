@@ -29,6 +29,9 @@ public class Customer {
     @Column(name = "frequency")
     private int frequency;
 
+    @Column(name = "regular_cost")
+    private Double regularCost;
+
     @OneToMany(mappedBy = "customer")
     private Set<Job> jobs = new HashSet<>();
 
@@ -42,6 +45,7 @@ public class Customer {
         customerLocation = customerRequest.getLocation();
         customerPhone = customerRequest.getPhone();
         frequency = customerRequest.getFrequency();
+        regularCost = customerRequest.getRegularCost();
     }
 
     public long getCustomerId() {
@@ -82,6 +86,14 @@ public class Customer {
 
     public void setFrequency(int frequency) {
         this.frequency = frequency;
+    }
+
+    public double getRegularCost() {
+        return regularCost;
+    }
+
+    public void setRegularCost(Double regularCost) {
+        this.regularCost = regularCost;
     }
 
 }
