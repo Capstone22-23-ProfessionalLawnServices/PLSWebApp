@@ -157,7 +157,7 @@ public class JobController {
         helpRequest.setWorkerPay(workerPay);
 
 
-        Result result = jobService.updateJobPrimitiveFields(jobRequest, helpRequest);
+        Result result = jobService.updateJobPrimitiveFields(jobRequest);
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
