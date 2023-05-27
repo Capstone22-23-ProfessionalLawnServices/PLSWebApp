@@ -68,22 +68,25 @@
         <div class="clear inner-add-elements"></div>
 
         <label for="workers" class="form-label" style="margin-top: 40px">Assigned To: </label>
+
         <table id="workers" class="table table-hover">
             <thead class="thead">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
+                <th id="pay-column" scope="col">Pay</th>
             </tr>
             </thead>
             <tbody>
-            <tr  class="table-row" th:each="worker : ${workers}" onclick="removeWorkerClick(event)"
-                 th:value="${worker.workerId}">
-                <td th:text="${worker.workerId}"></td>
-                <td th:text="${worker.workerName}"></td>
-                <td th:text="${worker.workerEmail}"></td>
-                <td th:text="${worker.workerPhone}"></td>            </tr>
+            <tr  class="table-row" th:each="help : ${helpArrayList}" onclick="removeWorkerClick(event)"
+                 th:value="${help.worker.workerId}">
+
+                <td th:text="${help.worker.workerId}"></td>
+                <td th:text="${help.worker.workerName}"></td>
+                <td><div class="editable-cell" th:text="${help.workerPay}" contenteditable>I'm editable</div></td>
+
+
+            </tr>
             </tbody>
         </table>
 

@@ -9,6 +9,8 @@ public class HelpRequest {
 
     private Job job;
 
+    private Double workerPay;
+
     public HelpRequest() {
 
     }
@@ -32,5 +34,13 @@ public class HelpRequest {
 
     public void setJob(Job job) {
         this.job = job;
+    }
+
+    public Double getWorkerPay() {
+        return workerPay;
+    }
+
+    public void setWorkerPay(Double workerPay) {
+        this.workerPay = workerPay;
     }
 }

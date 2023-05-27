@@ -22,6 +22,9 @@ public class Help {
     @JoinColumn(name = "job_id")
     private Job job;
 
+    @Column(name = "worker_pay")
+    private Double workerPay;
+
     public Help() {
 
     }
@@ -55,4 +58,11 @@ public class Help {
         this.job = job;
     }
 
+    public Double getWorkerPay() {
+        return workerPay;
+    }
+
+    public void setWorkerPay(Double workerPay) {
+        this.workerPay = workerPay;
+    }
 }

@@ -1,0 +1,8 @@
+.editable-cell {
+    outline: 2px #6D98AB solid;
+    border-radius: 2px;
+}
+
+#pay-column {
+    width: 170px;
+}
