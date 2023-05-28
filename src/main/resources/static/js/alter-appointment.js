@@ -116,7 +116,8 @@ function updateWorkerClick(e) {
 function removeWorkerClick(e) {
     let targetElement = e.target;
     let targetJQ = $(e.target);
-    let workerId = e.target.parentNode.getAttribute("value");
+    let workerId = e.target.parentNode.children[0].getAttribute("value");
+
     let jobId = document.getElementById("jobId").getAttribute("value");
 
     if (targetElement.hasAttribute('contenteditable')

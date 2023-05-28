@@ -82,7 +82,7 @@
             <tr  class="table-row" th:each="help : ${helpArrayList}" onclick="removeWorkerClick(event)"
                  th:value="${help.id}">
 
-                <td class="worker-id-cell" th:text="${help.worker.workerId}"></td>
+                <td class="worker-id-cell" th:text="${help.worker.workerId}" th:value="${help.worker.workerId}"></td>
                 <td class="worker-name-cell" th:text="${help.worker.workerName}"></td>
                 <td class="worker-pay-cell"><div class="editable-cell" th:text="${help.workerPay ?: '0.0'}" contenteditable>
                 </div></td>
