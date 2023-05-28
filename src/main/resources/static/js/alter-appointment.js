@@ -115,10 +115,13 @@ function updateWorkerClick(e) {
 
 function removeWorkerClick(e) {
     let targetElement = e.target;
+    let targetJQ = $(e.target);
     let workerId = e.target.parentNode.getAttribute("value");
     let jobId = document.getElementById("jobId").getAttribute("value");
 
-    if (targetElement.hasAttribute('contenteditable')) {
+    if (targetElement.hasAttribute('contenteditable')
+        || targetJQ.hasClass("btn")
+        ) {
         return;
     }
 
@@ -231,5 +234,29 @@ function addTotalTime() {
         $('#total-time').attr("hidden",true);
         $('#total-time-label').attr("hidden",true);
     }
+
+}
+
+function updateWorkerPay(e) {
+
+    let targetJQ = $(e.target);
+    let updateButtonCellJQ = targetJQ.parent();
+    let rowJQ = updateButtonCellJQ.parent();
+    let payCellJQ = $(updateButtonCellJQ.siblings()[2]).children()[0];
+
+    let helpId = rowJQ.attr('value');
+    let workerPay = payCellJQ.innerHTML;
+
+    let url = "/help/update-pay/" + helpId + "?workerPay=" + workerPay;
+
+    fetch(url, {
+        method: 'POST'
+    })
+        .then(response => {
+            window.location.reload();
+        })
+        .catch(error => {
+            alert("There was an issue with the fetch request.")
+        });
 
 }

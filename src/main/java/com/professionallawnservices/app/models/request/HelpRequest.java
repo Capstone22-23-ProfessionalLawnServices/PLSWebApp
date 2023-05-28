@@ -5,6 +5,8 @@ import com.professionallawnservices.app.models.data.Job;
 
 public class HelpRequest {
 
+    private long id;
+
     private Worker worker;
 
     private Job job;
@@ -42,5 +44,13 @@ public class HelpRequest {
 
     public void setWorkerPay(Double workerPay) {
         this.workerPay = workerPay;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

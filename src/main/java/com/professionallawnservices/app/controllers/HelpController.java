@@ -2,6 +2,7 @@ package com.professionallawnservices.app.controllers;
 
 import com.professionallawnservices.app.exceptions.PlsServiceException;
 import com.professionallawnservices.app.models.Result;
+import com.professionallawnservices.app.models.request.HelpRequest;
 import com.professionallawnservices.app.models.request.WorkerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.services.HelpService;
@@ -36,5 +37,25 @@ public class HelpController {
         }
 
         return ResponseEntity.ok("/update-appointment/" + jobId);
+    }
+
+    @PostMapping("/update-pay/{id}")
+    public ResponseEntity<String> updateHelpWorkerPay(
+            @PathVariable(value = "id", required = true) long id,
+            @RequestParam(value = "workerPay", required = false) double workerPay
+    )
+    {
+
+        HelpRequest helpRequest = new HelpRequest();
+        helpRequest.setId(id);
+        helpRequest.setWorkerPay(workerPay);
+
+        Result result = helpService.updateHelpWorkerPay(helpRequest);
+
+        if(!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return ResponseEntity.ok("Successfully updated help");
     }
 }

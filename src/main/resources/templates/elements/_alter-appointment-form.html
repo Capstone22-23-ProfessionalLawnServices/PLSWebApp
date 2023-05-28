@@ -75,15 +75,22 @@
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th id="pay-column" scope="col">Pay</th>
+                <th id="update-pay-column"></th>
             </tr>
             </thead>
             <tbody>
             <tr  class="table-row" th:each="help : ${helpArrayList}" onclick="removeWorkerClick(event)"
-                 th:value="${help.worker.workerId}">
+                 th:value="${help.id}">
 
-                <td th:text="${help.worker.workerId}"></td>
-                <td th:text="${help.worker.workerName}"></td>
-                <td><div class="editable-cell" th:text="${help.workerPay}" contenteditable>I'm editable</div></td>
+                <td class="worker-id-cell" th:text="${help.worker.workerId}"></td>
+                <td class="worker-name-cell" th:text="${help.worker.workerName}"></td>
+                <td class="worker-pay-cell"><div class="editable-cell" th:text="${help.workerPay ?: '0.0'}" contenteditable>
+                </div></td>
+                <td>
+                    <button type="button" onclick="updateWorkerPay(event)" class="default-btn btn">
+                        Update Pay
+                    </button>
+                </td>
 
 
             </tr>
