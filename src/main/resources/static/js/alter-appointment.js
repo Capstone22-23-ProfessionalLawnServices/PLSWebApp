@@ -22,6 +22,8 @@ function addAppointment(e) {
 
 function updateAppointment(e) {
 
+    updateWorkerPay();
+
     let params = getUrlParams();
 
     if (params === null) {
@@ -115,16 +117,11 @@ function updateWorkerClick(e) {
 
 function removeWorkerClick(e) {
     let targetElement = e.target;
-    let targetJQ = $(e.target);
-    let workerId = e.target.parentNode.children[0].getAttribute("value");
+    let removeButtonCellJQ = $(e.target);
+    let idCellJQ = $(removeButtonCellJQ.parent().siblings()[0]);
 
+    let workerId = idCellJQ[0].getAttribute("value");
     let jobId = document.getElementById("jobId").getAttribute("value");
-
-    if (targetElement.hasAttribute('contenteditable')
-        || targetJQ.hasClass("btn")
-        ) {
-        return;
-    }
 
     let url = "/help/delete?jobId=" + jobId + "&workerId=" + workerId;
 
@@ -238,26 +235,25 @@ function addTotalTime() {
 
 }
 
-function updateWorkerPay(e) {
+function updateWorkerPay() {
 
-    let targetJQ = $(e.target);
-    let updateButtonCellJQ = targetJQ.parent();
-    let rowJQ = updateButtonCellJQ.parent();
-    let payCellJQ = $(updateButtonCellJQ.siblings()[2]).children()[0];
+    let tableBodyJQ = $('#worker-table-body');
+    let tableRowsJQ = $(tableBodyJQ.children());
 
-    let helpId = rowJQ.attr('value');
-    let workerPay = payCellJQ.innerHTML;
+    for (let i = 0; i < tableRowsJQ.length; i++) {
+        let workerPay = $($($(tableRowsJQ[i]).children())[2]).children()[0].innerHTML;
+        let helpId = tableRowsJQ[i].getAttribute('value');
 
-    let url = "/help/update-pay/" + helpId + "?workerPay=" + workerPay;
+        let url = "/help/update-pay/" + helpId + "?workerPay=" + workerPay;
 
-    fetch(url, {
-        method: 'POST'
-    })
-        .then(response => {
-            window.location.reload();
+        fetch(url, {
+            method: 'POST'
         })
-        .catch(error => {
-            alert("There was an issue with the fetch request.")
-        });
-
+            .then(response => {
+                console.log("Updated pay for help: " + helpId);
+            })
+            .catch(error => {
+                alert("There was an issue with the fetch request.")
+            });
+    }
 }
