@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Calendar;
 
 public class DateHelper {
 
@@ -60,5 +61,19 @@ public class DateHelper {
 
         return htmlDate;
     }
+
+    public static Date sqlDateAddDays(Date date, int days) {
+
+        return Date.valueOf(date.toLocalDate().plusDays(days));
+    }
+
+    /*
+    public static Date sqlTimetoSqlDate(Time time) {
+
+
+        return date;
+    }
+
+     */
 
 }

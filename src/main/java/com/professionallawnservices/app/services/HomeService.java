@@ -9,6 +9,7 @@ import com.professionallawnservices.app.models.json.openweather.PlsWeather;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.repos.CustomerRepo;
+import com.professionallawnservices.app.repos.HelpRepo;
 import com.professionallawnservices.app.repos.JobRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +35,9 @@ public class HomeService {
     JobRepo jobRepo;
     @Autowired
     private CustomerRepo customerRepo;
+
+    @Autowired
+    JobService jobService;
 
     public ArrayList<PlsWeather> getCalendarWeather() {
 
@@ -238,6 +242,14 @@ public class HomeService {
         try {
 
             jobRepo.endSession(jobRequest.getId());
+
+            Job job = jobRepo.findById(jobRequest.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid job Id:" + jobRequest.getId()));
+
+            if (job.getEndTime() != null && job.getCustomer() != null) {
+                jobService.deleteUnfinishedFollowingJobs(job);
+                jobService.automaticScheduleNextAppointment(job);
+            }
 
             result.setComplete(true);
         }

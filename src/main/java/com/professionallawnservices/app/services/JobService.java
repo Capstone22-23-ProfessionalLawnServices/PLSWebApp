@@ -1,5 +1,6 @@
 package com.professionallawnservices.app.services;
 
+import com.professionallawnservices.app.helpers.DateHelper;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Worker;
 import com.professionallawnservices.app.models.data.Customer;
@@ -17,7 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -46,7 +49,8 @@ public class JobService {
 
             result.setData(jobArrayList);
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue retrieving jobs.");
         }
@@ -66,7 +70,8 @@ public class JobService {
 
             result.setData(job);
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue finding the job with id: " + jobRequest.getId());
         }
@@ -84,7 +89,8 @@ public class JobService {
 
             result.setData(helpArrayList);
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue finding the job with id: " + jobRequest.getId());
         }
@@ -112,7 +118,8 @@ public class JobService {
 
             result.setData(job);
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue saving the job with customer id: " + jobRequest.getCustomer());
         }
@@ -136,11 +143,17 @@ public class JobService {
             job.setEndTime(jobFromRequest.getEndTime());
             job.setNotes(jobFromRequest.getNotes());
 
+            if (job.getEndTime() != null && job.getCustomer() != null) {
+                deleteUnfinishedFollowingJobs(job);
+                automaticScheduleNextAppointment(job);
+            }
+
             jobRepo.save(job);
 
             result.setData(job);
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue updating the job with id: " + jobRequest.getId());
         }
@@ -162,7 +175,8 @@ public class JobService {
             jobRepo.delete(job);
 
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue deleting the job with id: " + jobRequest.getId());
         }
@@ -181,7 +195,8 @@ public class JobService {
 
             result.setData(customer);
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue getting customer with id: " + customerId);
         }
@@ -206,7 +221,8 @@ public class JobService {
 
             result.setData(help);
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue creating help for job with id:" + jobRequest.getId());
         }
@@ -224,7 +240,8 @@ public class JobService {
 
             result.setData(workers);
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue getting workers with ids: " + workerIds);
         }
@@ -243,7 +260,8 @@ public class JobService {
 
             result.setData(customer);
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue getting customer with id: " + jobRequest.getCustomer());
         }
@@ -274,7 +292,8 @@ public class JobService {
 
             result.setData(workers);
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue getting customers from job with id: " + jobRequest.getId());
         }
@@ -304,7 +323,8 @@ public class JobService {
 
             result.setData(job);
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue adding customer with id: " +
                     customerRequest.getId());
@@ -331,7 +351,8 @@ public class JobService {
             helpRepo.deleteAllById(helpIds);
 
             result.setComplete(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             result.setComplete(false);
             result.setErrorMessage("There was an issue deleting help with job id: " + jobRequest.getId() +
                     "and worker id: " + workerRequest.getId());
@@ -340,5 +361,49 @@ public class JobService {
         return result;
     }
 
+    public void automaticScheduleNextAppointment(Job job) {
 
+        try {
+
+            Job newJob = new Job();
+            Customer customer = customerRepo.findById(job.getCustomer().getCustomerId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" +
+                            job.getCustomer().getCustomerId())
+                    );
+            newJob.setJobId(0);
+            newJob.setJobLocation(job.getJobLocation());
+            newJob.setCustomer(job.getCustomer());
+            newJob.setCost(customer.getRegularCost());
+            newJob.setNotes("");
+            newJob.setStartTime(null);
+            newJob.setEndTime(null);
+            newJob.setTotalTime(0.0);
+
+            Date date = DateHelper.sqlDateAddDays(
+                    job.getScheduledDate(),
+                    newJob.getCustomer().getFrequency()
+                    );
+
+            newJob.setScheduledDate(date);
+
+            jobRepo.save(newJob);
+        }
+        catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void deleteUnfinishedFollowingJobs(Job job) {
+
+        try {
+
+            ArrayList<Job> jobArrayList = jobRepo.findByScheduledDateGreaterThan(job.getScheduledDate());
+
+            jobRepo.deleteAll(jobArrayList);
+
+        }
+        catch (Exception e) {
+            throw e;
+        }
+    }
 }

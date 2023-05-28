@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public interface JobRepo extends JpaRepository<Job, Long> {
@@ -30,6 +31,11 @@ public interface JobRepo extends JpaRepository<Job, Long> {
 
     @Query("select j from Job j where j.startTime is not null and j.endTime is null")
     ArrayList<Job> findActiveJobs();
+
+    @Query("select j from Job j where j.scheduledDate > :scheduleDate")
+    ArrayList<Job> findByScheduledDateGreaterThan(@Param("scheduleDate") Date scheduleDate);
+
+
 
     @Transactional
     @Modifying

@@ -235,6 +235,7 @@ function endSession() {
             $("#client-list").removeAttr('hidden');
             $("#client-list-label").removeAttr('hidden');
             $('#active-client-id').val('');
+            window.location.reload();
         })
         .catch(error => {
             alert("There was an issue with the fetch request.")
