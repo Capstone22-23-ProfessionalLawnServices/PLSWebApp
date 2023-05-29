@@ -20,7 +20,7 @@ public interface JobRepo extends JpaRepository<Job, Long> {
     ArrayList<Job> getAllJobByCustomerId(@Param("customerId") Long customerId);
 
     @Query("select j from Job j where j.scheduledDate is not null and j.scheduledDate = :scheduleDate and " +
-            "j.endTime is null")
+            "j.endTime is null and (j.startTime > CURRENT_TIME or j.startTime is null)")
     ArrayList<Job> getCalendarJobsByDate(@Param("scheduleDate") Date scheduleDate);
 
     @Query("select j from Job j where j.scheduledDate between :scheduleDate and :yesterdayDate and j.endTime is null")
