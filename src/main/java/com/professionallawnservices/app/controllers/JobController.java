@@ -1,6 +1,8 @@
 package com.professionallawnservices.app.controllers;
 
+import com.professionallawnservices.app.enums.RolesEnum;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
+import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Worker;
 import com.professionallawnservices.app.models.data.Customer;
@@ -23,11 +25,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+import static com.professionallawnservices.app.enums.RolesEnum.EMPLOYEE;
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 
 @Controller
 @RequestMapping("/appointments")
-@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
+//@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
 public class JobController {
 
     @Autowired
@@ -108,14 +111,14 @@ public class JobController {
     }
 
     @GetMapping("/update/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
     public String updateJobView(
             @PathVariable(value = "id", required = true) long id,
             Model model
     )
     {
         Result result = jobService.getJobById(new JobRequest(id));
-
+        RolesEnum user = SecurityHelpers.getPrimaryUserRole();
 
         if (!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
@@ -129,6 +132,10 @@ public class JobController {
         model.addAttribute("jobRequest", jobRequest);
         model.addAttribute("helpArrayList", helpArrayList);
         model.addAttribute("addUpdate", "UPDATE");
+        model.addAttribute("userAccessLevel", user.accessLevel);
+        model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
+        model.addAttribute("employeeAccessLevel", EMPLOYEE.accessLevel);
+
 
         return "alter-appointment";
     }

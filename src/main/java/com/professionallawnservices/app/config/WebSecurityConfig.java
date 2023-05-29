@@ -59,7 +59,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         //.antMatchers("/**").permitAll() //Allows access to pages without logging in
                         .antMatchers(staticResources).permitAll()
-                        .antMatchers(managerPages).hasAnyRole("MANAGER", "ADMIN", "OWNER")
+                        //.antMatchers(managerPages).hasAnyRole("MANAGER", "ADMIN", "OWNER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

@@ -1,5 +1,6 @@
 package com.professionallawnservices.app.models.data;
 
+import com.professionallawnservices.app.helpers.PhoneHelper;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import org.hibernate.annotations.Proxy;
 
@@ -78,6 +79,10 @@ public class Customer {
 
     public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
+    }
+
+    public String getCustomerPhoneFormatted() {
+        return PhoneHelper.formatPhoneNumber(customerPhone);
     }
 
     public int getFrequency() {

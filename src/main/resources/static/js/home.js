@@ -320,7 +320,8 @@ function appointmentClick(e) {
     let quickAddHeader = $('#add-header');
 
     //This checks whether it is the employee view
-    if (quickAddHeader.length !== 0) {
+    //if (quickAddHeader.length !== 0) {
+    if (true) {
         let appointmentDiv = $('#' + e.currentTarget.id);
         let appointmentInput = appointmentDiv.children().eq(0);
         let appointmentId = appointmentInput.val();
