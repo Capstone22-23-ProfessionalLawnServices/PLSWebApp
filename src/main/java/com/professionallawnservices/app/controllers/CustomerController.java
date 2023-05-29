@@ -18,6 +18,7 @@ import com.professionallawnservices.app.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +32,7 @@ import static com.professionallawnservices.app.enums.RolesEnum.*;
 
 @Controller
 @RequestMapping("/customers")
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
 public class CustomerController {
 
     @Autowired

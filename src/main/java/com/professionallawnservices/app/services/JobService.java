@@ -143,7 +143,7 @@ public class JobService {
             job.setEndTime(jobFromRequest.getEndTime());
             job.setNotes(jobFromRequest.getNotes());
 
-            if (job.getEndTime() != null && job.getCustomer() != null) {
+            if (job.getEndTime() != null && job.getCustomer() != null && job.getCustomer().getFrequency() > 0) {
                 deleteUnfinishedFollowingJobs(job);
                 automaticScheduleNextAppointment(job);
             }

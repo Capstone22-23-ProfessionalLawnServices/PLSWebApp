@@ -42,7 +42,10 @@ public class JobRequest {
         cost = job.getCost();
         endTime = DateHelper.sqlTimeToString(job.getScheduledDate(), job.getEndTime());
         startTime = DateHelper.sqlTimeToString(job.getScheduledDate(), job.getStartTime());
-        location = job.getJobLocation();
+        location = (job.getCustomer() != null) &&
+                (job.getCustomer().getCustomerLocation() != null) &&
+                (job.getJobLocation() == null)
+                ? job.getCustomer().getCustomerLocation() : job.getJobLocation();
         notes = job.getNotes();
         scheduledDate = DateHelper.sqlDateToString(job.getScheduledDate());
         totalTime = (int) Math.round(job.getTotalTime());

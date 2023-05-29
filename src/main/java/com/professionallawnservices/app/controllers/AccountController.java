@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
+import static com.professionallawnservices.app.enums.RolesEnum.OWNER;
 
 @Controller
 @RequestMapping("/account")
@@ -44,6 +45,7 @@ public class AccountController {
 
         model.addAttribute("userAccessLevel", userRequest.getRolesEnum().accessLevel);
         model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
+        model.addAttribute("ownerAccessLevel", OWNER.accessLevel);
         model.addAttribute("userRequest", userRequest);
         model.addAttribute("addUpdate", "UPDATE");
 
@@ -112,7 +114,7 @@ public class AccountController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/account/update";
+        return "redirect:/account";
     }
 
     /*

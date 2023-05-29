@@ -246,7 +246,7 @@ public class HomeService {
             Job job = jobRepo.findById(jobRequest.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid job Id:" + jobRequest.getId()));
 
-            if (job.getEndTime() != null && job.getCustomer() != null) {
+            if (job.getEndTime() != null && job.getCustomer() != null && job.getCustomer().getFrequency() > 0) {
                 jobService.deleteUnfinishedFollowingJobs(job);
                 jobService.automaticScheduleNextAppointment(job);
             }
