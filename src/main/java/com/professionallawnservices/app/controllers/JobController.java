@@ -30,7 +30,7 @@ import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
 
 @Controller
 @RequestMapping("/appointments")
-//@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
 public class JobController {
 
     @Autowired
@@ -111,7 +111,7 @@ public class JobController {
     }
 
     @GetMapping("/update/{id}")
-    //@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
     public String updateJobView(
             @PathVariable(value = "id", required = true) long id,
             Model model

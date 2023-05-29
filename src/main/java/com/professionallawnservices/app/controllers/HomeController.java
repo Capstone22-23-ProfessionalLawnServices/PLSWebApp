@@ -24,12 +24,14 @@ import static com.professionallawnservices.app.enums.RolesEnum.*;
 
 @Controller
 @RequestMapping("/home")
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
 public class HomeController {
 
     @Autowired
     HomeService homeService;
 
     @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
     public String viewHome(Model model) {
         RolesEnum user = SecurityHelpers.getPrimaryUserRole();
         ArrayList<PlsWeather> plsWeatherArrayList = homeService.getCalendarWeather();
@@ -39,6 +41,8 @@ public class HomeController {
 
         model.addAttribute("userAccessLevel", user.accessLevel);
         model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
+        model.addAttribute("employeeAccessLevel", EMPLOYEE.accessLevel);
+        model.addAttribute("readonlyAccessLevel", READONLY.accessLevel);
         model.addAttribute("weatherArrayList", plsWeatherArrayList);
         model.addAttribute("calendarJobs", calendarJobs);
         model.addAttribute("missedJobs", missedJobs);

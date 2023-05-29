@@ -126,6 +126,10 @@ h2 {
     display: none;
 }
 
+#clock-empty-space {
+    opacity: 0;
+}
+
 @media (max-width: 1199px){
 
     .container {

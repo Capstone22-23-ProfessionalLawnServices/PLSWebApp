@@ -27,12 +27,14 @@ import static com.professionallawnservices.app.enums.RolesEnum.OWNER;
 
 @Controller
 @RequestMapping("/account")
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
     @GetMapping("")
+    @PreAuthorize("isAuthenticated()")
     public String accountView(Model model) {
 
         Result result = accountService.accountView();
