@@ -1,3 +1,7 @@
+textarea {
+    width: 100%;
+}
+
 .editable-cell {
     outline: 2px #6D98AB solid;
     border-radius: 2px;

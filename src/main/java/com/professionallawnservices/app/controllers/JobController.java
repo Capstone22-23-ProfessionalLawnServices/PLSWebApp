@@ -72,9 +72,11 @@ public class JobController {
     @GetMapping("/add")
     public String addJobView(Model model) {
         JobRequest jobRequest = new JobRequest();
+        RolesEnum user = SecurityHelpers.getPrimaryUserRole();
 
         model.addAttribute("jobRequest", jobRequest);
         model.addAttribute("addUpdate", "ADD");
+        model.addAttribute("userAccessLevel", user.accessLevel);
 
         return "alter-appointment";
     }
