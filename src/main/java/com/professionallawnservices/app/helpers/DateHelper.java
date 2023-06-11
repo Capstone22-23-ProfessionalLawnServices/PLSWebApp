@@ -2,6 +2,7 @@ package com.professionallawnservices.app.helpers;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -13,17 +14,20 @@ public class DateHelper {
     public static Time stringToSqlTime(String timeString) {
 
         Time time;
-        LocalDateTime dateLocal;
 
         try {
-            dateLocal = LocalDateTime.parse(timeString);
-            ZonedDateTime zdt = ZonedDateTime.of(dateLocal, ZoneId.systemDefault());
 
-            long dateZone = zdt.toInstant().toEpochMilli();
+            if (timeString == null) {
+                return null;
+            }
 
-            time = new java.sql.Time(dateZone);
+            if (timeString.length() < 8) {
+                timeString += ":00";
+            }
+
+            time = Time.valueOf(timeString);
         } catch (Exception e) {
-            return null;
+            throw(e);
         }
 
         return time;

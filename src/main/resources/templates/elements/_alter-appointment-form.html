@@ -37,15 +37,15 @@
                required="required" th:if="${userAccessLevel == employeeAccessLevel}" readonly>
 
         <label for="start-time" class="form-label">Start Time:</label>
-        <input type="datetime-local" id="start-time" th:field="*{startTime}"
+        <input type="time" id="start-time" th:field="*{startTime}"
                th:if="${userAccessLevel >= managerAccessLevel}" class="form-control form-input">
-        <input type="datetime-local" id="start-time" th:field="*{startTime}"
+        <input type="time" id="start-time" th:field="*{startTime}"
                th:if="${userAccessLevel == employeeAccessLevel}" class="form-control form-input" readonly>
 
         <label for="end-time" class="form-label">End Time:</label>
-        <input type="datetime-local" id="end-time" th:field="*{endTime}"
+        <input type="time" id="end-time" th:field="*{endTime}"
                th:if="${userAccessLevel >= managerAccessLevel}" class="form-control form-input">
-        <input type="datetime-local" id="end-time" th:field="*{endTime}"
+        <input type="time" id="end-time" th:field="*{endTime}"
                th:if="${userAccessLevel == employeeAccessLevel}" class="form-control form-input" readonly>
 
         <label id="total-time-label" for="total-time" class="form-label">Total Time: </label>

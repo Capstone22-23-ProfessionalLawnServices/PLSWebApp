@@ -218,14 +218,20 @@ function addTotalTime() {
 
     if (startTimeString !== "" && endTimeString !== "") {
 
-        let startTime = new Date(startTimeString);
-        let endTime = new Date(endTimeString);
+        let [hours1, minutes1] = startTimeString.split(":");
+        let [hours2, minutes2] = endTimeString.split(":");
 
-        let minutesDifference = (endTime - startTime) / 1000 / 60;
-        let hoursDifference = Math.floor(minutesDifference / 60);
-        minutesDifference -= (hoursDifference * 60);
+        let date1 = new Date();
+        date1.setHours(hours1);
+        date1.setMinutes(minutes1);
 
-        $('#total-time').text(hoursDifference + " hour(s) and " + minutesDifference + " minute(s)");
+        let date2 = new Date();
+        date2.setHours(hours2);
+        date2.setMinutes(minutes2);
+
+        let differenceInMinutes = Math.abs(date2 - date1) / (1000 * 60);
+
+        $('#total-time').text(differenceInMinutes + " minute(s)");
 
     }
     else {

@@ -40,8 +40,8 @@ public class JobRequest {
     public JobRequest(Job job) {
         id = job.getJobId();
         cost = job.getCost();
-        endTime = DateHelper.sqlTimeToString(job.getScheduledDate(), job.getEndTime());
-        startTime = DateHelper.sqlTimeToString(job.getScheduledDate(), job.getStartTime());
+        endTime = job.getEndTime() != null ? job.getEndTime().toString() : "";
+        startTime = job.getStartTime() != null ? job.getStartTime().toString() : "";
         location = (job.getCustomer() != null) &&
                 (job.getCustomer().getCustomerLocation() != null) &&
                 (job.getJobLocation() == null)

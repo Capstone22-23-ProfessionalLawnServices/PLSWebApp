@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -365,28 +366,37 @@ public class JobService {
 
         try {
 
-            Job newJob = new Job();
-            Customer customer = customerRepo.findById(job.getCustomer().getCustomerId())
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" +
-                            job.getCustomer().getCustomerId())
-                    );
-            newJob.setJobId(0);
-            newJob.setJobLocation(job.getJobLocation());
-            newJob.setCustomer(job.getCustomer());
-            newJob.setCost(customer.getRegularCost());
-            newJob.setNotes("");
-            newJob.setStartTime(null);
-            newJob.setEndTime(null);
-            newJob.setTotalTime(0.0);
-
-            Date date = DateHelper.sqlDateAddDays(
+            Date currentDate = new Date(System.currentTimeMillis());
+            Date newAppointmentDate = DateHelper.sqlDateAddDays(
                     job.getScheduledDate(),
-                    newJob.getCustomer().getFrequency()
-                    );
+                    job.getCustomer().getFrequency()
+            );
 
-            newJob.setScheduledDate(date);
+            LocalDate localDate1 = currentDate.toLocalDate();
+            LocalDate localDate2 = newAppointmentDate.toLocalDate();
 
-            jobRepo.save(newJob);
+            int comparison = localDate1.compareTo(localDate2);
+
+            if (comparison <= 0) {
+                Job newJob = new Job();
+                Customer customer = customerRepo.findById(job.getCustomer().getCustomerId())
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" +
+                                job.getCustomer().getCustomerId())
+                        );
+                newJob.setJobId(0);
+                newJob.setJobLocation(job.getJobLocation());
+                newJob.setCustomer(job.getCustomer());
+                newJob.setCost(customer.getRegularCost());
+                newJob.setNotes("");
+                newJob.setStartTime(null);
+                newJob.setEndTime(null);
+                newJob.setTotalTime(0.0);
+
+                newJob.setScheduledDate(newAppointmentDate);
+
+                jobRepo.save(newJob);
+
+            }
         }
         catch (Exception e) {
             throw e;

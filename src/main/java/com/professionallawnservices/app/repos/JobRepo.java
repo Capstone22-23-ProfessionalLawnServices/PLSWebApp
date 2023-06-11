@@ -32,7 +32,7 @@ public interface JobRepo extends JpaRepository<Job, Long> {
     @Query("select j from Job j where j.startTime is not null and j.endTime is null and j.startTime <= CURRENT_TIME")
     ArrayList<Job> findActiveJobs();
 
-    @Query("select j from Job j where j.scheduledDate > :scheduleDate")
+    @Query("select j from Job j where j.scheduledDate > :scheduleDate and j.endTime = null")
     ArrayList<Job> findByScheduledDateGreaterThan(@Param("scheduleDate") Date scheduleDate);
 
 
