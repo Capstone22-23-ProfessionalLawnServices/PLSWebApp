@@ -1,15 +1,12 @@
 package com.professionallawnservices.app.services;
 
-/*
-The AccountService houses all the service layer work for the AccountController.
-Communication from the AccountService to the AccountController is accomplished primarily through the UserRequest.
- */
-
 import com.professionallawnservices.app.enums.RolesEnum;
 import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.request.UserRequest;
+import com.professionallawnservices.app.models.request.WorkerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -109,5 +106,4 @@ public class AccountService {
         return result;
 
     }
-
 }

@@ -14,15 +14,18 @@
   <label for="password" class="form-label">Password:</label>
   <input type="password" id="password" th:field="*{newPassword}" class="form-control form-input"
          minlength="8" required="required">
-  <label for="role" class="form-label">Role:</label>
+  <!--
+<label for="role" class="form-label">Role:</label>
+<div class="clear inner-add-elements"></div>
+<select id="role" th:field="*{role}" required="required">
+  <option value="ROLE_READONLY">Read Only</option>
+  <option value="ROLE_EMPLOYEE">Employee</option>
+  <option value="ROLE_MANAGER">Manager</option>
+</select>
+-->
   <div class="clear inner-add-elements"></div>
-  <select id="role" th:field="*{role}" required="required">
-    <option value="ROLE_READONLY">Read Only</option>
-    <option value="ROLE_EMPLOYEE">Employee</option>
-    <option value="ROLE_MANAGER">Manager</option>
-  </select>
-  <div class="clear inner-add-elements"></div>
-  <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Submit" />
+  <button class="btn btn-primary form-submit-btn default-btn" type="button"
+          onclick="createAccount()">Create Account</button>
 
 </div>
 

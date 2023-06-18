@@ -33,6 +33,9 @@ public class Worker {
     @OneToMany(mappedBy = "worker")
     private Set<Help> help = new HashSet<>();
 
+    @OneToOne(mappedBy = "worker")
+    private WorkerAccount workerAccount = new WorkerAccount();
+
     public Worker() {
 
     }
@@ -76,4 +79,11 @@ public class Worker {
         this.workerEmail = workerEmail;
     }
 
+    public WorkerAccount getWorkerAccount() {
+        return workerAccount;
+    }
+
+    public void setWorkerAccount(WorkerAccount workerAccount) {
+        this.workerAccount = workerAccount;
+    }
 }

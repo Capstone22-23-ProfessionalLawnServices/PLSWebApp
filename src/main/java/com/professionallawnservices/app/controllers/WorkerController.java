@@ -11,8 +11,10 @@ import com.professionallawnservices.app.exceptions.PlsRequestException;
 import com.professionallawnservices.app.exceptions.PlsServiceException;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
+import com.professionallawnservices.app.models.data.Users;
 import com.professionallawnservices.app.models.data.Worker;
 import com.professionallawnservices.app.models.request.WorkerRequest;
+import com.professionallawnservices.app.services.UsersService;
 import com.professionallawnservices.app.services.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,9 @@ public class WorkerController {
 
     @Autowired
     WorkerService workerService;
+
+    @Autowired
+    UsersService usersService;
 
     @GetMapping("")
     public String workersView(
@@ -69,14 +74,16 @@ public class WorkerController {
     }
 
     @PostMapping("/add")
-    public String addWorker(@ModelAttribute("workerRequest") WorkerRequest workerRequest) {
-        if(
-                ValidationHelpers.isNull(workerRequest)
-                        || ValidationHelpers.isNullOrBlank(workerRequest.getName())
-        )
-        {
-            throw new PlsRequestException("Request must contain name");
-        }
+    public String addWorker(
+            @RequestParam(value = "name",required = true) String name,
+            @RequestParam(value = "email",required = true) String email,
+            @RequestParam(value = "phone",required = true) String phone
+    )
+    {
+        WorkerRequest workerRequest = new WorkerRequest();
+        workerRequest.setName(name);
+        workerRequest.setEmail(email);
+        workerRequest.setPhone(phone);
 
         Result result = workerService.createWorker(workerRequest);
 
@@ -102,9 +109,11 @@ public class WorkerController {
 
         Worker worker = (Worker) result.getData();
         WorkerRequest workerRequest = new WorkerRequest(worker);
+        Users user = (Users) usersService.getUserByWorkerId(workerRequest).getData();
 
         model.addAttribute("worker", worker);
         model.addAttribute("workerRequest", workerRequest);
+        model.addAttribute("account", user);
         model.addAttribute("id", workerRequest.getId());
         model.addAttribute("addUpdate", "UPDATE");
 
@@ -114,19 +123,16 @@ public class WorkerController {
     @PostMapping("/update/{id}")
     public String updateWorker(
             @PathVariable(value = "id",required = true) long id,
-            @ModelAttribute("workerRequest") WorkerRequest workerRequest,
+            @RequestParam(value = "name",required = true) String name,
+            @RequestParam(value = "email",required = true) String email,
+            @RequestParam(value = "phone",required = true) String phone,
             Model model
     )
     {
-        if(
-                ValidationHelpers.isNull(workerRequest)
-                        || ValidationHelpers.isNullOrBlank(workerRequest.getName())
-        )
-        {
-            throw new PlsRequestException("Request must contain name");
-        }
-
-        workerRequest.setId(id);
+        WorkerRequest workerRequest = new WorkerRequest(id);
+        workerRequest.setName(name);
+        workerRequest.setEmail(email);
+        workerRequest.setPhone(phone);
 
         Result result = workerService.updateWorker(workerRequest);
 
@@ -153,55 +159,19 @@ public class WorkerController {
         return ResponseEntity.ok("");
     }
 
-    /*
-    @GetMapping("/search")
-    public String getEmployeeByName(
-            @RequestParam(value = "name", required = true) String name,
+    @GetMapping("/add-account/{id}")
+    public String addWorkerAccount(
+            @PathVariable(value = "id",required = true) long id,
             Model model
     )
     {
-        ContactRequest contactRequest = new ContactRequest();
-        contactRequest.setName(name);
-
-        Result result = contactService.searchContacts(contactRequest);
+        Result result = workerService.deleteWorkerById(new WorkerRequest(id));
 
         if(!result.getComplete()) {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        ArrayList<Contact> contacts = (ArrayList<Contact>) result.getData();
-
-        model.addAttribute("contacts", contacts);
-        model.addAttribute("selectSearch", "SEARCH");
-        model.addAttribute("pageNumber", "0");
-        model.addAttribute("contact", new ContactRequest());
-
-        return "contacts";
+        return "alter-account";
     }
-    */
-
-    /*
-    The rest methods are intended for use with a api application like Postman and not with webpages.
-
-
-    @PostMapping("/rest/create-contact")
-    public String createContactRest(@RequestBody ContactRequest contactRequest) {
-        if(
-                ValidationHelpers.isNull(contactRequest)
-                        || ValidationHelpers.isNullOrBlank(contactRequest.getName())
-        )
-        {
-            throw new PlsRequestException("Request must contain name");
-        }
-
-        Result result = contactService.createContact(contactRequest);
-
-        if(!result.getComplete()) {
-            throw new PlsServiceException(result.getErrorMessage());
-        }
-
-        return "redirect:/contacts/add";
-    }
-         */
 
 }

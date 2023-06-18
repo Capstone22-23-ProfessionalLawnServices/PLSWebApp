@@ -42,10 +42,12 @@
 
         </form>
 
+        <!--
         <button class="btn btn-primary form-submit-btn default-btn" type="button" href="/account/add"
         onclick="addAccountClick()" th:if="${userAccessLevel >= ownerAccessLevel && addUpdate == 'UPDATE'}">
           New Account
         </button>
+        -->
 
         <form th:action="@{/logout}" th:if="${addUpdate == 'UPDATE'}" method="post">
           <input type="submit" class="btn btn-primary form-submit-btn default-btn" value="Sign Out"/>

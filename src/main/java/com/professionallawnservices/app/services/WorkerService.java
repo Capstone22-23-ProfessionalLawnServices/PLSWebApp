@@ -1,14 +1,19 @@
 package com.professionallawnservices.app.services;
 
 import com.professionallawnservices.app.helpers.ValidationHelpers;
+import com.professionallawnservices.app.models.data.Users;
 import com.professionallawnservices.app.models.data.Worker;
 import com.professionallawnservices.app.models.data.Help;
+import com.professionallawnservices.app.models.data.WorkerAccount;
 import com.professionallawnservices.app.models.request.WorkerRequest;
+import com.professionallawnservices.app.repos.UsersRepo;
+import com.professionallawnservices.app.repos.WorkerAccountRepo;
 import com.professionallawnservices.app.repos.WorkerRepo;
 import com.professionallawnservices.app.repos.HelpRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import com.professionallawnservices.app.models.*;
 
@@ -22,6 +27,14 @@ public class WorkerService {
 
     @Autowired
     HelpRepo helpRepo;
+
+    @Autowired
+    private WorkerAccountRepo workerAccountRepo;
+
+    @Autowired
+    private JdbcUserDetailsManager jdbcUserDetailsManager;
+    @Autowired
+    private UsersRepo usersRepo;
 
     public Result getAllWorkers() {
 
@@ -67,6 +80,7 @@ public class WorkerService {
         try {
 
             Worker worker = new Worker(workerRequest);
+            worker.setWorkerAccount(null);
 
             workerRepo.save(worker);
 
@@ -106,7 +120,10 @@ public class WorkerService {
 
         try {
 
+            WorkerAccount workerAccount = workerAccountRepo.findWorkerAccountByWorkerId(workerRequest.getId());
+
             Worker worker = new Worker(workerRequest);
+            worker.setWorkerAccount(workerAccount);
 
             workerRepo.save(worker);
 
@@ -129,8 +146,12 @@ public class WorkerService {
             Worker worker = workerRepo.getReferenceById(workerRequest.getId());
 
             ArrayList<Help> helpArrayList = helpRepo.getAllHelpByWorkerId(worker.getWorkerId());
+            WorkerAccount workerAccount = workerAccountRepo.findWorkerAccountByWorkerId(workerRequest.getId());
+            Users users = usersRepo.findByUsername(workerAccount.getUsers().getUsername());
 
             helpRepo.deleteAll(helpArrayList);
+            workerAccountRepo.delete(workerAccount);
+            jdbcUserDetailsManager.deleteUser(users.getUsername());
             workerRepo.delete(worker);
 
             result.setComplete(true);
