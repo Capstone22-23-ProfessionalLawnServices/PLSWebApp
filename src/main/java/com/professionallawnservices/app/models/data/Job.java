@@ -144,4 +144,11 @@ public class Job {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
+    public ArrayList<Help> getHelp() {
+        ArrayList<Help> helpList = new ArrayList<Help>();
+        helpList.addAll(help);
+
+        return helpList;
+    }
 }

@@ -231,7 +231,7 @@ function addTotalTime() {
 
         let differenceInMinutes = Math.abs(date2 - date1) / (1000 * 60);
 
-        $('#total-time').text(differenceInMinutes + " minute(s)");
+        $('#total-time').text(Math.floor(differenceInMinutes) + " minute(s)");
 
     }
     else {

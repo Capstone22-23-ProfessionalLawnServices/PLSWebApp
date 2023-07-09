@@ -408,6 +408,13 @@ public class JobService {
         try {
 
             ArrayList<Job> jobArrayList = jobRepo.findByScheduledDateGreaterThan(job.getScheduledDate());
+            ArrayList<Job> jobArrayListCopy = new ArrayList<>(jobArrayList);
+
+            for (Job unfinishedJob : jobArrayListCopy) {
+                if (unfinishedJob.getCustomer().getCustomerId() != job.getCustomer().getCustomerId()) {
+                    jobArrayList.remove(unfinishedJob);
+                }
+            }
 
             jobRepo.deleteAll(jobArrayList);
 

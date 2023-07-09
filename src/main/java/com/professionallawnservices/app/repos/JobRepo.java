@@ -35,8 +35,6 @@ public interface JobRepo extends JpaRepository<Job, Long> {
     @Query("select j from Job j where j.scheduledDate > :scheduleDate and j.endTime = null")
     ArrayList<Job> findByScheduledDateGreaterThan(@Param("scheduleDate") Date scheduleDate);
 
-
-
     @Transactional
     @Modifying
     @Query("update Job j set j.startTime = CURRENT_TIME where j.jobId = :jobId")
