@@ -1,26 +1,3 @@
-// function addCustomerClick(e) {
-//     let cost = document.getElementById("cost").value == null ? "0.0":document.getElementById("cost").value;
-//     let location = document.getElementById("location").value == null ? "":document.getElementById("location").value;
-//     let scheduledDate = document.getElementById("date").value == null ? "null":document.getElementById("date").value;
-//     let startTime = document.getElementById("start-time").value == null ? "":document.getElementById("start-time").value;
-//     let endTime = document.getElementById("end-time").value == null ? "":document.getElementById("end-time").value;
-//
-//     if (scheduledDate === "") {
-//         alert("An appointment must have a scheduled date.")
-//         return;
-//     }
-//
-//     let url = "/add/select-customer?"
-//         + "cost=" + cost
-//         + "&location=" + location
-//         + "&scheduledDate=" + scheduledDate
-//         + "&startTime=" + startTime
-//         + "&endTime=" + endTime;
-//
-//     window.location.href = $.ajax({type: "post", url: url, async: false}).responseText;
-//     //window.location.href = $.ajax({type: "POST", url: url, async: false}).responseText;
-// }
-
 function addAppointment(e) {
 
     let params = getUrlParams();
@@ -44,6 +21,8 @@ function addAppointment(e) {
 }
 
 function updateAppointment(e) {
+
+    updateWorkerPay();
 
     let params = getUrlParams();
 
@@ -113,7 +92,7 @@ function updateCustomerClick(e) {
         });
 }
 
-function updateContactClick(e) {
+function updateWorkerClick(e) {
 
     let params = getUrlParams();
 
@@ -129,18 +108,22 @@ function updateContactClick(e) {
         method: 'POST'
     })
         .then(response => {
-            window.location.href = "/appointments/update/" + jobId + "/select-contact";
+            window.location.href = "/appointments/update/" + jobId + "/select-worker";
         })
         .catch(error => {
             alert("There was an issue with the fetch request.")
         });
 }
 
-function removeContactClick(e) {
-    let contactId = e.target.parentNode.getAttribute("value");
+function removeWorkerClick(e) {
+    let targetElement = e.target;
+    let removeButtonCellJQ = $(e.target);
+    let idCellJQ = $(removeButtonCellJQ.parent().siblings()[0]);
+
+    let workerId = idCellJQ[0].getAttribute("value");
     let jobId = document.getElementById("jobId").getAttribute("value");
 
-    let url = "/help/delete?jobId=" + jobId + "&contactId=" + contactId;
+    let url = "/help/delete?jobId=" + jobId + "&workerId=" + workerId;
 
     fetch(url, {
         method: 'POST'
@@ -164,11 +147,18 @@ function deleteJob(e) {
 }
 
 function getUrlParams() {
-    let cost = document.getElementById("cost") == null ? "0.0":document.getElementById("cost").value;
-    let location = document.getElementById("location") == null ? "":document.getElementById("location").value;
-    let scheduledDate = document.getElementById("date") == null ? "":document.getElementById("date").value;
-    let startTime = document.getElementById("start-time") == null ? "":document.getElementById("start-time").value;
-    let endTime = document.getElementById("end-time") == null ? "":document.getElementById("end-time").value;
+    let cost = document.getElementById("cost") == null
+        ? "0.0":document.getElementById("cost").value;
+    let location = document.getElementById("location") == null
+        ? "":document.getElementById("location").value;
+    let scheduledDate = document.getElementById("date") == null
+        ? "":document.getElementById("date").value;
+    let startTime = document.getElementById("start-time") == null
+        ? "":document.getElementById("start-time").value;
+    let endTime = document.getElementById("end-time") == null
+        ? "":document.getElementById("end-time").value;
+    let notes = document.getElementById("notes") == null
+        ? "":document.getElementById("notes").value;
 
     if (scheduledDate === "" || scheduledDate === null) {
         alert("An appointment must have a scheduled date.")
@@ -197,6 +187,10 @@ function getUrlParams() {
         params += "endTime=" + paramSpaceReplace(endTime) + "&";
     }
 
+    if (notes !== "") {
+        params += "notes=" + paramSpaceReplace(notes) + "&";
+    }
+
     if (params.charAt(params.length - 1) === '$') {
         params = params.substring(0, (params.length - 2))
     }
@@ -213,4 +207,59 @@ function paramSpaceReplace(param) {
     }
 
     return param;
+}
+
+function addTotalTime() {
+
+    let startTimeString = document.getElementById("start-time") == null
+        ? "":document.getElementById("start-time").value;
+    let endTimeString = document.getElementById("end-time") == null
+        ? "":document.getElementById("end-time").value;
+
+    if (startTimeString !== "" && endTimeString !== "") {
+
+        let [hours1, minutes1] = startTimeString.split(":");
+        let [hours2, minutes2] = endTimeString.split(":");
+
+        let date1 = new Date();
+        date1.setHours(hours1);
+        date1.setMinutes(minutes1);
+
+        let date2 = new Date();
+        date2.setHours(hours2);
+        date2.setMinutes(minutes2);
+
+        let differenceInMinutes = Math.abs(date2 - date1) / (1000 * 60);
+
+        $('#total-time').text(Math.floor(differenceInMinutes) + " minute(s)");
+
+    }
+    else {
+        $('#total-time').attr("hidden",true);
+        $('#total-time-label').attr("hidden",true);
+    }
+
+}
+
+function updateWorkerPay() {
+
+    let tableBodyJQ = $('#worker-table-body');
+    let tableRowsJQ = $(tableBodyJQ.children());
+
+    for (let i = 0; i < tableRowsJQ.length; i++) {
+        let workerPay = $($($(tableRowsJQ[i]).children())[2]).children()[0].innerHTML;
+        let helpId = tableRowsJQ[i].getAttribute('value');
+
+        let url = "/help/update-pay/" + helpId + "?workerPay=" + workerPay;
+
+        fetch(url, {
+            method: 'POST'
+        })
+            .then(response => {
+                console.log("Updated pay for help: " + helpId);
+            })
+            .catch(error => {
+                alert("There was an issue with the fetch request.")
+            });
+    }
 }

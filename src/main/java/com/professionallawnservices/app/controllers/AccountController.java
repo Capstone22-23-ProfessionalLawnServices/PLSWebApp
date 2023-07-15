@@ -12,6 +12,7 @@ import com.professionallawnservices.app.exceptions.PlsServiceException;
 import com.professionallawnservices.app.helpers.ValidationHelpers;
 import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.request.UserRequest;
+import com.professionallawnservices.app.models.request.WorkerRequest;
 import com.professionallawnservices.app.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,15 +24,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import static com.professionallawnservices.app.enums.RolesEnum.MANAGER;
+import static com.professionallawnservices.app.enums.RolesEnum.OWNER;
 
 @Controller
 @RequestMapping("/account")
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
     @GetMapping("")
+    @PreAuthorize("isAuthenticated()")
     public String accountView(Model model) {
 
         Result result = accountService.accountView();
@@ -44,6 +48,7 @@ public class AccountController {
 
         model.addAttribute("userAccessLevel", userRequest.getRolesEnum().accessLevel);
         model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
+        model.addAttribute("ownerAccessLevel", OWNER.accessLevel);
         model.addAttribute("userRequest", userRequest);
         model.addAttribute("addUpdate", "UPDATE");
 
@@ -81,6 +86,7 @@ public class AccountController {
         return "redirect:/account";
     }
 
+    /*
     @GetMapping("/add")
     @PreAuthorize("hasAnyRole('ROLE_OWNER','ROLE_ADMIN')")
     public String addAccountView(Model model) {
@@ -95,16 +101,12 @@ public class AccountController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAnyRole('ROLE_OWNER','ROLE_ADMIN')")
-    public String addAccount(@ModelAttribute("userRequest") UserRequest userRequest) {
-        if(
-                ValidationHelpers.isNull(userRequest)
-                || ValidationHelpers.isNullOrBlank(userRequest.getUsername())
-                || ValidationHelpers.isNullOrBlank(userRequest.getNewPassword())
-                || ValidationHelpers.isNullOrBlank(userRequest.getRole())
-        )
-        {
-            throw new PlsRequestException("Request must contain username, new password, and role");
-        }
+    public String addAccount(
+            @RequestParam(value = "username", required = true) String username,
+            @RequestParam(value = "password", required = true) String password
+    )
+    {
+        UserRequest userRequest = new UserRequest();
 
         Result result = accountService.createAccount(userRequest);
 
@@ -112,7 +114,31 @@ public class AccountController {
             throw new PlsServiceException(result.getErrorMessage());
         }
 
-        return "redirect:/account/update";
+        return "redirect:/account";
+    }
+    */
+
+    @PostMapping("/update-worker/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_OWNER','ROLE_ADMIN')")
+    public String updateAccount(
+            @PathVariable(value = "id",required = true) long id,
+            @RequestParam(value = "username", required = true) String username,
+            @RequestParam(value = "password", required = true) String password,
+            Model model
+    )
+    {
+        UserRequest userRequest = new UserRequest();
+
+        userRequest.setUsername(username);
+        userRequest.setPassword(password);
+
+        Result result = accountService.updateAccount(userRequest);
+
+        if (!result.getComplete()) {
+            throw new PlsServiceException(result.getErrorMessage());
+        }
+
+        return "redirect:/account";
     }
 
     /*

@@ -1,0 +1,28 @@
+textarea {
+    width: 100%;
+}
+
+.editable-cell {
+    outline: 2px #6D98AB solid;
+    border-radius: 2px;
+}
+
+.worker-id-cell {
+    padding-top: 20px !important;
+}
+
+.worker-name-cell {
+    padding-top: 20px !important;
+}
+
+.worker-pay-cell {
+    padding-top: 20px !important;
+}
+
+#pay-column {
+    width: 180px;
+}
+
+#update-pay-column {
+    width: 140px;
+}

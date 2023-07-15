@@ -1,18 +1,19 @@
 package com.professionallawnservices.app.services;
 
+import com.professionallawnservices.app.enums.RolesEnum;
+import com.professionallawnservices.app.helpers.SecurityHelpers;
 import com.professionallawnservices.app.models.Result;
-import com.professionallawnservices.app.models.data.Customer;
-import com.professionallawnservices.app.models.data.Job;
+import com.professionallawnservices.app.models.data.*;
 import com.professionallawnservices.app.models.json.openweather.Interval;
 import com.professionallawnservices.app.models.json.openweather.OpenWeatherResponse;
 import com.professionallawnservices.app.models.json.openweather.PlsWeather;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
-import com.professionallawnservices.app.repos.CustomerRepo;
-import com.professionallawnservices.app.repos.JobRepo;
+import com.professionallawnservices.app.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,8 +33,18 @@ public class HomeService {
 
     @Autowired
     JobRepo jobRepo;
+
     @Autowired
     private CustomerRepo customerRepo;
+
+    @Autowired
+    private WorkerRepo workerRepo;
+
+    @Autowired
+    private WorkerAccountRepo workerAccountRepo;
+
+    @Autowired
+    JobService jobService;
 
     public ArrayList<PlsWeather> getCalendarWeather() {
 
@@ -122,12 +133,36 @@ public class HomeService {
         try {
 
             ArrayList<ArrayList<Job>> calendarList = new ArrayList<ArrayList<Job>>();
+            RolesEnum userRoles = SecurityHelpers.getPrimaryUserRole();
 
-            for (int i = 0; i < 12; i++) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.DATE, i);
-                java.sql.Date scheduldeDate = new java.sql.Date(calendar.getTimeInMillis());
-                calendarList.add(jobRepo.getCalendarJobsByDate(scheduldeDate));
+            if (userRoles.accessLevel != 1) {
+                for (int i = 0; i < 12; i++) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.add(Calendar.DATE, i);
+                    java.sql.Date scheduldeDate = new java.sql.Date(calendar.getTimeInMillis());
+                    calendarList.add(jobRepo.getCalendarJobsByDate(scheduldeDate));
+                }
+            }
+            else {
+                Authentication user = SecurityHelpers.getUser();
+
+                for (int i = 0; i < 12; i++) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.add(Calendar.DATE, i);
+                    java.sql.Date scheduldeDate = new java.sql.Date(calendar.getTimeInMillis());
+                    ArrayList<Job> dayArray = jobRepo.getCalendarJobsByDate(scheduldeDate);
+                    ArrayList<Job> dayArrayCopy = new ArrayList<>(dayArray);
+
+                    for (Job job : dayArrayCopy) {
+                        ArrayList<String> usernames = getUsernamesFromJob(job);
+
+                        if (!usernames.contains(user.getName())) {
+                            dayArray.remove(job);
+                        }
+                    }
+
+                    calendarList.add(dayArray);
+                }
             }
 
             result.setData(calendarList);
@@ -200,7 +235,24 @@ public class HomeService {
 
             ArrayList<Job> activeJobs = jobRepo.findActiveJobs();
 
-            Job activeJob = activeJobs.size() == 0 ? null : activeJobs.get(0);
+            RolesEnum userRole = SecurityHelpers.getPrimaryUserRole();
+            Authentication user = SecurityHelpers.getUser();
+            Job activeJob = null;
+
+            if (userRole.accessLevel == 1) {
+
+                for (Job job : activeJobs) {
+                    ArrayList<String> usernames = getUsernamesFromJob(job);
+
+                    if (usernames.contains(user.getName())) {
+                        activeJob = job;
+                    }
+                }
+
+            }
+            else {
+                activeJob = activeJobs.size() == 0 ? null : activeJobs.get(0);
+            }
 
             result.setData(activeJob);
             result.setComplete(true);
@@ -239,6 +291,14 @@ public class HomeService {
 
             jobRepo.endSession(jobRequest.getId());
 
+            Job job = jobRepo.findById(jobRequest.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid job Id:" + jobRequest.getId()));
+
+            if (job.getEndTime() != null && job.getCustomer() != null && job.getCustomer().getFrequency() > 0) {
+                jobService.deleteUnfinishedFollowingJobs(job);
+                jobService.automaticScheduleNextAppointment(job);
+            }
+
             result.setComplete(true);
         }
         catch (Exception e) {
@@ -268,6 +328,36 @@ public class HomeService {
         return result;
     }
 
+    private ArrayList<String> getUsernamesFromJob(Job job) {
+        ArrayList<Worker> workerArrayList = new ArrayList<>();
 
+        for (Help help : job.getHelp()) {
+            workerArrayList.add(workerRepo.findById(help.getWorker().getWorkerId())
+                    .orElseThrow(() ->
+                            new IllegalArgumentException("Invalid job Id:" + help.getWorker().getWorkerId())));
+        }
+
+        ArrayList<WorkerAccount> workerAccounts = new ArrayList<>();
+
+        for (Worker worker : workerArrayList) {
+            try {
+                workerAccounts.add(workerAccountRepo.findWorkerAccountByWorkerId(worker.getWorkerId()));
+            }
+            catch (Exception ignored){
+            }
+        }
+
+        ArrayList<String> usernames = new ArrayList<>();
+
+        for (WorkerAccount workerAccount : workerAccounts) {
+            try {
+                usernames.add(workerAccount.getUsers().getUsername());
+            }
+            catch (Exception ignored) {
+            }
+        }
+
+        return usernames;
+    }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public interface JobRepo extends JpaRepository<Job, Long> {
@@ -19,7 +20,7 @@ public interface JobRepo extends JpaRepository<Job, Long> {
     ArrayList<Job> getAllJobByCustomerId(@Param("customerId") Long customerId);
 
     @Query("select j from Job j where j.scheduledDate is not null and j.scheduledDate = :scheduleDate and " +
-            "j.startTime is null and j.endTime is null")
+            "j.endTime is null and (j.startTime > CURRENT_TIME or j.startTime is null)")
     ArrayList<Job> getCalendarJobsByDate(@Param("scheduleDate") Date scheduleDate);
 
     @Query("select j from Job j where j.scheduledDate between :scheduleDate and :yesterdayDate and j.endTime is null")
@@ -28,8 +29,11 @@ public interface JobRepo extends JpaRepository<Job, Long> {
             @Param("yesterdayDate") Date yesterdayDate
     );
 
-    @Query("select j from Job j where j.startTime is not null and j.endTime is null")
+    @Query("select j from Job j where j.startTime is not null and j.endTime is null and j.startTime <= CURRENT_TIME")
     ArrayList<Job> findActiveJobs();
+
+    @Query("select j from Job j where j.scheduledDate > :scheduleDate and j.endTime = null")
+    ArrayList<Job> findByScheduledDateGreaterThan(@Param("scheduleDate") Date scheduleDate);
 
     @Transactional
     @Modifying

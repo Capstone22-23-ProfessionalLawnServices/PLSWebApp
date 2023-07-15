@@ -9,29 +9,55 @@
 
     <div id="appointment-form-contents">
 
-        <label for="cost" class="form-label">Price:</label>
+        <label for="cost" class="form-label" th:if="${userAccessLevel >= managerAccessLevel}">
+            Price:
+        </label>
         <input type="text" id="cost" th:field="*{cost}" class="form-control form-input"
+               th:if="${userAccessLevel >= managerAccessLevel}"
                placeholder="30.00" pattern="^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$">
 
         <label for="location" class="form-label">Location:</label>
         <input type="text" id="location" th:field="*{location}"
+               th:if="${userAccessLevel >= managerAccessLevel}"
                class="form-control form-input" placeholder="120 Smith St" minlength="5">
+        <input type="text" id="location" th:field="*{location}"
+               th:if="${userAccessLevel == employeeAccessLevel}"
+               class="form-control form-input" placeholder="120 Smith St" minlength="5" readonly>
+
+        <label for="notes" class="form-label">Notes:</label>
+        <textarea id="notes" th:field="*{notes}" rows="4" cols="69"
+                  th:if="${userAccessLevel >= managerAccessLevel}"></textarea>
+        <textarea id="notes" th:field="*{notes}" rows="4" cols="69"
+                  th:if="${userAccessLevel == employeeAccessLevel}" readonly></textarea>
 
         <label for="date" class="form-label">Scheduled Date:</label>
         <input type="date" id="date" th:field="*{scheduledDate}" class="form-control form-input"
-               required="required">
-        <label for="start-time" class="form-label">Start Time:</label>
-        <input type="datetime-local" id="start-time" th:field="*{startTime}" class="form-control form-input">
-        <label for="end-time" class="form-label">End Time:</label>
-        <input type="datetime-local" id="end-time" th:field="*{endTime}" class="form-control form-input">
+               required="required" th:if="${userAccessLevel >= managerAccessLevel}">
+        <input type="date" id="date" th:field="*{scheduledDate}" class="form-control form-input"
+               required="required" th:if="${userAccessLevel == employeeAccessLevel}" readonly>
 
-        <label for="customers" class="form-label" style="margin-top: 40px">Customers: </label>
+        <label for="start-time" class="form-label">Start Time:</label>
+        <input type="time" id="start-time" th:field="*{startTime}"
+               th:if="${userAccessLevel >= managerAccessLevel}" class="form-control form-input">
+        <input type="time" id="start-time" th:field="*{startTime}"
+               th:if="${userAccessLevel == employeeAccessLevel}" class="form-control form-input" readonly>
+
+        <label for="end-time" class="form-label">End Time:</label>
+        <input type="time" id="end-time" th:field="*{endTime}"
+               th:if="${userAccessLevel >= managerAccessLevel}" class="form-control form-input">
+        <input type="time" id="end-time" th:field="*{endTime}"
+               th:if="${userAccessLevel == employeeAccessLevel}" class="form-control form-input" readonly>
+
+        <label id="total-time-label" for="total-time" class="form-label">Total Time: </label>
+        <h2 id="total-time">No Total</h2>
+
+        <label for="customers" class="form-label" style="margin-top: 40px">Customer: </label>
         <table th:id="customers" class="table table-hover">
             <thead class="thead">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th class="location-column" scope="col">Location</th>
+                <th scope="col">Phone Number</th>
             </tr>
             </thead>
             <tbody>
@@ -39,12 +65,12 @@
                 th:value="${customer.customerId}">
                 <th th:text="${customer.customerId}" scope="row"></th>
                 <td th:text="${customer.customerName}"></td>
-                <td class="location-column" th:text="${customer.customerLocation}"></td>
+                <td th:text="${customer.getCustomerPhoneFormatted()}"></td>
             </tr>
             </tbody>
         </table>
 
-        <div class="container">
+        <div class="container" th:if="${userAccessLevel >= managerAccessLevel}">
             <div class="row">
                 <div class="col text-center">
                     <button class="btn form-submit-btn default-btn" type="button"
@@ -61,41 +87,51 @@
 
         <div class="clear inner-add-elements"></div>
 
-        <label for="contacts" class="form-label" style="margin-top: 40px">Assigned To: </label>
-        <table id="contacts" class="table table-hover">
+        <label for="workers" class="form-label" style="margin-top: 40px"th:if="${userAccessLevel >= managerAccessLevel}">
+            Assigned To:
+        </label>
+
+        <table id="workers" class="table table-hover" th:if="${userAccessLevel >= managerAccessLevel}">
             <thead class="thead">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
+                <th id="pay-column" scope="col">Pay</th>
+                <th id="update-pay-column"></th>
             </tr>
             </thead>
-            <tbody>
-            <tr  class="table-row" th:each="contact : ${contacts}" onclick="removeContactClick(event)"
-                 th:value="${contact.contactId}">
-                <td th:text="${contact.contactId}"></td>
-                <td th:text="${contact.contactName}"></td>
-                <td th:text="${contact.contactEmail}"></td>
-                <td th:text="${contact.contactPhone}"></td>
+            <tbody id="worker-table-body">
+            <tr  class="table-row" th:each="help : ${helpArrayList}" th:value="${help.id}">
+
+                <td class="worker-id-cell" th:text="${help.worker.workerId}" th:value="${help.worker.workerId}"></td>
+                <td class="worker-name-cell" th:text="${help.worker.workerName}"></td>
+                <td class="worker-pay-cell"><div class="editable-cell" th:text="${help.workerPay ?: '0.0'}" contenteditable>
+                </div></td>
+                <td>
+                    <button type="button" onclick="removeWorkerClick(event)" class="default-btn btn">
+                        Remove
+                    </button>
+                </td>
+
+
             </tr>
             </tbody>
         </table>
 
-        <div class="container" style="margin-bottom: 40px">
+        <div class="container" style="margin-bottom: 40px" th:if="${userAccessLevel >= managerAccessLevel}">
             <div class="row">
                 <div class="col text-center">
                     <button class="btn form-submit-btn default-btn" th:if="${addUpdate == 'ADD'}" type="button"
-                            disabled>Add Contact</button>
+                            disabled>Add Worker</button>
                     <button class="btn form-submit-btn default-btn" th:if="${addUpdate == 'UPDATE'}" type="button"
-                            onclick="updateContactClick(event)">Add Contact</button>
+                            onclick="updateWorkerClick(event)">Add Worker</button>
                 </div>
             </div>
         </div>
 
         <div class="clear inner-add-elements"></div>
 
-        <div class="container" style="margin-bottom: 40px">
+        <div class="container" style="margin-bottom: 40px" th:if="${userAccessLevel >= managerAccessLevel}">
             <div class="row">
                 <div class="col text-center">
                     <input type="button" class="btn btn-primary form-submit-btn default-btn" value="Add Appointment"

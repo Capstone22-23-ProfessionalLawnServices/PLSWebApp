@@ -128,13 +128,14 @@ body {
     padding-top: 30px;
 }
 
-#row1 {
+#table-page-header {
     border-radius: 10px 10px 0 0;
 }
 
-#row3 {
+#table-tail-row {
     border-radius: 0 0 10px 10px;
     height: 30px;
+    padding-bottom: 35px;
 }
 
 #next-page {

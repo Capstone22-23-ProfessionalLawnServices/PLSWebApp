@@ -4,19 +4,19 @@
 
 @media (max-width: 780px) {
 
-    #search-contact-button-text {
-        display: none;
-    }
-
-    #add-contact-button-text {
-        display: none;
-    }
-
     .location-column {
         display: none;
     }
 
-    .email-column {
+    .frequency-column {
+        display: none;
+    }
+
+    #search-worker-button-text {
+        display: none;
+    }
+
+    #add-worker-button-text {
         display: none;
     }
 

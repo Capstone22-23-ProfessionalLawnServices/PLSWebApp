@@ -13,11 +13,11 @@
   <nav>
     <ul class="nav-links">
       <li><a th:href="@{/home}" href="../home.html">Home</a></li>
-      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/contacts}" href="../contacts.html">Contacts</a></li>
-      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/customers}" href="../customers.html">Customer</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/workers}" href="../workers.html">Workers</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/customers}" href="../customers.html">Customers</a></li>
       <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/appointments}" href="../appointments.html">Appointments</a></li>
       <li><a th:href="@{/account}" href="../alter-account.html">Account</a></li>
-      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/statistics}" href="../statistics.html">Statistics</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/reports}" href="../reports.html">Reports</a></li>
     </ul>
   </nav>
   <div id="navbar-dropdown">
@@ -27,11 +27,11 @@
     <div id="navbar-dropdown-content">
       <!--<img src="../../../images/plstraced.svg" height="60">-->
       <li><a th:href="@{/home}" href="../home.html">Home</a></li>
-      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/contacts}" href="../contacts.html">Contacts</a></li>
-      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/customers}" href="../customers.html">Customer</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/workers}" href="../workers.html">Workers</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/customers}" href="../customers.html">Customers</a></li>
       <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/appointments}" href="../appointments.html">Appointments</a></li>
       <li><a th:href="@{/account}" href="../alter-account.html">Account</a></li>
-      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/statistics}" href="../statistics.html">Statistics</a></li>
+      <li th:if="${userAccessLevel >= managerAccessLevel}"><a th:href="@{/reports}" href="../reports.html">Reports</a></li>
     </div>
   </div>
 </header>

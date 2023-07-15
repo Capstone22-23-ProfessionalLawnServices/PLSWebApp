@@ -7,7 +7,6 @@ import com.professionallawnservices.app.models.Result;
 import com.professionallawnservices.app.models.data.Customer;
 import com.professionallawnservices.app.models.data.Job;
 import com.professionallawnservices.app.models.json.openweather.PlsWeather;
-import com.professionallawnservices.app.models.request.ContactRequest;
 import com.professionallawnservices.app.models.request.CustomerRequest;
 import com.professionallawnservices.app.models.request.JobRequest;
 import com.professionallawnservices.app.services.HomeService;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static com.professionallawnservices.app.enums.RolesEnum.*;
@@ -26,12 +24,14 @@ import static com.professionallawnservices.app.enums.RolesEnum.*;
 
 @Controller
 @RequestMapping("/home")
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_OWNER','ROLE_ADMIN')")
 public class HomeController {
 
     @Autowired
     HomeService homeService;
 
     @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
     public String viewHome(Model model) {
         RolesEnum user = SecurityHelpers.getPrimaryUserRole();
         ArrayList<PlsWeather> plsWeatherArrayList = homeService.getCalendarWeather();
@@ -41,6 +41,8 @@ public class HomeController {
 
         model.addAttribute("userAccessLevel", user.accessLevel);
         model.addAttribute("managerAccessLevel", MANAGER.accessLevel);
+        model.addAttribute("employeeAccessLevel", EMPLOYEE.accessLevel);
+        model.addAttribute("readonlyAccessLevel", READONLY.accessLevel);
         model.addAttribute("weatherArrayList", plsWeatherArrayList);
         model.addAttribute("calendarJobs", calendarJobs);
         model.addAttribute("missedJobs", missedJobs);

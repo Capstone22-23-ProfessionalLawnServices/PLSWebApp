@@ -4,11 +4,15 @@
 
 @media (max-width: 780px) {
 
-    #search-contact-button-text {
+    .email-column {
         display: none;
     }
 
-    #add-contact-button-text {
+    #search-worker-button-text {
+        display: none;
+    }
+
+    #add-worker-button-text {
         display: none;
     }
 
