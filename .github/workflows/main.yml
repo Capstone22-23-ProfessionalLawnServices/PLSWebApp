@@ -1,0 +1,64 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI/CD with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: maven
+    - name: Check if application.properties exists
+      run: |
+        if (Test-Path -Path 'src/main/resources/application.properties') {
+          echo "application.properties file exists."
+        }
+        else {
+          echo "application.properties file not found."
+          exit 1
+        }
+    - name: Show application.properties content
+      run: |
+        Get-Content src/main/resources/application.properties
+    - name: Replace placeholder values
+      run: |
+        (Get-Content src/main/resources/application.properties) -replace "\$\{APP_DATASOURCE_JDBC_URL\}", "${{ secrets.APP_DATASOURCE_JDBC_URL }}" | Set-Content src/main/resources/application.properties
+        (Get-Content src/main/resources/application.properties) -replace "\$\{APP_DATASOURCE_USERNAME\}", "${{ secrets.APP_DATASOURCE_USERNAME }}" | Set-Content src/main/resources/application.properties
+        (Get-Content src/main/resources/application.properties) -replace "\$\{APP_DATASOURCE_PASSWORD\}", "${{ secrets.APP_DATASOURCE_PASSWORD }}" | Set-Content src/main/resources/application.properties
+        (Get-Content src/main/resources/application.properties) -replace "\$\{APIKEY_OPENWEATHERAPI\}", "${{ secrets.APIKEY_OPENWEATHERAPI }}" | Set-Content src/main/resources/application.properties
+        (Get-Content src/main/resources/application.properties) -replace "\$\{APP_HOME_MISSED_JOB_DAYS\}", "${{ vars.APP_HOME_MISSED_JOB_DAYS }}" | Set-Content src/main/resources/application.properties
+        (Get-Content src/main/resources/application.properties) -replace "\$\{SERVER_SERVLET_REGISTER_DEFAULT_SERVLET\}", "${{ vars.SERVER_SERVLET_REGISTER_DEFAULT_SERVLET }}" | Set-Content src/main/resources/application.properties
+        (Get-Content src/main/resources/application.properties) -replace "\$\{SPRING_APPLICATION_NAME\}", "${{ vars.SPRING_APPLICATION_NAME }}" | Set-Content src/main/resources/application.properties
+        (Get-Content src/main/resources/application.properties) -replace "\$\{SPRING_DATA_WEB_PAGEABLE_DEFAULT_PAGE_SIZE\}", "${{ vars.SPRING_DATA_WEB_PAGEABLE_DEFAULT_PAGE_SIZE }}" | Set-Content src/main/resources/application.properties
+        (Get-Content src/main/resources/application.properties) -replace "\$\{SPRING_JPA_HIBERNATE_DDL_AUTO\}", "${{ vars.SPRING_JPA_HIBERNATE_DDL_AUTO }}" | Set-Content src/main/resources/application.properties
+        (Get-Content src/main/resources/application.properties) -replace "\$\{SPRING_JPA_OPEN_IN_VIEW\}", "${{ vars.SPRING_JPA_OPEN_IN_VIEW }}" | Set-Content src/main/resources/application.properties
+    - name: Show application.properties content
+      run: |
+        Get-Content src/main/resources/application.properties
+    - name: Build with Maven
+      run: mvn clean package install
+    - name: Deploy to Azure App Service
+      uses: azure/webapps-deploy@v2
+      with:
+       app-name: ${{ secrets.APP_SERVICE_NAME }}
+       publish-profile: ${{ secrets.AZURE_APP_SERVICE_PUBLISH_PROFILE }}
+       package: '${{ github.workspace }}/target/*.jar'
