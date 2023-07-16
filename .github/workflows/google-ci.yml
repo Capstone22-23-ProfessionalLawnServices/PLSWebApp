@@ -25,7 +25,7 @@ jobs:
       - name: Grant privileges
         run: mysql -u root -proot -e "GRANT ALL PRIVILEGES ON mydatabase.* TO 'plsadmin'@'localhost';"
       - name: Create database schema
-        run: mysql -u plsadmin -pplspassword -e "CREATE DATABASE mydatabase;"
+        run: mysql -u plsadmin -padminpassword -e "CREATE DATABASE mydatabase;"
       - name: Check if application.properties exists
         run: |
           if [ -f 'src/main/resources/application.properties' ]; then
