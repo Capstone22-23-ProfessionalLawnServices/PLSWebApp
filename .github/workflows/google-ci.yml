@@ -7,7 +7,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     environment: production
 
     steps:
@@ -20,7 +20,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Start MySQL service
-        run: sudo service mysql start
+        run: sc start mysql
       - name: Create MySQL user
         run: mysql -u root -proot -e "CREATE USER 'plsadmin'@'localhost' IDENTIFIED BY 'adminpassword';"
       - name: Grant privileges
@@ -29,30 +29,31 @@ jobs:
         run: mysql -u plsadmin -padminpassword -e "CREATE DATABASE mydatabase;"
       - name: Check if application.properties exists
         run: |
-          if [ -f 'src/main/resources/application.properties' ]; then
-            echo "application.properties file exists."
-          else
-            echo "application.properties file not found."
-            exit 1
-          fi
+          if (Test-Path -Path 'src/main/resources/application.properties') {
+          echo "application.properties file exists."
+          }
+          else {
+          echo "application.properties file not found."
+          exit 1
+          }
       - name: Show application.properties content
         run: |
-          cat src/main/resources/application.properties
+          Get-Content src/main/resources/application.properties
       - name: Replace placeholder values
         run: |
-          sed -i "s/\${APP_DATASOURCE_JDBC_URL}/${{ secrets.APP_DATASOURCE_JDBC_URL }}/g" src/main/resources/application.properties
-          sed -i "s/\${APP_DATASOURCE_USERNAME}/${{ secrets.APP_DATASOURCE_USERNAME }}/g" src/main/resources/application.properties
-          sed -i "s/\${APP_DATASOURCE_PASSWORD}/${{ secrets.APP_DATASOURCE_PASSWORD }}/g" src/main/resources/application.properties
-          sed -i "s/\${APIKEY_OPENWEATHERAPI}/${{ secrets.APIKEY_OPENWEATHERAPI }}/g" src/main/resources/application.properties
-          sed -i "s/\${APP_HOME_MISSED_JOB_DAYS}/${{ vars.APP_HOME_MISSED_JOB_DAYS }}/g" src/main/resources/application.properties
-          sed -i "s/\${SERVER_SERVLET_REGISTER_DEFAULT_SERVLET}/${{ vars.SERVER_SERVLET_REGISTER_DEFAULT_SERVLET }}/g" src/main/resources/application.properties
-          sed -i "s/\${SPRING_APPLICATION_NAME}/${{ vars.SPRING_APPLICATION_NAME }}/g" src/main/resources/application.properties
-          sed -i "s/\${SPRING_DATA_WEB_PAGEABLE_DEFAULT_PAGE_SIZE}/${{ vars.SPRING_DATA_WEB_PAGEABLE_DEFAULT_PAGE_SIZE }}/g" src/main/resources/application.properties
-          sed -i "s/\${SPRING_JPA_HIBERNATE_DDL_AUTO}/${{ vars.SPRING_JPA_HIBERNATE_DDL_AUTO }}/g" src/main/resources/application.properties
-          sed -i "s/\${SPRING_JPA_OPEN_IN_VIEW}/${{ vars.SPRING_JPA_OPEN_IN_VIEW }}/g" src/main/resources/application.properties
+          (Get-Content src/main/resources/application.properties) -replace "\$\{APP_DATASOURCE_JDBC_URL\}", "${{ secrets.APP_DATASOURCE_JDBC_URL }}" | Set-Content src/main/resources/application.properties
+          (Get-Content src/main/resources/application.properties) -replace "\$\{APP_DATASOURCE_USERNAME\}", "${{ secrets.APP_DATASOURCE_USERNAME }}" | Set-Content src/main/resources/application.properties
+          (Get-Content src/main/resources/application.properties) -replace "\$\{APP_DATASOURCE_PASSWORD\}", "${{ secrets.APP_DATASOURCE_PASSWORD }}" | Set-Content src/main/resources/application.properties
+          (Get-Content src/main/resources/application.properties) -replace "\$\{APIKEY_OPENWEATHERAPI\}", "${{ secrets.APIKEY_OPENWEATHERAPI }}" | Set-Content src/main/resources/application.properties
+          (Get-Content src/main/resources/application.properties) -replace "\$\{APP_HOME_MISSED_JOB_DAYS\}", "${{ vars.APP_HOME_MISSED_JOB_DAYS }}" | Set-Content src/main/resources/application.properties
+          (Get-Content src/main/resources/application.properties) -replace "\$\{SERVER_SERVLET_REGISTER_DEFAULT_SERVLET\}", "${{ vars.SERVER_SERVLET_REGISTER_DEFAULT_SERVLET }}" | Set-Content src/main/resources/application.properties
+          (Get-Content src/main/resources/application.properties) -replace "\$\{SPRING_APPLICATION_NAME\}", "${{ vars.SPRING_APPLICATION_NAME }}" | Set-Content src/main/resources/application.properties
+          (Get-Content src/main/resources/application.properties) -replace "\$\{SPRING_DATA_WEB_PAGEABLE_DEFAULT_PAGE_SIZE\}", "${{ vars.SPRING_DATA_WEB_PAGEABLE_DEFAULT_PAGE_SIZE }}" | Set-Content src/main/resources/application.properties
+          (Get-Content src/main/resources/application.properties) -replace "\$\{SPRING_JPA_HIBERNATE_DDL_AUTO\}", "${{ vars.SPRING_JPA_HIBERNATE_DDL_AUTO }}" | Set-Content src/main/resources/application.properties
+          (Get-Content src/main/resources/application.properties) -replace "\$\{SPRING_JPA_OPEN_IN_VIEW\}", "${{ vars.SPRING_JPA_OPEN_IN_VIEW }}" | Set-Content src/main/resources/application.properties
       - name: Show application.properties content
         run: |
-          cat src/main/resources/application.properties
+          Get-Content src/main/resources/application.properties
       - name: Build with Maven
         run: mvn clean package install
       - name: Rename Artifact
