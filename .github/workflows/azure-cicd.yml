@@ -6,18 +6,17 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Java CI/CD with Maven
+name: Java CI/CD with Maven to Azure
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
   build:
 
     runs-on: windows-latest
+    environment: develop
 
     steps:
     - uses: actions/checkout@v3
