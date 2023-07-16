@@ -59,6 +59,11 @@ jobs:
     - name: Rename Artifact
       run: |
         mv target/*.jar target/${{ vars.PROJECT_ARTIFACT_NAME }}.jar
+    - name: Upload Artifact for Download
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ vars.SPRING_APPLICATION_NAME }}
+        path: target/${{ vars.PROJECT_ARTIFACT_NAME }}.jar
     - name: Deploy to Azure App Service
       uses: azure/webapps-deploy@v2
       with:
