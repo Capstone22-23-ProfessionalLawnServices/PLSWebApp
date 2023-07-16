@@ -11,8 +11,6 @@ name: Java CI/CD with Maven to Azure
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
