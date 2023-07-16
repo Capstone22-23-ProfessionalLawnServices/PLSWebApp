@@ -9,15 +9,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ROOT_PASSWORD: password
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -27,11 +18,14 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
-      - name: Add non-root user
-        run: |
-          docker exec -it mysql mysql -uroot -ppassword -e "CREATE USER 'plsadmin'@'%' IDENTIFIED BY 'adminpassword';"
-          docker exec -it mysql mysql -uroot -ppassword -e "GRANT ALL PRIVILEGES ON *.* TO 'plsadmin'@'%';"
-          docker exec -it mysql mysql -uroot -ppassword -e "FLUSH PRIVILEGES;"
+      - name: Start MySQL service
+        run: sudo service mysql start
+      - name: Create MySQL user
+        run: mysql -u root -proot -e "CREATE USER 'plsadmin'@'localhost' IDENTIFIED BY 'adminpassword';"
+      - name: Grant privileges
+        run: mysql -u root -proot -e "GRANT ALL PRIVILEGES ON mydatabase.* TO 'plsadmin'@'localhost';"
+      - name: Create database schema
+        run: mysql -u plsadmin -pplspassword -e "CREATE DATABASE mydatabase;"
       - name: Check if application.properties exists
         run: |
           if [ -f 'src/main/resources/application.properties' ]; then
